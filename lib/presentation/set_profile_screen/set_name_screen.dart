@@ -20,59 +20,84 @@ class SetNameScreen extends StatelessWidget {
           AppLocalizations.of(context)!.setProfileName,
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          if (_nameFormKey.currentState!.validate())
+            Navigator.pushNamed(context, AppRouterNames.setAvatarScreen);
+        },
+        child: Icon(Icons.arrow_forward),
+      ),
       body: Column(
         // mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           SizedBox(height: AppConstants.toScreenEdgePadding),
-          Padding(
-            padding: const EdgeInsets.symmetric(
-                horizontal: AppConstants.toScreenEdgePadding),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Column(
-                children: [
-                  Text(
-                    AppLocalizations.of(context)!.hi,
-                    style: Theme.of(context).textTheme.headline4,
-                    textAlign: TextAlign.center,
-                  ),
-                  Text(
-                    AppLocalizations.of(context)!.setNameMessage,
-                    style: Theme.of(context).textTheme.headline5,
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ),
-            ),
-          ),
+          _buildSetProfileNameMessage(context),
           SizedBox(height: AppConstants.toScreenEdgePadding),
-          Padding(
-            padding: const EdgeInsets.symmetric(
-                horizontal: AppConstants.toScreenEdgePadding),
-            child: Form(
-              key: _nameFormKey,
-              child: TextFormField(
-                decoration: InputDecoration(
-                  labelText: AppLocalizations.of(context)!.name,
-                  focusedBorder: OutlineInputBorder(borderSide: BorderSide()),
-                  border: OutlineInputBorder(),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty)
-                    return AppLocalizations.of(context)!.pleaseEnterName;
-                  else
-                    return null;
-                },
-              ),
-            ),
-          ),
-          TextButton(
-              onPressed: () {
-                if (_nameFormKey.currentState!.validate())
-                  Navigator.pushNamed(context, AppRouterNames.setAvatarScreen);
-              },
-              child: Text(AppLocalizations.of(context)!.next))
+          _buildTextFormName(_nameFormKey, context),
         ],
+      ),
+    );
+  }
+
+  TextButton _buildNextButton(
+      GlobalKey<FormState> _nameFormKey, BuildContext context) {
+    return TextButton(
+      onPressed: () {
+        if (_nameFormKey.currentState!.validate())
+          Navigator.pushNamed(context, AppRouterNames.setAvatarScreen);
+      },
+      child: Text(AppLocalizations.of(context)!.next),
+      style: TextButton.styleFrom(
+        primary: Colors.white,
+        backgroundColor: Theme.of(context).colorScheme.secondary,
+      ),
+    );
+  }
+
+  Widget _buildTextFormName(
+      GlobalKey<FormState> _nameFormKey, BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(
+          horizontal: AppConstants.toScreenEdgePadding),
+      child: Form(
+        key: _nameFormKey,
+        child: TextFormField(
+          decoration: InputDecoration(
+            labelText: AppLocalizations.of(context)!.name,
+            focusedBorder: OutlineInputBorder(borderSide: BorderSide()),
+            border: OutlineInputBorder(),
+          ),
+          validator: (value) {
+            if (value == null || value.isEmpty)
+              return AppLocalizations.of(context)!.pleaseEnterName;
+            else
+              return null;
+          },
+        ),
+      ),
+    );
+  }
+
+  Padding _buildSetProfileNameMessage(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+          horizontal: AppConstants.toScreenEdgePadding),
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Column(
+          children: [
+            Text(
+              AppLocalizations.of(context)!.hi,
+              style: Theme.of(context).textTheme.headline4,
+              textAlign: TextAlign.center,
+            ),
+            Text(
+              AppLocalizations.of(context)!.setNameMessage,
+              style: Theme.of(context).textTheme.headline5,
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
       ),
     );
   }

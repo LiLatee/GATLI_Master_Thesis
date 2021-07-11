@@ -9,4 +9,7 @@ class SPKeys {
 class AppConstants {
 //! Durations
   static const Duration splashScreenDuration = Duration(seconds: 1);
+
+//! Paddings
+  static const double toScreenEdgePadding = 16.0;
 }

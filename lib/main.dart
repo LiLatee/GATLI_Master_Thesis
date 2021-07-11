@@ -3,11 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:master_thesis/core/themes/app_theme.dart';
 import 'package:master_thesis/logic/cubit/launching_cubit.dart';
 import 'package:master_thesis/presentation/home_screen/home_screen.dart';
+import 'package:master_thesis/presentation/router/app_router.dart';
 import 'package:master_thesis/presentation/yt_player_test_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:master_thesis/service_locator.dart' as di;
 
-import 'presentation/set_profile_screen/set_profile_screen.dart';
+import 'presentation/set_profile_screen/set_name_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
   MaterialApp _buildMaterialApp() {
     return MaterialApp(
       title: 'Flutter Demo',
+      onGenerateRoute: di.sl<AppRouter>().onGenerateRoute,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       // themeMode: themeState is ThemeDark ? ThemeMode.dark : ThemeMode.light,
@@ -49,7 +51,7 @@ class MyApp extends StatelessWidget {
     return BlocBuilder<LaunchingCubit, LaunchingState>(
       builder: (context, state) {
         if (state is LaunchingSetProfile)
-          return SetProfileScreen();
+          return SetNameScreen();
         else if (state is LaunchingHomeScreen)
           return HomeScreen();
         else if (state is LaunchingLoading)

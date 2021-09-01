@@ -1,23 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:master_thesis/presentation/home_screen/home_screen.dart';
-import 'package:master_thesis/presentation/set_profile_screen/set_avatar_screen.dart';
-
-class AppRouterNames {
-  static const String home = '/homeScreen';
-  static const String setAvatarScreen = '/setAvatarScreen';
-}
+import 'package:master_thesis/features/home_page/home_screen.dart';
+import 'package:master_thesis/features/launching/first_launch/presentation/pages/set_avatar_page.dart';
 
 class AppRouter {
   Route? onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
-      case AppRouterNames.home:
+      case HomePage.routeName:
         return MaterialPageRoute(
-          builder: (_) => HomeScreen(),
+          builder: (_) => HomePage(),
         );
-      case AppRouterNames.setAvatarScreen:
+      case SetAvatarPage.routeName:
         return SlideRightRoute(
-          page: SetAvatarScreen(),
+          page: SetAvatarPage(),
         );
     }
   }

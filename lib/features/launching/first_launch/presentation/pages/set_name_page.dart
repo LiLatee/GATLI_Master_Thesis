@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttermoji/fluttermoji.dart';
-import 'package:master_thesis/core/constants/AppConstants.dart';
-import 'package:master_thesis/logic/cubit/launching_cubit.dart';
+import 'package:master_thesis/core/constants/app_constants.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:master_thesis/presentation/router/app_router.dart';
+import 'package:master_thesis/features/launching/first_launch/presentation/pages/set_avatar_page.dart';
 
 class SetNameScreen extends StatelessWidget {
   const SetNameScreen({Key? key}) : super(key: key);
@@ -23,16 +20,16 @@ class SetNameScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           if (_nameFormKey.currentState!.validate())
-            Navigator.pushNamed(context, AppRouterNames.setAvatarScreen);
+            Navigator.pushNamed(context, SetAvatarPage.routeName);
         },
-        child: Icon(Icons.arrow_forward),
+        child: const Icon(Icons.arrow_forward),
       ),
       body: Column(
         // mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          SizedBox(height: AppConstants.toScreenEdgePadding),
+          const SizedBox(height: AppConstants.toScreenEdgePadding),
           _buildSetProfileNameMessage(context),
-          SizedBox(height: AppConstants.toScreenEdgePadding),
+          const SizedBox(height: AppConstants.toScreenEdgePadding),
           _buildTextFormName(_nameFormKey, context),
         ],
       ),
@@ -44,7 +41,7 @@ class SetNameScreen extends StatelessWidget {
     return TextButton(
       onPressed: () {
         if (_nameFormKey.currentState!.validate())
-          Navigator.pushNamed(context, AppRouterNames.setAvatarScreen);
+          Navigator.pushNamed(context, SetAvatarPage.routeName);
       },
       child: Text(AppLocalizations.of(context)!.next),
       style: TextButton.styleFrom(
@@ -83,7 +80,7 @@ class SetNameScreen extends StatelessWidget {
       padding: const EdgeInsets.symmetric(
           horizontal: AppConstants.toScreenEdgePadding),
       child: Align(
-        alignment: Alignment.centerLeft,
+        alignment: Alignment.center,
         child: Column(
           children: [
             Text(

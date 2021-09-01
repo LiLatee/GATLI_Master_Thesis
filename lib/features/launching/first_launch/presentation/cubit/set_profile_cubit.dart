@@ -1,5 +1,7 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
-import 'package:master_thesis/core/constants/AppConstants.dart';
+import 'package:master_thesis/core/constants/app_constants.dart';
 import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -13,8 +15,11 @@ class SetProfileCubit extends Cubit<SetProfileState> {
   }
 
   bool isProfileSet() {
-    if (prefs.containsKey(SPKeys.setProfile))
+    if (prefs.containsKey(SPKeys.setProfile)) {
+      log("isProfileSet: ${prefs.getBool(SPKeys.setProfile)!}");
       return prefs.getBool(SPKeys.setProfile)!;
+    }
+    log("isProfileSet: false");
 
     return false;
   }

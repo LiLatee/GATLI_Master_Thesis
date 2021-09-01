@@ -8,8 +8,9 @@ class SPKeys {
 
 class AppConstants {
 //! Durations
-  static const Duration splashScreenDuration = Duration(seconds: 1);
+  // static const Duration splashScreenDuration = Duration(seconds: 1);
 
 //! Paddings
-  static const double toScreenEdgePadding = 16.0;
+  static const double toScreenEdgePadding = 16;
+  static const double homePageAvatarRadius = 30;
 }

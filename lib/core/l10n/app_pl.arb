@@ -4,16 +4,20 @@
     "light": "Jasny",
     "system": "Systemowy",
     "customizeAvatar": "Dostosuj awatar:",
-    "name": "Imię",
+    "name": "Imię/Pseudonim",
     "setProfileName": "Ustaw profil - imię",
     "setProfileAvatar": "Ustaw profil - awatar",
     "next": "Dalej",
     "hi": "Cześć!",
     "setNameMessage": "Na początek proszę podaj swoje imię :) ",
     "setAvatarMessage": "Następnie spersonalizuj swój awatar tak, aby jak najbardziej Ci się podobał. Gdy skończysz nie zapomnij zapisać zmian używając przycisku dyskietki.",
-    "pleaseEnterName": "Proszę podaj swoje (lub wymyślone) imię.",
+    "pleaseEnterName": "Proszę podaj swoje imię lub pseudonim.",
     "finishEditProfile": "Zakończ",
     "isEditFinished": "Czy na pewno zapisałeś zmiany?",
     "isEditFinishedYes": "Tak, skończyłem",
-    "isEditFinishedNo": "Nie, daj mi wrócić"
+    "isEditFinishedNo": "Nie, wróć",
+    "steps": "kroki",
+    "anyPhysicalActivity": "Aktywność fizyczna",
+    "thaiChi": "Thai Chi",
+    "todaysStatistics": "Dzisiejsze statystki"
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:master_thesis/presentation/router/app_router.dart';
+import 'package:master_thesis/features/home_page/home_screen.dart';
 
 class SetProfileConfirmationDialog extends StatelessWidget {
   const SetProfileConfirmationDialog({
@@ -16,6 +16,7 @@ class SetProfileConfirmationDialog extends StatelessWidget {
           AppLocalizations.of(context)!.isEditFinished,
           style: Theme.of(context).textTheme.headline6,
         ),
+        SizedBox(height: 8),
         Wrap(
           alignment: WrapAlignment.end,
           children: [
@@ -28,7 +29,7 @@ class SetProfileConfirmationDialog extends StatelessWidget {
             SizedBox(width: 8.0),
             TextButton(
               onPressed: () => Navigator.of(context).pushNamedAndRemoveUntil(
-                AppRouterNames.home,
+                HomePage.routeName,
                 (Route<dynamic> route) => false,
               ),
               child: Text(

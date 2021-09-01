@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttermoji/fluttermoji.dart';
-import 'package:master_thesis/core/constants/AppConstants.dart';
-import 'package:master_thesis/logic/cubit/launching_cubit.dart';
+import 'package:master_thesis/core/constants/app_constants.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:master_thesis/presentation/home_screen/home_screen.dart';
-import 'package:master_thesis/presentation/router/app_router.dart';
+import 'package:master_thesis/features/launching/first_launch/presentation/widgets/set_profile_confirmation_dialog.dart';
 
-import 'set_profile_confirmation_dialog.dart';
+class SetAvatarPage extends StatelessWidget {
+  SetAvatarPage({Key? key}) : super(key: key);
 
-class SetAvatarScreen extends StatelessWidget {
-  SetAvatarScreen({Key? key}) : super(key: key);
+  static const String routeName = '/setAvatarScreen';
 
   @override
   Widget build(BuildContext context) {

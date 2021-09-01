@@ -4,16 +4,20 @@
     "light": "Light",
     "system": "System",
     "customizeAvatar": "Customize avatar:",
-    "name": "Name",
+    "name": "Name/Nickname",
     "setProfileName": "Set Profile - name",
     "setProfileAvatar": "Set Profile - avatar",
     "next": "Next",
     "hi": "Hi!",
     "setNameMessage": "First please set your name :)",
     "setAvatarMessage": "Then customize your avatar. All in your hands. When you are done remeber to save changes using save button.",
-    "pleaseEnterName": "Please enter your (or fake) name.",
+    "pleaseEnterName": "Please enter your name or nickname.",
     "finishEditProfile": "Finish",
     "isEditFinished": "Did you save changes?",
     "isEditFinishedYes": "Yes, I am done",
-    "isEditFinishedNo": "No, let me back"
+    "isEditFinishedNo": "No, let me back",
+    "steps": "steps",
+    "anyPhysicalActivity": "Any physical activity",
+    "thaiChi": "Thai Chi",
+    "todaysStatistics": "Today's statistics"
 }

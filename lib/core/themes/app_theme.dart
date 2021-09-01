@@ -21,10 +21,10 @@ class AppTheme {
 
   static final _lightColorScheme = ColorScheme(
     surface: Color(0xffFFFFFF),
-    primary: Color(0xff8e24aa),
-    primaryVariant: Color(0xff5c007a), // FlatButton text color
-    secondary: Color(0xFFd81b60),
-    secondaryVariant: Color(0xFFa00037), // FloatingButton color
+    primary: Color(0xff6fc27c),
+    primaryVariant: Color(0xff6fc27c), // FlatButton text color
+    secondary: Color(0xFF0f4d19),
+    secondaryVariant: Color(0xFF0f4d19), // FloatingButton color
     background: Color(0xffFFFFFF),
     error: Color(0xffCF6679),
     onPrimary: Color(0xffFFFFFF),
@@ -36,9 +36,64 @@ class AppTheme {
     brightness: Brightness.light,
   );
 
+  // static final _lightColorScheme = ColorScheme(
+  //   surface: Color(0xffFFFFFF),
+  //   primary: Color(0xff9d9ad9),
+  //   primaryVariant: Color(0xff9d9ad9), // FlatButton text color
+  //   secondary: Color(0xFF1f5980),
+  //   secondaryVariant: Color(0xFF1f5980), // FloatingButton color
+  //   background: Color(0xffcedef0),
+  //   error: Color(0xffCF6679),
+  //   onPrimary: Color(0xffFFFFFF),
+  //   onSecondary: Color(0xffFFFFFF),
+  //   onSurface:
+  //       Color(0xff000000), // FloatingButton child background, e.g. icon color
+  //   onBackground: Color(0xff000000), // TextFormField border color
+  //   onError: Color(0xff000000),
+  //   brightness: Brightness.light,
+  // );
+
+  // static final _lightColorScheme = ColorScheme(
+  //   surface: Color(0xffFFFFFF),
+  //   primary: Color(0xffACFFAD),
+  //   primaryVariant: Color(0xff558056), // FlatButton text color
+  //   secondary: Color(0xFF3db2ff),
+  //   secondaryVariant: Color(0xFF1f5980), // FloatingButton color
+  //   background: Color(0xffFFFFFF),
+  //   error: Color(0xffCF6679),
+  //   onPrimary: Color(0xffFFFFFF),
+  //   onSecondary: Color(0xffFFFFFF),
+  //   onSurface:
+  //       Color(0xff000000), // FloatingButton child background, e.g. icon color
+  //   onBackground: Color(0xff000000), // TextFormField border color
+  //   onError: Color(0xff000000),
+  //   brightness: Brightness.light,
+  // );
+
   static final lightTheme = ThemeData.from(
     colorScheme: _lightColorScheme,
   );
+
+  // static final _lightColorScheme = ColorScheme(
+  //   surface: Color(0xffFFFFFF),
+  //   primary: Color(0xff8e24aa),
+  //   primaryVariant: Color(0xff5c007a), // FlatButton text color
+  //   secondary: Color(0xFFd81b60),
+  //   secondaryVariant: Color(0xFFa00037), // FloatingButton color
+  //   background: Color(0xffFFFFFF),
+  //   error: Color(0xffCF6679),
+  //   onPrimary: Color(0xffFFFFFF),
+  //   onSecondary: Color(0xffFFFFFF),
+  //   onSurface:
+  //       Color(0xff000000), // FloatingButton child background, e.g. icon color
+  //   onBackground: Color(0xff000000), // TextFormField border color
+  //   onError: Color(0xff000000),
+  //   brightness: Brightness.light,
+  // );
+
+  // static final lightTheme = ThemeData.from(
+  //   colorScheme: _lightColorScheme,
+  // );
 
   static final _darkColorScheme = ColorScheme(
     surface: Color(0xff121212),

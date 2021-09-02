@@ -13,4 +13,10 @@ class AppConstants {
 //! Paddings
   static const double toScreenEdgePadding = 16;
   static const double homePageAvatarRadius = 30;
+
+  static const double cornersRoundingRadius = 30;
 }
+
+// const Map<String, List<Color>> badges = {
+// "badge1": [Color(0xfff34a53), Color(0xff53f34a),],
+// };

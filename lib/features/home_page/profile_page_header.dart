@@ -23,7 +23,27 @@ class ProfilePageHeader extends SliverPersistentHeaderDelegate {
     return Stack(
       fit: StackFit.expand,
       children: [
-        Container(color: Theme.of(context).colorScheme.primary),
+        Container(
+          padding: const EdgeInsets.only(bottom: 8.0),
+          child: Card(
+            elevation: 8,
+            color: Theme.of(context).colorScheme.primary,
+            shape: RoundedRectangleBorder(
+              borderRadius:
+                  BorderRadius.circular(AppConstants.cornersRoundingRadius),
+            ),
+          ),
+        ),
+        // Container(
+        //   margin: const EdgeInsets.all(4),
+        //   decoration: BoxDecoration(
+        //     color: Theme.of(context).colorScheme.primary,
+        //     gradient: const LinearGradient(
+        //         colors: [Color(0xff1D976C), Color(0xff93F9B9)]),
+        //     borderRadius:
+        //         BorderRadius.circular(AppConstants.cornersRoundingRadius),
+        //   ),
+        // ),
         Positioned(
           top: 8.0,
           child: Row(

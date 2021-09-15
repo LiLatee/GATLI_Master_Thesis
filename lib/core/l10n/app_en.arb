@@ -19,5 +19,7 @@
     "steps": "steps",
     "anyPhysicalActivity": "Any physical activity",
     "thaiChi": "Thai Chi",
-    "todaysStatistics": "Today's statistics"
+    "todaysStatistics": "Today's statistics",
+    "runner": "Runner",
+    "walker": "Walker"
 }

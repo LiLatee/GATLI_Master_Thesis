@@ -13,7 +13,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         borderRadius: BorderRadius.only(
           topRight: Radius.circular(AppConstants.cornersRoundingRadius),
           topLeft: Radius.circular(AppConstants.cornersRoundingRadius),
@@ -26,7 +26,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
         ],
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.only(
+        borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(AppConstants.cornersRoundingRadius),
           topRight: Radius.circular(AppConstants.cornersRoundingRadius),
         ),

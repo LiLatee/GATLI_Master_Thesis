@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:master_thesis/core/themes/app_theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:master_thesis/features/home_page/home_screen.dart';
@@ -39,11 +40,14 @@ class MyApp extends StatelessWidget {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       // themeMode: themeState is ThemeDark ? ThemeMode.dark : ThemeMode.light,
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+      ],
       supportedLocales: AppLocalizations.supportedLocales,
       locale: null, // TODO
       // home: _buildProperScreen(),
-      home: HomePage(),
+      home: const HomePage(),
     );
   }
 
@@ -51,11 +55,11 @@ class MyApp extends StatelessWidget {
     return BlocBuilder<LaunchingCubit, LaunchingState>(
       builder: (context, state) {
         if (state is LaunchingSetProfile) {
-          return SetNameScreen();
+          return const SetNameScreen();
         } else if (state is LaunchingHomeScreen) {
-          return HomePage();
+          return const HomePage();
         } else {
-          return SplashScreen();
+          return const SplashScreen();
         }
       },
     );

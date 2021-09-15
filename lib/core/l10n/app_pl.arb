@@ -19,5 +19,7 @@
     "steps": "kroki",
     "anyPhysicalActivity": "Aktywność fizyczna",
     "thaiChi": "Thai Chi",
-    "todaysStatistics": "Dzisiejsze statystki"
+    "todaysStatistics": "Dzisiejsze statystki",
+    "runner": "Biegacz",
+    "walker": "Chodziarz"
 }

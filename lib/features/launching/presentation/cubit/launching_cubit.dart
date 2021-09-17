@@ -8,6 +8,7 @@ import 'package:meta/meta.dart';
 part 'launching_state.dart';
 
 // some random change 2
+// commit2 - some random change 1
 
 class LaunchingCubit extends Cubit<LaunchingState> {
   SetProfileCubit setProfileCubit;

@@ -7,6 +7,8 @@ import 'package:meta/meta.dart';
 
 part 'launching_state.dart';
 
+// some random change 2
+
 class LaunchingCubit extends Cubit<LaunchingState> {
   SetProfileCubit setProfileCubit;
   late StreamSubscription setProfileStreamSubscription;

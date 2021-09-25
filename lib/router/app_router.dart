@@ -2,18 +2,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:master_thesis/features/home_page/home_screen.dart';
 import 'package:master_thesis/features/launching/first_launch/presentation/pages/set_avatar_page.dart';
+import 'package:master_thesis/features/login/login_page.dart';
 
 class AppRouter {
   Route? onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
       case HomePage.routeName:
         return MaterialPageRoute(
-          builder: (_) => HomePage(),
+          builder: (_) => const HomePage(),
         );
-      // case EmailSignUpPage.routeName:
-      //   return MaterialPageRoute(
-      //     builder: (_) => EmailSignUpPage(),
-      //   );
+      case LoginPage.routeName:
+        return MaterialPageRoute(
+          builder: (_) => const LoginPage(),
+        );
       case SetAvatarPage.routeName:
         return SlideRightRoute(
           page: SetAvatarPage(),

@@ -4,12 +4,16 @@ import 'package:google_fonts/google_fonts.dart';
 // TODO use testStyles from Theme
 // TODO use colors from Theme
 class WholeScreenWidthButton extends StatelessWidget {
-  const WholeScreenWidthButton(
-      {Key? key, required this.label, required this.onPressed})
-      : super(key: key);
+  const WholeScreenWidthButton({
+    Key? key,
+    required this.label,
+    required this.onPressed,
+    this.color,
+  }) : super(key: key);
 
   final String label;
   final void Function() onPressed;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +23,7 @@ class WholeScreenWidthButton extends StatelessWidget {
           child: TextButton(
             onPressed: onPressed,
             style: TextButton.styleFrom(
-              backgroundColor: Theme.of(context).colorScheme.primary,
+              backgroundColor: color ?? Theme.of(context).colorScheme.primary,
               primary: Colors.white,
               textStyle: Theme.of(context).textTheme.bodyText2!.copyWith(
                     fontSize: 16,

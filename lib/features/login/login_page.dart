@@ -1,23 +1,34 @@
+import 'dart:developer';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
-import 'package:master_thesis/features/login/sign_in/email_sign_in/email_sign_in_cubit.dart';
-import 'package:master_thesis/features/login/sign_in/email_sign_in/email_sign_in_page.dart';
-import 'package:master_thesis/features/login/sign_up/email_sign_up/email_sign_up_page.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:master_thesis/core/l10n/l10n.dart';
+import 'package:master_thesis/features/home_page/home_screen.dart';
+import 'package:master_thesis/features/login/login_cubit.dart';
 import 'package:master_thesis/features/widgets/rounded_background_widget.dart';
 import 'package:master_thesis/features/widgets/whole_screen_width_button.dart';
-import 'package:master_thesis/service_locator.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
+
+  static const String routeName = '/loginPage';
 
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
-  int currentTabIndex = 0;
+  late final LoginCubit loginCubil;
+
+  @override
+  void initState() {
+    super.initState();
+    loginCubil = LoginCubit();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,146 +39,242 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
 
-    return Scaffold(
-      body: Column(
-        children: [
-          _buildHeader(context),
-          const SizedBox(height: 16),
-          DefaultTabController(
-            length: 2,
-            initialIndex: 0,
-            child: Expanded(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: TabBar(
-                      unselectedLabelStyle:
-                          Theme.of(context).textTheme.bodyText2,
-                      labelStyle: Theme.of(context).textTheme.headline6,
-                      indicatorColor: Theme.of(context).colorScheme.primary,
-                      labelColor: Colors.black,
-                      onTap: (value) {
-                        setState(() {
-                          currentTabIndex = value;
-                        });
-                      },
-                      tabs: const [
-                        Tab(child: Text('Sign in')),
-                        Tab(child: Text('Sign up')),
-                      ],
+    return BlocListener<LoginCubit, LoginState>(
+      bloc: loginCubil,
+      listener: (context, state) {
+        if (state is LoginSuccess) {
+          log('sds?');
+          Navigator.pushNamed(context, HomePage.routeName);
+        } else if (state is LoginError) {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(state.error)));
+        }
+      },
+      child: Scaffold(
+        body: Column(
+          children: [
+            _buildHeader(context),
+            const SizedBox(height: 16),
+            DefaultTabController(
+              length: 2,
+              initialIndex: 0,
+              child: Expanded(
+                child: Column(
+                  children: [
+                    _buildTabs(context),
+                    Expanded(
+                      child: TabBarView(
+                        children: [
+                          _buildSignIn(),
+                          _buildSignUp(),
+                        ],
+                      ),
                     ),
-                  ),
-                  Expanded(
-                    child: TabBarView(
-                      children: [
-                        _buildSignIn(),
-                        _buildSignUp(),
-                      ],
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTabs(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: TabBar(
+        unselectedLabelStyle: Theme.of(context).textTheme.bodyText2,
+        labelStyle: Theme.of(context).textTheme.headline6,
+        indicatorColor: Theme.of(context).colorScheme.primary,
+        labelColor: Colors.black,
+        tabs: [
+          Tab(child: Text(context.l10n.signIn)),
+          Tab(child: Text(context.l10n.signUp)),
         ],
       ),
     );
   }
 
   Widget _buildSignIn() {
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  InputField(
-                    labelText: 'Email address',
-                    prefixIcon: Icon(Icons.email),
-                  ),
-                  SizedBox(height: 16),
-                  InputField(
-                    labelText: 'Password',
-                    prefixIcon: Icon(Icons.lock_outline),
-                  ),
-                  OrWidget(context: context),
-                  Row(
+    final TextEditingController emailController = TextEditingController();
+    final TextEditingController passwordController = TextEditingController();
+
+    return BlocBuilder<LoginCubit, LoginState>(
+      bloc: loginCubil,
+      builder: (context, state) {
+        return Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
                     children: [
-                      Expanded(
-                        child: SignInButton(
-                          Buttons.Google,
-                          text: 'Sign in with Google',
-                          onPressed: () {},
-                        ),
+                      InputField(
+                        labelText: context.l10n.email,
+                        prefixIcon: const Icon(Icons.email),
+                        textEditingController: emailController,
+                      ),
+                      const SizedBox(height: 16),
+                      InputField(
+                        labelText: context.l10n.password,
+                        obscure: true,
+                        prefixIcon: const Icon(Icons.lock_outline),
+                        textEditingController: passwordController,
+                      ),
+                      const OrWidget(),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: SignInButton(
+                              Buttons.Google,
+                              text: context.l10n.signInGoogle,
+                              onPressed: () async {
+                                await signInWithGoogle(
+                                    context: context); // TODO not working
+                              },
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
+                ),
               ),
-            ),
+              if (state is LoginLoading)
+                const CircularProgressIndicator()
+              else
+                WholeScreenWidthButton(
+                  label: context.l10n.signIn,
+                  onPressed: () async {
+                    loginCubil.login(
+                      email: emailController.text,
+                      password: passwordController.text,
+                    );
+                  },
+                ),
+              const SizedBox(height: 16),
+            ],
           ),
-          WholeScreenWidthButton(
-            label: 'Sign in',
-            onPressed: () {},
-          ),
-          const SizedBox(height: 16),
-        ],
-      ),
+        );
+      },
     );
   }
 
+  Future<User?> signInWithGoogle({required BuildContext context}) async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    User? user;
+    final GoogleSignIn googleSignIn = GoogleSignIn();
+
+    final GoogleSignInAccount? googleSignInAccount =
+        await googleSignIn.signIn();
+
+    if (googleSignInAccount != null) {
+      final GoogleSignInAuthentication googleSignInAuthentication =
+          await googleSignInAccount.authentication;
+
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleSignInAuthentication.accessToken,
+        idToken: googleSignInAuthentication.idToken,
+      );
+
+      try {
+        final UserCredential userCredential =
+            await auth.signInWithCredential(credential);
+
+        user = userCredential.user;
+        log(user!.uid.toString());
+      } on FirebaseAuthException catch (e, s) {
+        log('error2: $e');
+        log('stack2: $s');
+        if (e.code == 'account-exists-with-different-credential') {
+          // handle the error here
+        } else if (e.code == 'invalid-credential') {
+          // handle the error here
+        }
+      } catch (e, s) {
+        log('error1: $e');
+        log('stack1: $s');
+
+        // handle the error here
+      }
+    }
+
+    return user;
+  }
+
   Widget _buildSignUp() {
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  InputField(
-                    labelText: 'Name',
-                    prefixIcon: Icon(Icons.account_circle_outlined),
-                  ),
-                  SizedBox(height: 16),
-                  InputField(
-                    labelText: 'Email address',
-                    prefixIcon: Icon(Icons.email),
-                  ),
-                  SizedBox(height: 16),
-                  InputField(
-                    labelText: 'Password',
-                    prefixIcon: Icon(Icons.lock_outline),
-                  ),
-                  OrWidget(context: context),
-                  Row(
+    final TextEditingController nameController = TextEditingController();
+    final TextEditingController emailController = TextEditingController();
+    final TextEditingController passwordController = TextEditingController();
+
+    return BlocBuilder<LoginCubit, LoginState>(
+      bloc: loginCubil,
+      builder: (context, state) {
+        return Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
                     children: [
-                      Expanded(
-                        child: SignInButton(
-                          Buttons.Google,
-                          text: 'Sign up with Google',
-                          onPressed: () {},
-                        ),
+                      InputField(
+                        labelText: context.l10n.name,
+                        prefixIcon: const Icon(Icons.account_circle_outlined),
+                        textEditingController: nameController,
+                      ),
+                      const SizedBox(height: 16),
+                      InputField(
+                        labelText: context.l10n.email,
+                        prefixIcon: const Icon(Icons.email),
+                        textEditingController: emailController,
+                      ),
+                      const SizedBox(height: 16),
+                      InputField(
+                        labelText: context.l10n.password,
+                        obscure: true,
+                        prefixIcon: const Icon(Icons.lock_outline),
+                        textEditingController: passwordController,
+                      ),
+                      const OrWidget(),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: SignInButton(
+                              Buttons.Google,
+                              text: context.l10n.signUpGoogle,
+                              onPressed: () {},
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
+                ),
               ),
-            ),
+              const SizedBox(height: 16),
+              if (state is LoginLoading)
+                const CircularProgressIndicator()
+              else
+                WholeScreenWidthButton(
+                  label: context.l10n.signUp,
+                  onPressed: () {
+                    loginCubil.signUp(
+                      email: emailController.text,
+                      password: passwordController.text,
+                      nickname: nameController.text,
+                    );
+                  },
+                ),
+              const SizedBox(height: 16),
+            ],
           ),
-          const SizedBox(height: 16),
-          WholeScreenWidthButton(
-            label: 'Sign up',
-            onPressed: () {},
-          ),
-          const SizedBox(height: 16),
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -197,77 +304,10 @@ class _LoginPageState extends State<LoginPage> {
       ],
     );
   }
-
-  Widget _buildOldPage(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text('Sign up!'),
-        ),
-        body: Center(
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                const Padding(
-                  padding: EdgeInsets.all(10.0),
-                  child: Text('Meet Up',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 30,
-                          fontFamily: 'Roboto')),
-                ),
-                Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: SignInButton(
-                      Buttons.Email,
-                      shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(20))),
-                      elevation: 5,
-                      text: 'Sign up with Email',
-                      onPressed: () =>
-                          Navigator.pushNamed(context, EmailSignUp.routeName),
-                    )),
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: SignInButton(
-                    Buttons.Google,
-                    shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(
-                            20))), // not working with flutter_signin_button: ^2.0.0
-                    elevation: 5,
-                    text: 'Sign up with Google',
-                    onPressed: () {},
-                  ),
-                ),
-                Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: GestureDetector(
-                        child: const Text('Log In Using Email',
-                            style: TextStyle(
-                                decoration: TextDecoration.underline,
-                                color: Colors.blue)),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => BlocProvider(
-                                      create: (context) =>
-                                          sl<EmailSignInCubit>(),
-                                      child: EmailSignInPage(),
-                                    )),
-                          );
-                        }))
-              ]),
-        ));
-  }
 }
 
 class OrWidget extends StatelessWidget {
-  const OrWidget({
-    Key? key,
-    required this.context,
-  }) : super(key: key);
-
-  final BuildContext context;
+  const OrWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -285,7 +325,7 @@ class OrWidget extends StatelessWidget {
               ),
             ),
             Text(
-              'or',
+              context.l10n.or,
               style: Theme.of(context).textTheme.headline6,
             ),
             Expanded(
@@ -309,15 +349,23 @@ class InputField extends StatelessWidget {
     Key? key,
     required this.labelText,
     required this.prefixIcon,
+    this.obscure = false,
+    this.textInputAction = TextInputAction.next,
+    required this.textEditingController,
   }) : super(key: key);
 
   final String labelText;
   final Icon prefixIcon;
+  final bool obscure;
+  final TextInputAction textInputAction;
+  final TextEditingController textEditingController;
 
   @override
   Widget build(BuildContext context) {
     return TextField(
-      // onChanged: (email) => context.read<SignInBloc>().add(SignInEmailChanged(email)),
+      textInputAction: textInputAction,
+      controller: textEditingController,
+      obscureText: obscure,
       decoration: InputDecoration(
         border: const OutlineInputBorder(),
         prefixIcon: Padding(

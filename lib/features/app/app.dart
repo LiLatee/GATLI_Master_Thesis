@@ -41,7 +41,7 @@ class App extends StatelessWidget {
         GlobalMaterialLocalizations.delegate,
       ],
       supportedLocales: AppLocalizations.supportedLocales,
-      locale: null, // TODO
+      locale: const Locale('en'), // TODO
       home: _buildProperScreen(),
       // home: const EmailSignUpPage(),
     );
@@ -51,6 +51,8 @@ class App extends StatelessWidget {
     return BlocBuilder<AppCubit, AppState>(
       bloc: sl<AppCubit>(),
       builder: (contetx, state) {
+        log('_buildProperScreen: $state');
+
         log('AppState: $state');
         if (state == AppState.authorized) {
           log('HomePage');

@@ -40,6 +40,7 @@ dependencies:
   fluttermoji: ^0.2.1
   get_it: ^7.0.0
   google_fonts: ^2.1.0
+  google_sign_in: ^5.1.1
   intl: ^0.17.0
   shared_preferences: ^2.0.6
   youtube_player_flutter: ^8.0.0
@@ -84,7 +85,6 @@ flutter:
         - asset: assets/fonts/Montserrat/Montserrat-SemiBoldItalic.ttf
         - asset: assets/fonts/Montserrat/Montserrat-Thin.ttf
         - asset: assets/fonts/Montserrat/Montserrat-ThinItalic.ttf
-        
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
   # For details regarding adding assets from package dependencies, see

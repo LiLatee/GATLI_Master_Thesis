@@ -1,7 +1,4 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:master_thesis/core/constants/app_constants.dart';
 import 'package:master_thesis/features/home_page/achievements_page/achievements_page.dart';
 import 'package:master_thesis/features/home_page/actions_gird_view/actions_grid_view.dart';
 import 'package:master_thesis/features/home_page/profile_page_header.dart';

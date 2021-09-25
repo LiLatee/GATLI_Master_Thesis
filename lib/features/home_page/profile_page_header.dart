@@ -2,9 +2,9 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:fluttermoji/fluttermojiCircleAvatar.dart';
 import 'package:master_thesis/core/constants/app_constants.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:master_thesis/core/constants/image_paths.dart';
 
 class ProfilePageHeader extends SliverPersistentHeaderDelegate {

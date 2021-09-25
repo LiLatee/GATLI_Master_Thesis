@@ -10,6 +10,10 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => HomePage(),
         );
+      // case EmailSignUpPage.routeName:
+      //   return MaterialPageRoute(
+      //     builder: (_) => EmailSignUpPage(),
+      //   );
       case SetAvatarPage.routeName:
         return SlideRightRoute(
           page: SetAvatarPage(),

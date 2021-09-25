@@ -5,6 +5,7 @@ import 'package:master_thesis/core/constants/app_constants.dart';
 import 'package:master_thesis/features/home_page/achievements_page/achievements_page.dart';
 import 'package:master_thesis/features/home_page/actions_gird_view/actions_grid_view.dart';
 import 'package:master_thesis/features/home_page/profile_page_header.dart';
+import 'package:master_thesis/features/home_page/settings_page/settings_page.dart';
 import 'package:master_thesis/features/widgets/custom_bottom_navigation_bar.dart';
 
 class HomePage extends StatefulWidget {
@@ -21,7 +22,7 @@ class _HomePageState extends State<HomePage> {
   static const List<Widget> _options = [
     ActionsGridView(),
     AchievementsPage(),
-    SliverToBoxAdapter(child: Center(child: LinearProgressIndicator())),
+    SettingsPage(),
   ];
 
   @override

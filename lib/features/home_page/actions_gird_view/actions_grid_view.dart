@@ -11,7 +11,7 @@ class ActionsGridView extends StatelessWidget {
     return SliverPadding(
       padding: const EdgeInsets.all(16),
       sliver: SliverGrid(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisSpacing: 16,
           mainAxisSpacing: 16,
           crossAxisCount: 2,

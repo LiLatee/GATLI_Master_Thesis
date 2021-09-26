@@ -39,6 +39,19 @@ class UserRepository {
     }
   }
 
+  Future<Either<DefaultFailure, bool>> exists(String id) async {
+    try {
+      final snapshot = await collection.doc(id).get();
+      if (snapshot.exists) {
+        return const Right(true);
+      } else {
+        return const Right(false);
+      }
+    } catch (e) {
+      return Left(DefaultFailure(message: "Can't get user. Error: $e"));
+    }
+  }
+
   // TODO
   Future<Either<DefaultFailure, void>> updateUser(UserApp user) async {
     try {

@@ -14,14 +14,6 @@
       },
       "oauth_client": [
         {
-          "client_id": "655420451184-usn18d5tla4p11kij9pla5ian7ns9nle.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "marcin.hradowicz.master_thesis",
-            "certificate_hash": "574c2bed3bf1ef20e7f168fbf7d07014944fbc99"
-          }
-        },
-        {
           "client_id": "655420451184-vgddob936qjqm48r6t2ts015rgrn3kv6.apps.googleusercontent.com",
           "client_type": 3
         }

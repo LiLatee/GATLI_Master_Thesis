@@ -4,7 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:master_thesis/core/error/failures.dart';
 import 'package:master_thesis/features/app/app_cubit.dart';
 import 'package:master_thesis/features/data/user_app.dart';
@@ -61,16 +63,22 @@ class LoginCubit extends Cubit<LoginState> {
       return;
     }
 
-    final UserApp? userApp =
-        await _firestoreCreateAccount(userCredential, nickname, email);
+    final UserApp? userApp = await _firestoreCreateAccount(
+      userCredential: userCredential,
+      nickname: nickname,
+      email: email,
+    );
 
     if (userApp != null) {
       userSessionRepository.writeSession(userId: userApp.id!); // TODO !
     }
   }
 
-  Future<UserApp?> _firestoreCreateAccount(
-      UserCredential userCredential, String nickname, String email) async {
+  Future<UserApp?> _firestoreCreateAccount({
+    required UserCredential userCredential,
+    required String nickname,
+    required String email,
+  }) async {
     final Either<DefaultFailure, DocumentReference?> failureOrRef =
         await userRepository.addUser(
       UserApp(
@@ -147,5 +155,116 @@ class LoginCubit extends Cubit<LoginState> {
         emit(LoginSuccess());
       },
     );
+  }
+
+  Future<void> signUpWithGoogle({
+    required BuildContext context,
+    required String name,
+  }) async {
+    User? user;
+    final GoogleSignIn googleSignIn = GoogleSignIn();
+
+    final GoogleSignInAccount? googleSignInAccount =
+        await googleSignIn.signIn();
+
+    if (googleSignInAccount != null) {
+      final GoogleSignInAuthentication googleSignInAuthentication =
+          await googleSignInAccount.authentication;
+
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleSignInAuthentication.accessToken,
+        idToken: googleSignInAuthentication.idToken,
+      );
+
+      try {
+        final UserCredential userCredential =
+            await firebaseAuth.signInWithCredential(credential);
+
+        user = userCredential.user;
+        final failureOrExists = await userRepository.exists(user!.uid);
+        failureOrExists.fold(
+          (failure) => LoginError(error: failure.message),
+          (exists) async {
+            UserApp? userApp = null;
+            if (!exists) {
+              userApp = await _firestoreCreateAccount(
+                userCredential: userCredential,
+                nickname: name,
+                email: userCredential.user!.email!,
+              ); // TODO !
+            }
+
+            if (userApp != null) {
+              userSessionRepository.writeSession(userId: userApp.id!); // TODO !
+            }
+          },
+        );
+
+        emit(LoginSuccess());
+      } on FirebaseAuthException catch (e, s) {
+        log('error2: $e');
+        log('stack2: $s');
+        emit(LoginError(error: e.code));
+      } catch (e, s) {
+        emit(LoginError(error: e.toString()));
+      }
+    }
+  }
+
+  Future<void> signInWithGoogle({required BuildContext context}) async {
+    User? user;
+    final GoogleSignIn googleSignIn = GoogleSignIn();
+
+    final GoogleSignInAccount? googleSignInAccount =
+        await googleSignIn.signIn();
+
+    if (googleSignInAccount != null) {
+      final GoogleSignInAuthentication googleSignInAuthentication =
+          await googleSignInAccount.authentication;
+
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleSignInAuthentication.accessToken,
+        idToken: googleSignInAuthentication.idToken,
+      );
+
+      try {
+        final UserCredential userCredential =
+            await firebaseAuth.signInWithCredential(credential);
+
+        user = userCredential.user;
+
+        final failureOrExists = await userRepository.exists(user!.uid);
+        failureOrExists.fold(
+          (failure) => LoginError(error: failure.message),
+          (exists) async {
+            if (exists) {
+              final failureOrUserApp =
+                  await userRepository.getUser(userCredential.user!.uid);
+
+              failureOrUserApp.fold(
+                (failure) {
+                  log('Error: ${failure.message}');
+                },
+                (UserApp userApp) {
+                  userSessionRepository.writeSession(
+                      userId: userApp.id!); // TODO !
+                  emit(LoginSuccess());
+                },
+              );
+            } else {
+              await firebaseAuth.signOut();
+
+              emit(LoginError(error: 'Account not found. Please sign up :)'));
+            }
+          },
+        );
+      } on FirebaseAuthException catch (e) {
+        emit(LoginError(error: e.code));
+      } catch (e) {
+        emit(LoginError(error: e.toString()));
+      }
+    } else {
+      emit(LoginError(error: 'Failure in logging to Google account.'));
+    }
   }
 }

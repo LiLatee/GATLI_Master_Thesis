@@ -25,8 +25,8 @@ Future<void> initServiceLocator() async {
   sl.registerLazySingleton(() => AppCubit());
 
   //! Repository
-  sl.registerLazySingleton(() =>
-      UserRepository(collection: sl<FirebaseFirestore>().collection('users')));
+  // sl.registerLazySingleton(() =>
+  //     UserRepository(collection: sl<FirebaseFirestore>().collection('users')));
   sl.registerLazySingleton(() => UserSessionRepository());
 
   //! Data source

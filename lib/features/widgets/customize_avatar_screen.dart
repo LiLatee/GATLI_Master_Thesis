@@ -9,9 +9,9 @@ class CustomizeAvatarScreen extends StatelessWidget {
         body: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Spacer(),
+            const Spacer(),
             FluttermojiCircleAvatar(),
-            Spacer(),
+            const Spacer(),
             FluttermojiCustomizer(),
           ],
         ),

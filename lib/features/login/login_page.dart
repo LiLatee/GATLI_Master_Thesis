@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:master_thesis/core/l10n/l10n.dart';
 import 'package:master_thesis/features/home_page/home_screen.dart';
+import 'package:master_thesis/features/home_page/settings_page/set_avatar_page.dart';
 import 'package:master_thesis/features/login/login_cubit.dart';
 import 'package:master_thesis/features/login/sign_in_widget.dart';
 import 'package:master_thesis/features/login/sign_up_widget.dart';
@@ -40,8 +41,12 @@ class _LoginPageState extends State<LoginPage> {
     return BlocListener<LoginCubit, LoginState>(
       bloc: loginCubit,
       listener: (context, state) {
+        log('Listener state: $state');
+
         if (state is LoginSuccess) {
           Navigator.pushNamed(context, HomePage.routeName);
+        } else if (state is LoginSignUpSuccess) {
+          Navigator.pushNamed(context, SetAvatarPage.routeName);
         } else if (state is LoginError) {
           ScaffoldMessenger.of(context)
               .showSnackBar(SnackBar(content: Text(state.error)));

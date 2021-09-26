@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:master_thesis/features/home_page/home_screen.dart';
-import 'package:master_thesis/features/launching/first_launch/presentation/pages/set_avatar_page.dart';
+import 'package:master_thesis/features/home_page/settings_page/set_avatar_page.dart';
 import 'package:master_thesis/features/login/login_page.dart';
 
 class AppRouter {

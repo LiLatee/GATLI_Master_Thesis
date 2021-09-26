@@ -1,7 +1,9 @@
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:master_thesis/features/data/user_session_repository.dart';
+import 'package:master_thesis/features/data/users_repository.dart';
 import 'package:master_thesis/service_locator.dart';
 
 class AppCubit extends Cubit<AppState> {
@@ -19,7 +21,12 @@ class AppCubit extends Cubit<AppState> {
 
     failureOrSession.fold(
       (_) => emit(AppState.unauthorized),
-      (_) => emit(AppState.authorized),
+      (userId) {
+        sl.registerLazySingleton(() => UserRepository(
+            documentReference:
+                sl<FirebaseFirestore>().collection('users').doc(userId)));
+        emit(AppState.authorized);
+      },
     );
   }
 

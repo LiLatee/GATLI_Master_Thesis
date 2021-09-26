@@ -1,11 +1,16 @@
-import 'dart:math';
+import 'dart:developer';
+import 'dart:math' as math;
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:fluttermoji/fluttermojiCircleAvatar.dart';
 import 'package:master_thesis/core/constants/app_constants.dart';
 import 'package:master_thesis/core/constants/image_paths.dart';
+import 'package:master_thesis/features/data/user_app.dart';
+import 'package:master_thesis/features/data/users_repository.dart';
+import 'package:master_thesis/service_locator.dart';
 
 class ProfilePageHeader extends SliverPersistentHeaderDelegate {
   ProfilePageHeader({
@@ -17,52 +22,58 @@ class ProfilePageHeader extends SliverPersistentHeaderDelegate {
   @override
   final double maxExtent;
 
+  late UserApp _userApp;
+
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return Stack(
-      fit: StackFit.expand,
-      children: [
-        Container(
-          padding: const EdgeInsets.only(bottom: 8.0),
-          child: Card(
-            elevation: 8,
-            color: Theme.of(context).colorScheme.primary,
-            shape: RoundedRectangleBorder(
-              borderRadius:
-                  BorderRadius.circular(AppConstants.cornersRoundingRadius),
-            ),
-          ),
-        ),
-        // Container(
-        //   margin: const EdgeInsets.all(4),
-        //   decoration: BoxDecoration(
-        //     color: Theme.of(context).colorScheme.primary,
-        //     gradient: const LinearGradient(
-        //         colors: [Color(0xff1D976C), Color(0xff93F9B9)]),
-        //     borderRadius:
-        //         BorderRadius.circular(AppConstants.cornersRoundingRadius),
-        //   ),
-        // ),
-        Positioned(
-          top: 8.0,
-          child: Row(
-            children: [
-              FluttermojiCircleAvatar(
-                radius: AppConstants.homePageAvatarRadius,
-                backgroundColor: Colors.transparent,
-              ),
-              const SizedBox(width: 8.0),
-              Text(
-                "Marcin Hradowicz",
-                style: Theme.of(context).textTheme.headline5,
-              ),
-            ],
-          ),
-        ),
-        _buildContent(context, shrinkOffset),
-      ],
-    );
+    return StreamBuilder<DocumentSnapshot>(
+        stream: sl<UserRepository>().getStream(),
+        builder:
+            (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+          if (snapshot.hasData) {
+            _userApp =
+                UserApp.fromMap(snapshot.data!.data() as Map<String, dynamic>);
+            log(_userApp.toString());
+            return Stack(
+              fit: StackFit.expand,
+              children: [
+                Container(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: Card(
+                    elevation: 8,
+                    color: Theme.of(context).colorScheme.primary,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                          AppConstants.cornersRoundingRadius),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: 8.0,
+                  child: Row(
+                    children: [
+                      FluttermojiCircleAvatar(
+                        radius: AppConstants.homePageAvatarRadius,
+                        backgroundColor: Colors.transparent,
+                      ),
+                      const SizedBox(width: 8.0),
+                      Text(
+                        _userApp.nickname,
+                        style: Theme.of(context).textTheme.headline5,
+                      ),
+                    ],
+                  ),
+                ),
+                _buildContent(context, shrinkOffset),
+              ],
+            );
+          } else {
+            return const Center(
+              child: Text('No data.'),
+            );
+          }
+        });
   }
 
   Widget _buildContent(BuildContext context, double shrinkOffset) {
@@ -155,7 +166,7 @@ class ProfilePageHeader extends SliverPersistentHeaderDelegate {
             ),
             const SizedBox(width: 8),
             Text(
-              "1230 ",
+              '${_userApp.steps} ',
               style:
                   Theme.of(context).textTheme.bodyText2!.copyWith(fontSize: 16),
             ),
@@ -176,7 +187,7 @@ class ProfilePageHeader extends SliverPersistentHeaderDelegate {
             ),
             const SizedBox(width: 8),
             Text(
-              "3.4 km",
+              '${_userApp.kilometers} km',
               style:
                   Theme.of(context).textTheme.bodyText2!.copyWith(fontSize: 16),
             ),
@@ -245,7 +256,7 @@ class ProfilePageHeader extends SliverPersistentHeaderDelegate {
 
   double titleOpacity(double shrinkOffset) {
     // simple formula: fade out text as soon as shrinkOffset > 0
-    return 1.0 - max(0.0, shrinkOffset) / maxExtent;
+    return 1.0 - math.max(0.0, shrinkOffset) / maxExtent;
     // more complex formula: starts fading out text when shrinkOffset > minExtent
     //return 1.0 - max(0.0, (shrinkOffset - minExtent)) / (maxExtent - minExtent);
   }

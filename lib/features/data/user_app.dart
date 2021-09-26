@@ -10,6 +10,7 @@ class UserApp extends Equatable {
     required this.badgesKeys,
     required this.steps,
     required this.kilometers,
+    required this.emojiSVG,
   });
 
   final String? id;
@@ -18,6 +19,7 @@ class UserApp extends Equatable {
   final List<String> badgesKeys;
   final int steps;
   final int kilometers;
+  final String emojiSVG;
 
   Map<String, dynamic> toMap() {
     return {
@@ -27,6 +29,7 @@ class UserApp extends Equatable {
       'badgesKeys': badgesKeys,
       'steps': steps,
       'kilometers': kilometers,
+      'emojiSVG': emojiSVG,
     };
   }
 
@@ -38,6 +41,7 @@ class UserApp extends Equatable {
       badgesKeys: List<String>.from(map['badgesKeys']),
       steps: map['steps'],
       kilometers: map['kilometers'],
+      emojiSVG: map['emojiSVG'],
     );
   }
 
@@ -54,6 +58,7 @@ class UserApp extends Equatable {
         badgesKeys,
         steps,
         kilometers,
+        emojiSVG,
       ];
 
   UserApp copyWith({
@@ -63,6 +68,7 @@ class UserApp extends Equatable {
     List<String>? badgesKeys,
     int? steps,
     int? kilometers,
+    String? emojiSVG,
   }) {
     return UserApp(
       id: id ?? this.id,
@@ -71,6 +77,7 @@ class UserApp extends Equatable {
       badgesKeys: badgesKeys ?? this.badgesKeys,
       steps: steps ?? this.steps,
       kilometers: kilometers ?? this.kilometers,
+      emojiSVG: emojiSVG ?? this.emojiSVG,
     );
   }
 }

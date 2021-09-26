@@ -4,23 +4,27 @@ import 'package:master_thesis/core/error/failures.dart';
 import 'package:master_thesis/features/data/user_app.dart';
 
 class UserRepository {
-  const UserRepository({required this.collection});
-  final CollectionReference collection;
+  const UserRepository({
+    required this.documentReference,
+    // required this.userId,
+  });
+  final DocumentReference documentReference;
+  // final String userId;
 
-  Stream<QuerySnapshot> getStream() {
-    return collection.snapshots();
+  Stream<DocumentSnapshot> getStream() {
+    return documentReference.snapshots();
+    //aJwZi61bASMdQWGCvRrFeocXi7U2
   }
 
   Future<Either<DefaultFailure, DocumentReference>> addUser(
       UserApp user) async {
     final DocumentReference ref;
     try {
-      ref = collection.doc(user.id);
-      await ref.set(user.toMap());
+      await documentReference.set(user.toMap());
     } catch (e) {
       return Left(DefaultFailure(message: "Can't add user. Error: $e"));
     }
-    return Right(ref);
+    return Right(documentReference);
   }
 
   // DocumentReference getUserDocumentReference(UserApp userApp) {
@@ -31,7 +35,7 @@ class UserRepository {
     final Map<String, dynamic> userAppMap;
     try {
       userAppMap =
-          (await collection.doc(id).get()).data() as Map<String, dynamic>;
+          (await documentReference.get()).data() as Map<String, dynamic>;
 
       return Right(UserApp.fromMap(userAppMap).copyWith(id: id));
     } catch (e) {
@@ -41,7 +45,7 @@ class UserRepository {
 
   Future<Either<DefaultFailure, bool>> exists(String id) async {
     try {
-      final snapshot = await collection.doc(id).get();
+      final snapshot = await documentReference.get();
       if (snapshot.exists) {
         return const Right(true);
       } else {
@@ -55,7 +59,7 @@ class UserRepository {
   // TODO
   Future<Either<DefaultFailure, void>> updateUser(UserApp user) async {
     try {
-      await collection.doc(user.id).update(user.toMap());
+      await documentReference.update(user.toMap());
       return const Right(null);
     } catch (e) {
       return Left(DefaultFailure(message: "Can't update user. Error: $e"));

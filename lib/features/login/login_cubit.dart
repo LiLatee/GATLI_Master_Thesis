@@ -6,6 +6,7 @@ import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttermoji/fluttermoji.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:master_thesis/core/error/failures.dart';
 import 'package:master_thesis/features/app/app_cubit.dart';
@@ -24,7 +25,16 @@ class LoginInitial extends LoginState {}
 class LoginLoading extends LoginState {}
 
 class LoginSuccess extends LoginState {
-  LoginSuccess() {
+  LoginSuccess({required userId}) {
+    sl.registerLazySingleton(() => UserRepository(
+        documentReference:
+            sl<FirebaseFirestore>().collection('users').doc(userId)));
+    sl<AppCubit>().emit(AppState.authorized);
+  }
+}
+
+class LoginSignUpSuccess extends LoginState {
+  LoginSignUpSuccess() {
     sl<AppCubit>().emit(AppState.authorized);
   }
 }
@@ -88,6 +98,7 @@ class LoginCubit extends Cubit<LoginState> {
         badgesKeys: const [],
         steps: 0,
         kilometers: 0,
+        emojiSVG: await FluttermojiFunctions().encodeMySVGtoString(),
       ),
     );
 
@@ -109,7 +120,7 @@ class LoginCubit extends Cubit<LoginState> {
           },
           (UserApp userApp) {
             log(userApp.toJson());
-            emit(LoginSuccess());
+            emit(LoginSignUpSuccess());
             return userApp;
           },
         );
@@ -152,7 +163,7 @@ class LoginCubit extends Cubit<LoginState> {
       },
       (UserApp userApp) {
         userSessionRepository.writeSession(userId: userApp.id!); // TODO !
-        emit(LoginSuccess());
+        emit(LoginSuccess(userId: userApp.id));
       },
     );
   }
@@ -185,7 +196,7 @@ class LoginCubit extends Cubit<LoginState> {
         failureOrExists.fold(
           (failure) => LoginError(error: failure.message),
           (exists) async {
-            UserApp? userApp = null;
+            UserApp? userApp;
             if (!exists) {
               userApp = await _firestoreCreateAccount(
                 userCredential: userCredential,
@@ -200,7 +211,7 @@ class LoginCubit extends Cubit<LoginState> {
           },
         );
 
-        emit(LoginSuccess());
+        emit(LoginSuccess(userId: user.uid));
       } on FirebaseAuthException catch (e, s) {
         log('error2: $e');
         log('stack2: $s');
@@ -248,7 +259,7 @@ class LoginCubit extends Cubit<LoginState> {
                 (UserApp userApp) {
                   userSessionRepository.writeSession(
                       userId: userApp.id!); // TODO !
-                  emit(LoginSuccess());
+                  emit(LoginSuccess(userId: userApp.id));
                 },
               );
             } else {

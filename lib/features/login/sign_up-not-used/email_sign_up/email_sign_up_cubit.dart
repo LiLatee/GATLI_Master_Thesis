@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fluttermoji/fluttermojiFunctions.dart';
 import 'package:master_thesis/core/error/failures.dart';
 import 'package:master_thesis/features/data/user_app.dart';
 import 'package:master_thesis/features/data/user_session_repository.dart';
@@ -59,6 +60,7 @@ class EmailSignUpCubit extends Cubit<EmailSignUpState> {
         badgesKeys: const [],
         steps: 0,
         kilometers: 0,
+        emojiSVG: await FluttermojiFunctions().encodeMySVGtoString(),
       ),
     );
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:master_thesis/core/constants/app_constants.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:master_thesis/features/launching/first_launch/presentation/pages/set_avatar_page.dart';
+import 'package:master_thesis/features/home_page/settings_page/set_avatar_page.dart';
 
 class SetNameScreen extends StatelessWidget {
   const SetNameScreen({Key? key}) : super(key: key);

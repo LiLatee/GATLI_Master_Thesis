@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:master_thesis/features/home_page/grid_items/thai_chi/thai_chi_lesson.dart';
+import 'package:master_thesis/features/home_page/grid_items/thai_chi/thai_chi_page.dart';
 import 'package:master_thesis/features/home_page/home_screen.dart';
 import 'package:master_thesis/features/home_page/settings_page/set_avatar_page.dart';
 import 'package:master_thesis/features/login/login_page.dart';
@@ -14,6 +16,13 @@ class AppRouter {
       case LoginPage.routeName:
         return MaterialPageRoute(
           builder: (_) => const LoginPage(),
+        );
+      case ThaiChiPage.routeName:
+        final args = settings.arguments as ThaiChiLesson;
+        return MaterialPageRoute(
+          builder: (_) => ThaiChiPage(
+            thaiChiLesson: args,
+          ),
         );
       case SetAvatarPage.routeName:
         return SlideRightRoute(

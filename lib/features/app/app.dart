@@ -2,12 +2,11 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:master_thesis/core/l10n/l10n.dart';
 import 'package:master_thesis/core/themes/app_theme.dart';
 import 'package:master_thesis/features/app/app_cubit.dart';
 import 'package:master_thesis/features/home_page/home_screen.dart';
-import 'package:master_thesis/features/launching/presentation/cubit/launching_cubit.dart';
 import 'package:master_thesis/features/login/login_page.dart';
 import 'package:master_thesis/features/splash_screen/splash_screen.dart';
 import 'package:master_thesis/router/app_router.dart';
@@ -17,15 +16,8 @@ class App extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<LaunchingCubit>(
-          create: (_) => sl<LaunchingCubit>(),
-        ),
-      ],
-      child: Builder(
-        builder: (context) => _buildMaterialApp(),
-      ),
+    return Builder(
+      builder: (context) => _buildMaterialApp(),
     );
   }
 
@@ -66,17 +58,5 @@ class App extends StatelessWidget {
         }
       },
     );
-
-    // return BlocBuilder<LaunchingCubit, LaunchingState>(
-    //   builder: (context, state) {
-    //     if (state is LaunchingSetProfile) {
-    //       return const SetNameScreen();
-    //     } else if (state is LaunchingHomeScreen) {
-    //       return const HomePage();
-    //     } else {
-    //       return const SplashScreen();
-    //     }
-    //   },
-    // );
   }
 }

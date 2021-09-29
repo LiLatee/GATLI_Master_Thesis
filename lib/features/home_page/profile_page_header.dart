@@ -4,10 +4,10 @@ import 'dart:math' as math;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:fluttermoji/fluttermojiCircleAvatar.dart';
 import 'package:master_thesis/core/constants/app_constants.dart';
 import 'package:master_thesis/core/constants/image_paths.dart';
+import 'package:master_thesis/core/l10n/l10n.dart';
 import 'package:master_thesis/features/data/user_app.dart';
 import 'package:master_thesis/features/data/users_repository.dart';
 import 'package:master_thesis/service_locator.dart';
@@ -100,7 +100,7 @@ class ProfilePageHeader extends SliverPersistentHeaderDelegate {
           children: [
             Text(
               // "Today's statistics:",
-              AppLocalizations.of(context)!.todaysStatistics,
+              context.l10n.todaysStatistics,
 
               style: Theme.of(context).textTheme.headline6,
             ),
@@ -129,7 +129,7 @@ class ProfilePageHeader extends SliverPersistentHeaderDelegate {
             const SizedBox(width: 8),
             Text(
               // "Thai Chi Exercise",
-              AppLocalizations.of(context)!.thaiChi,
+              context.l10n.thaiChi,
 
               style:
                   Theme.of(context).textTheme.bodyText2!.copyWith(fontSize: 16),
@@ -143,7 +143,7 @@ class ProfilePageHeader extends SliverPersistentHeaderDelegate {
             const SizedBox(width: 8),
             Text(
               // "Any physical activity",
-              AppLocalizations.of(context)!.anyPhysicalActivity,
+              context.l10n.anyPhysicalActivity,
               style:
                   Theme.of(context).textTheme.bodyText2!.copyWith(fontSize: 16),
             ),
@@ -171,7 +171,7 @@ class ProfilePageHeader extends SliverPersistentHeaderDelegate {
                   Theme.of(context).textTheme.bodyText2!.copyWith(fontSize: 16),
             ),
             Text(
-              AppLocalizations.of(context)!.steps,
+              context.l10n.steps,
               style:
                   Theme.of(context).textTheme.bodyText2!.copyWith(fontSize: 16),
             ),
@@ -203,7 +203,7 @@ class ProfilePageHeader extends SliverPersistentHeaderDelegate {
         Row(
           children: [
             Text(
-              "Overall statistics:",
+              'Overall statistics:',
               style: Theme.of(context).textTheme.headline6,
             ),
           ],
@@ -221,14 +221,14 @@ class ProfilePageHeader extends SliverPersistentHeaderDelegate {
                 // ),
                 const SizedBox(width: 8),
                 Text(
-                  "All collected badges: ",
+                  'All collected badges: ',
                   style: Theme.of(context)
                       .textTheme
                       .bodyText2!
                       .copyWith(fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  "8 ",
+                  '8 ',
                   style: Theme.of(context).textTheme.bodyText2,
                 ),
               ],
@@ -243,7 +243,7 @@ class ProfilePageHeader extends SliverPersistentHeaderDelegate {
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  "3.4 km",
+                  '3.4 km',
                   style: Theme.of(context).textTheme.headline5,
                 ),
               ],

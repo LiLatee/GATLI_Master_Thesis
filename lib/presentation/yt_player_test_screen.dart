@@ -1,16 +1,17 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class YTPlayerTestScreen extends StatelessWidget {
   final String videoId;
-  late YoutubePlayerController _controller;
+  late final YoutubePlayerController _controller;
 
-  YTPlayerTestScreen({Key? key, required this.videoId}) : super(key: key) {
+  YTPlayerTestScreen({
+    Key? key,
+    required this.videoId,
+  }) : super(key: key) {
     _controller = YoutubePlayerController(
       initialVideoId: videoId,
-      flags: YoutubePlayerFlags(
+      flags: const YoutubePlayerFlags(
         autoPlay: false,
         mute: false,
       ),
@@ -24,7 +25,7 @@ class YTPlayerTestScreen extends StatelessWidget {
         controller: _controller,
         showVideoProgressIndicator: true,
         progressIndicatorColor: Colors.red,
-        progressColors: ProgressBarColors(
+        progressColors: const ProgressBarColors(
           handleColor: Colors.red,
           backgroundColor: Colors.black,
           playedColor: Colors.red,

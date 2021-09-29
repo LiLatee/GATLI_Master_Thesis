@@ -102,7 +102,7 @@ class _SetAvatarPageState extends State<SetAvatarPage> {
       padding: const EdgeInsets.symmetric(
           horizontal: AppConstants.toScreenEdgePadding),
       child: Text(
-        AppLocalizations.of(context)!.setAvatarMessage,
+        context.l10n.setAvatarMessage,
         textAlign: TextAlign.center,
         style: Theme.of(context).textTheme.headline6,
       ),
@@ -115,7 +115,7 @@ class _SetAvatarPageState extends State<SetAvatarPage> {
       children: [
         const SizedBox(height: AppConstants.toScreenEdgePadding),
         FluttermojiCustomizer(
-          outerTitleText: AppLocalizations.of(context)!.customizeAvatar,
+          outerTitleText: context.l10n.customizeAvatar,
         ),
       ],
     );

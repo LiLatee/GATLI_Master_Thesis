@@ -40,8 +40,7 @@ class EmailSignInCubit extends Cubit<EmailSignInState> {
     // log(userCredential.credential!.providerId);
     log(userCredential.user!.uid);
 
-    final failureOrUserApp =
-        await userRepository.getUser(userCredential.user!.uid);
+    final failureOrUserApp = await userRepository.getUser();
 
     failureOrUserApp.fold(
       (failure) {

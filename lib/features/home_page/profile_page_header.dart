@@ -29,11 +29,13 @@ class ProfilePageHeader extends SliverPersistentHeaderDelegate {
       BuildContext context, double shrinkOffset, bool overlapsContent) {
     return StreamBuilder<DocumentSnapshot>(
         stream: sl<UserRepository>().getStream(),
-        builder:
-            (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+        builder: (
+          BuildContext context,
+          AsyncSnapshot<DocumentSnapshot> snapshot,
+        ) {
           if (snapshot.hasData) {
             _userApp =
-                UserApp.fromMap(snapshot.data!.data() as Map<String, dynamic>);
+                UserApp.fromJson(snapshot.data!.data() as Map<String, dynamic>);
             log(_userApp.toString());
             return Stack(
               fit: StackFit.expand,

@@ -61,6 +61,8 @@ class EmailSignUpCubit extends Cubit<EmailSignUpState> {
         steps: 0,
         kilometers: 0,
         emojiSVG: await FluttermojiFunctions().encodeMySVGtoString(),
+        activeInterventions: const {},
+        pastInterventions: const {},
       ),
     );
 
@@ -71,8 +73,7 @@ class EmailSignUpCubit extends Cubit<EmailSignUpState> {
         return null;
       },
       (ref) async {
-        final failureOrUserApp =
-            await userRepository.getUser(ref!.id); // TODO !
+        final failureOrUserApp = await userRepository.getUser();
 
         return failureOrUserApp.fold(
           (failure) {
@@ -81,7 +82,7 @@ class EmailSignUpCubit extends Cubit<EmailSignUpState> {
             return null;
           },
           (UserApp userApp) {
-            log(userApp.toJson());
+            log(userApp.toJson().toString());
             emit(EmailSignUpSuccess());
             return userApp;
           },

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:master_thesis/core/error/failures.dart';
@@ -18,26 +20,34 @@ class UserRepository {
 
   Future<Either<DefaultFailure, DocumentReference>> addUser(
       UserApp user) async {
-    final DocumentReference ref;
     try {
-      await documentReference.set(user.toMap());
+      await documentReference.set(user.toJson());
     } catch (e) {
       return Left(DefaultFailure(message: "Can't add user. Error: $e"));
     }
     return Right(documentReference);
   }
 
-  // DocumentReference getUserDocumentReference(UserApp userApp) {
-  //   return collection.doc(userApp.id);
-  // }
+  Future<Either<DefaultFailure, DocumentReference>> assignThaiChiInterventions(
+      {required String thaiChiInterventionId}) async {
+    try {
+      await documentReference.update({
+        'activeInterventions': {
+          'thai_chi': [thaiChiInterventionId] // TODO it overwrites
+        }
+      });
+    } catch (e) {
+      return Left(DefaultFailure(message: "Can't add user. Error: $e"));
+    }
+    return Right(documentReference);
+  }
 
-  Future<Either<DefaultFailure, UserApp>> getUser(String id) async {
+  Future<Either<DefaultFailure, UserApp>> getUser() async {
     final Map<String, dynamic> userAppMap;
     try {
       userAppMap =
           (await documentReference.get()).data() as Map<String, dynamic>;
-
-      return Right(UserApp.fromMap(userAppMap).copyWith(id: id));
+      return Right(UserApp.fromJson(userAppMap)); // usunięte .copyWith(id: id)
     } catch (e) {
       return Left(DefaultFailure(message: "Can't get user. Error: $e"));
     }
@@ -56,10 +66,10 @@ class UserRepository {
     }
   }
 
-  // TODO
+  // TODO probably not working
   Future<Either<DefaultFailure, void>> updateUser(UserApp user) async {
     try {
-      await documentReference.update(user.toMap());
+      await documentReference.update(user.toJson());
       return const Right(null);
     } catch (e) {
       return Left(DefaultFailure(message: "Can't update user. Error: $e"));

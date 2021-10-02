@@ -7,10 +7,11 @@ import 'package:master_thesis/service_locator.dart';
 // on iOS it uses Keychain, so uninstalling app doesn't remove session.
 class UserSessionRepository {
   final FlutterSecureStorage _flutterSecureStorage = sl<FlutterSecureStorage>();
+  static const userSessionKey = '/currentUserId';
 
   Either<DefaultFailure, bool> writeSession({required String userId}) {
     try {
-      _flutterSecureStorage.write(key: 'curretnUserId', value: userId);
+      _flutterSecureStorage.write(key: userSessionKey, value: userId);
       return const Right(true);
     } catch (_) {
       return const Left(DefaultFailure(
@@ -21,7 +22,7 @@ class UserSessionRepository {
   Future<Either<DefaultFailure, String>> readSession() async {
     try {
       final String? userSession =
-          await _flutterSecureStorage.read(key: 'curretnUserId');
+          await _flutterSecureStorage.read(key: userSessionKey);
       if (userSession != null) {
         return Right(userSession);
       } else {
@@ -36,7 +37,7 @@ class UserSessionRepository {
 
   Future<Either<DefaultFailure, bool>> deleteSession() async {
     try {
-      await _flutterSecureStorage.delete(key: 'curretnUserId');
+      await _flutterSecureStorage.delete(key: userSessionKey);
       return const Right(true);
     } catch (_) {
       return const Left(DefaultFailure(

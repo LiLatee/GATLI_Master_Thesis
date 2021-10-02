@@ -20,6 +20,14 @@ extension ThemeModeExt on ThemeMode {
 ThemeData get myLightThemeData => ThemeData(
       colorScheme: myLightColorScheme,
       fontFamily: 'Montserrat',
+      textButtonTheme: myTextButtonThemeData,
+    );
+
+TextButtonThemeData get myTextButtonThemeData => TextButtonThemeData(
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(myLightColorScheme.primary),
+        foregroundColor: MaterialStateProperty.all(Colors.white),
+      ),
     );
 
 ColorScheme get myLightColorScheme => const ColorScheme(

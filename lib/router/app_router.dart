@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:master_thesis/features/home_page/grid_items/admin_page/admin_page.dart';
+import 'package:master_thesis/features/home_page/grid_items/thai_chi/thai_chi_intervention_page.dart';
 import 'package:master_thesis/features/home_page/grid_items/thai_chi/thai_chi_lesson.dart';
 import 'package:master_thesis/features/home_page/grid_items/thai_chi/thai_chi_page.dart';
 import 'package:master_thesis/features/home_page/home_screen.dart';
@@ -17,16 +19,25 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => const LoginPage(),
         );
+      case AdminPage.routeName:
+        return MaterialPageRoute(
+          builder: (_) => const AdminPage(),
+        );
       case ThaiChiPage.routeName:
-        final args = settings.arguments as ThaiChiLesson;
+        final args = settings.arguments as ThaiChiPageArguments;
         return MaterialPageRoute(
           builder: (_) => ThaiChiPage(
-            thaiChiLesson: args,
+            thaiChiLesson: args.thaiChiLesson,
+            thaiChiIntervention: args.thaiChiIntervention,
           ),
+        );
+      case ThaiChiInterventionPage.routeName:
+        return MaterialPageRoute(
+          builder: (_) => const ThaiChiInterventionPage(),
         );
       case SetAvatarPage.routeName:
         return SlideRightRoute(
-          page: SetAvatarPage(),
+          page: const SetAvatarPage(),
         );
     }
   }

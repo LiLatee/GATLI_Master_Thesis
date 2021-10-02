@@ -20,8 +20,13 @@ class AppCubit extends Cubit<AppState> {
     final failureOrSession = await userSessionRepository.readSession();
 
     failureOrSession.fold(
-      (_) => emit(AppState.unauthorized),
+      (_) {
+        log('unauthorized');
+
+        emit(AppState.unauthorized);
+      },
       (userId) {
+        log('authorized');
         sl.registerLazySingleton(() => UserRepository(
             documentReference:
                 sl<FirebaseFirestore>().collection('users').doc(userId)));
@@ -32,6 +37,7 @@ class AppCubit extends Cubit<AppState> {
 
   Future<void> logout() async {
     await userSessionRepository.deleteSession();
+    sl.unregister<UserRepository>();
     emit(AppState.unauthorized);
   }
 }

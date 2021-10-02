@@ -80,7 +80,7 @@ class _SetAvatarPageState extends State<SetAvatarPage> {
         failureOrUserId.fold(
           (l) => null,
           (userId) async {
-            final failureOrUser = await sl<UserRepository>().getUser(userId);
+            final failureOrUser = await sl<UserRepository>().getUser();
             failureOrUser.fold(
               (l) => null,
               (user) async {

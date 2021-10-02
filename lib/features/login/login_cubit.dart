@@ -26,9 +26,9 @@ class LoginLoading extends LoginState {}
 
 class LoginSuccess extends LoginState {
   LoginSuccess({required userId}) {
-    sl.registerLazySingleton(() => UserRepository(
-        documentReference:
-            sl<FirebaseFirestore>().collection('users').doc(userId)));
+    // sl.registerLazySingleton(() => UserRepository(
+    //     documentReference:
+    //         sl<FirebaseFirestore>().collection('users').doc(userId)));
     sl<AppCubit>().emit(AppState.authorized);
   }
 }
@@ -50,7 +50,7 @@ class LoginCubit extends Cubit<LoginState> {
 
   final AppCubit appCubit = sl<AppCubit>();
   final FirebaseAuth firebaseAuth = sl<FirebaseAuth>();
-  final UserRepository userRepository = sl<UserRepository>();
+  late final UserRepository userRepository;
   final UserSessionRepository userSessionRepository =
       sl<UserSessionRepository>();
 
@@ -89,6 +89,12 @@ class LoginCubit extends Cubit<LoginState> {
     required String nickname,
     required String email,
   }) async {
+    sl.registerLazySingleton(() => UserRepository(
+        documentReference: sl<FirebaseFirestore>()
+            .collection('users')
+            .doc(userCredential.user!.uid)));
+    userRepository = sl<UserRepository>();
+
     final Either<DefaultFailure, DocumentReference?> failureOrRef =
         await userRepository.addUser(
       UserApp(
@@ -99,6 +105,8 @@ class LoginCubit extends Cubit<LoginState> {
         steps: 0,
         kilometers: 0,
         emojiSVG: await FluttermojiFunctions().encodeMySVGtoString(),
+        activeInterventions: const {},
+        pastInterventions: const {},
       ),
     );
 
@@ -109,8 +117,7 @@ class LoginCubit extends Cubit<LoginState> {
         return null;
       },
       (ref) async {
-        final failureOrUserApp =
-            await userRepository.getUser(ref!.id); // TODO !
+        final failureOrUserApp = await userRepository.getUser();
 
         return failureOrUserApp.fold(
           (failure) {
@@ -119,7 +126,7 @@ class LoginCubit extends Cubit<LoginState> {
             return null;
           },
           (UserApp userApp) {
-            log(userApp.toJson());
+            log(userApp.toJson().toString());
             emit(LoginSignUpSuccess());
             return userApp;
           },
@@ -154,8 +161,13 @@ class LoginCubit extends Cubit<LoginState> {
     // log(userCredential.credential!.providerId);
     log(userCredential.user!.uid);
 
-    final failureOrUserApp =
-        await userRepository.getUser(userCredential.user!.uid);
+    sl.registerLazySingleton(() => UserRepository(
+        documentReference: sl<FirebaseFirestore>()
+            .collection('users')
+            .doc(userCredential!.user!.uid)));
+    userRepository = sl<UserRepository>();
+
+    final failureOrUserApp = await userRepository.getUser();
 
     failureOrUserApp.fold(
       (failure) {
@@ -249,8 +261,7 @@ class LoginCubit extends Cubit<LoginState> {
           (failure) => LoginError(error: failure.message),
           (exists) async {
             if (exists) {
-              final failureOrUserApp =
-                  await userRepository.getUser(userCredential.user!.uid);
+              final failureOrUserApp = await userRepository.getUser();
 
               failureOrUserApp.fold(
                 (failure) {

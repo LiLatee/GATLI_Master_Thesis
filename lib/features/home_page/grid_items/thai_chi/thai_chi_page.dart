@@ -2,19 +2,34 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:master_thesis/features/home_page/grid_items/thai_chi/thai_chi_intervention.dart';
+import 'package:master_thesis/features/home_page/grid_items/thai_chi/thai_chi_interventions_repository.dart';
 import 'package:master_thesis/features/home_page/grid_items/thai_chi/thai_chi_lesson.dart';
+import 'package:master_thesis/service_locator.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
+class ThaiChiPageArguments {
+  ThaiChiPageArguments({
+    required this.thaiChiLesson,
+    required this.thaiChiIntervention,
+  });
+
+  final ThaiChiLesson thaiChiLesson;
+  final ThaiChiIntervention thaiChiIntervention;
+}
+
 class ThaiChiPage extends StatefulWidget {
-  ThaiChiPage({
+  const ThaiChiPage({
     Key? key,
     required this.thaiChiLesson,
+    required this.thaiChiIntervention,
   }) : super(key: key);
 
   static const routeName = '/thaiChi';
 
   final ThaiChiLesson thaiChiLesson;
+  final ThaiChiIntervention thaiChiIntervention;
 
   @override
   State<ThaiChiPage> createState() => _ThaiChiPageState();
@@ -24,6 +39,8 @@ class _ThaiChiPageState extends State<ThaiChiPage> {
   late final YoutubePlayerController _controller;
   late final StopWatchTimer _stopWatchTimer;
   int _watchedTimeInSeconds = 0;
+
+  bool _isWatchedVideo = false;
 
   bool fullscreen = false;
   @override
@@ -36,6 +53,34 @@ class _ThaiChiPageState extends State<ThaiChiPage> {
       onChangeRawSecond: (value) {
         log('onChangeRawSecond $value');
         _watchedTimeInSeconds = value;
+        final bool isWatchedVideo = 5 < _watchedTimeInSeconds;
+
+        // TODO for tests
+
+        // final bool isWatchedVideo =
+        //     _controller.metadata.duration.inSeconds * 0.9 <
+        //         _watchedTimeInSeconds;
+
+        if (isWatchedVideo && !_isWatchedVideo) {
+          setState(() {
+            _isWatchedVideo = true;
+          });
+          ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Well done! Exercise performed.')));
+
+          final lessonsDone = widget.thaiChiIntervention.lessonsDone +
+              [widget.thaiChiLesson.id];
+          final lessonsToDo = widget.thaiChiIntervention.lessonsToDo;
+          lessonsToDo.remove(widget.thaiChiLesson.id);
+
+          final ThaiChiIntervention newThaiChiIntervention =
+              widget.thaiChiIntervention.copyWith(
+            lessonsDone: lessonsDone,
+            lessonsToDo: lessonsToDo,
+          );
+          sl<ThaiChiInterventionsRepository>().updateThaiChiIntervention(
+              newThaiChiIntervention: newThaiChiIntervention);
+        }
       },
       // onChangeRawMinute: (value) => log('onChangeRawMinute $value'),
     );
@@ -62,30 +107,43 @@ class _ThaiChiPageState extends State<ThaiChiPage> {
       appBar: fullscreen
           ? null
           : AppBar(
-              title: const Text('Module 1'),
+              title: Text(widget.thaiChiLesson.title),
             ),
-      floatingActionButton: fullscreen
-          ? null
-          : FloatingActionButton.extended(
-              label: Text('Done'),
-              icon: const Icon(Icons.done),
-              onPressed: () {
-                // final bool isWatchedVideo =
-                //     _controller.metadata.duration.inSeconds * 0.9 <
-                //         _watchedTimeInSeconds;
+      // floatingActionButton: fullscreen
+      //     ? null
+      //     : FloatingActionButton.extended(
+      //         label: const Text('Done'),
+      //         icon: const Icon(Icons.done),
+      //         onPressed: () {
+      //           // final bool isWatchedVideo =
+      //           //     _controller.metadata.duration.inSeconds * 0.9 <
+      //           //         _watchedTimeInSeconds;
 
-                // TODO for tests
-                final bool isWatchedVideo = 5 < _watchedTimeInSeconds;
+      //           // TODO for tests
+      //           final bool isWatchedVideo = 5 < _watchedTimeInSeconds;
 
-                if (isWatchedVideo == false) {
-                  ScaffoldMessenger.of(context)
-                      .showSnackBar(SnackBar(content: Text('O Ty gnojku')));
-                } else {
-                  ScaffoldMessenger.of(context)
-                      .showSnackBar(SnackBar(content: Text('well done')));
-                }
-              },
-            ),
+      //           if (isWatchedVideo == false) {
+      //             ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      //                 content: Text('Please perform whole video')));
+      //           } else {
+      //             ScaffoldMessenger.of(context)
+      //                 .showSnackBar(const SnackBar(content: Text('well done')));
+      //             final lessonsDone = widget.thaiChiIntervention.lessonsDone +
+      //                 [widget.thaiChiLesson.id];
+      //             final lessonsToDo = widget.thaiChiIntervention.lessonsToDo;
+      //             lessonsToDo.remove(widget.thaiChiLesson.id);
+
+      //             final ThaiChiIntervention newThaiChiIntervention =
+      //                 widget.thaiChiIntervention.copyWith(
+      //               lessonsDone: lessonsDone,
+      //               lessonsToDo: lessonsToDo,
+      //             );
+      //             sl<ThaiChiInterventionsRepository>()
+      //                 .updateThaiChiIntervention(
+      //                     newThaiChiIntervention: newThaiChiIntervention);
+      //           }
+      //         },
+      //       ),
       body: YoutubePlayerBuilder(
         onEnterFullScreen: () {
           setState(() {

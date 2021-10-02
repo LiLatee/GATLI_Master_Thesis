@@ -43,6 +43,7 @@ dependencies:
   google_fonts: ^2.1.0
   google_sign_in: ^5.1.1
   intl: ^0.17.0
+  json_annotation: ^4.1.0
   provider: ^6.0.1
   settings_ui: ^1.0.0
   shared_preferences: ^2.0.6
@@ -50,9 +51,11 @@ dependencies:
   youtube_player_flutter: ^8.0.0
 
 dev_dependencies:
-  analyzer: 1.5.0
+  analyzer: ^2.0.0
+  build_runner: ^2.1.4
   flutter_test:
     sdk: flutter
+  json_serializable: ^5.0.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

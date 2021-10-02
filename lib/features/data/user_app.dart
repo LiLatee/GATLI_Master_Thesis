@@ -1,7 +1,8 @@
-import 'dart:convert';
-
 import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
+part 'user_app.g.dart';
 
+@JsonSerializable()
 class UserApp extends Equatable {
   const UserApp({
     required this.id,
@@ -11,6 +12,8 @@ class UserApp extends Equatable {
     required this.steps,
     required this.kilometers,
     required this.emojiSVG,
+    required this.activeInterventions,
+    required this.pastInterventions,
   });
 
   final String? id;
@@ -20,35 +23,8 @@ class UserApp extends Equatable {
   final int steps;
   final int kilometers;
   final String emojiSVG;
-
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'nickname': nickname,
-      'email': email,
-      'badgesKeys': badgesKeys,
-      'steps': steps,
-      'kilometers': kilometers,
-      'emojiSVG': emojiSVG,
-    };
-  }
-
-  factory UserApp.fromMap(Map<String, dynamic> map) {
-    return UserApp(
-      id: map['id'],
-      nickname: map['nickname'],
-      email: map['email'],
-      badgesKeys: List<String>.from(map['badgesKeys']),
-      steps: map['steps'],
-      kilometers: map['kilometers'],
-      emojiSVG: map['emojiSVG'],
-    );
-  }
-
-  String toJson() => json.encode(toMap());
-
-  factory UserApp.fromJson(String source) =>
-      UserApp.fromMap(json.decode(source));
+  final Map<String, List<String>> activeInterventions;
+  final Map<String, List<String>> pastInterventions;
 
   @override
   List<Object?> get props => [
@@ -59,7 +35,58 @@ class UserApp extends Equatable {
         steps,
         kilometers,
         emojiSVG,
+        activeInterventions,
+        pastInterventions
       ];
+
+  factory UserApp.fromJson(Map<String, dynamic> json) =>
+      _$UserAppFromJson(json);
+
+  Map<String, dynamic> toJson() => _$UserAppToJson(this);
+
+  // Map<String, dynamic> toMap() {
+  //   return {
+  //     'id': id,
+  //     'nickname': nickname,
+  //     'email': email,
+  //     'badgesKeys': badgesKeys,
+  //     'steps': steps,
+  //     'kilometers': kilometers,
+  //     'emojiSVG': emojiSVG,
+  //     'activeInterventions': activeInterventions,
+  //     'pastInterventions': pastInterventions,
+  //   };
+  // }
+
+  // factory UserApp.fromMap(Map<String, dynamic> map) {
+  //   log('kkkkk');
+  //   log(map['activeInterventions'].toString());
+  //   // log(jsonDecode(map['activeInterventions'].toString()).toString());
+  //   return UserApp(
+  //       id: map['id'],
+  //       nickname: map['nickname'],
+  //       email: map['email'],
+  //       badgesKeys: List<String>.from(map['badgesKeys']),
+  //       steps: map['steps'],
+  //       kilometers: map['kilometers'],
+  //       emojiSVG: map['emojiSVG'],
+  //       activeInterventions: <String, List<String>>{
+  //         'thai_chi': map['activeInterventions']['thai_chi'] as List<String>
+  //       },
+  //       pastInterventions: <String, List<String>>{
+  //         'thai_chi': map['pastInterventions']['thai_chi'] as List<String>
+  //       }
+  //       // activeInterventions: Map<String, List<String>>.from(
+  //       //     map['activeInterventions']),
+  //       // pastInterventions: Map<String, List<String>>.from(
+  //       //     map['pastInterventions']),
+  //       );
+  // }
+
+  // String toJson() => json.encode(toMap());
+
+  // factory UserApp.fromJson(String source) =>
+  //     UserApp.fromMap(json.decode(source));
 
   UserApp copyWith({
     String? id,
@@ -69,6 +96,8 @@ class UserApp extends Equatable {
     int? steps,
     int? kilometers,
     String? emojiSVG,
+    Map<String, List<String>>? activeInterventions,
+    Map<String, List<String>>? pastInterventions,
   }) {
     return UserApp(
       id: id ?? this.id,
@@ -78,6 +107,8 @@ class UserApp extends Equatable {
       steps: steps ?? this.steps,
       kilometers: kilometers ?? this.kilometers,
       emojiSVG: emojiSVG ?? this.emojiSVG,
+      activeInterventions: activeInterventions ?? this.activeInterventions,
+      pastInterventions: pastInterventions ?? this.pastInterventions,
     );
   }
 }

@@ -1,10 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:master_thesis/features/home_page/grid_items/thai_chi/thai_chi_intervention.dart';
-import 'package:master_thesis/features/home_page/grid_items/thai_chi/thai_chi_interventions_repository.dart';
-import 'package:master_thesis/features/home_page/grid_items/thai_chi/thai_chi_lessons_repository.dart';
 import 'package:master_thesis/features/data/users_repository.dart';
+import 'package:master_thesis/features/home_page/grid_items/questionnaire_page/questionnaire.dart';
+import 'package:master_thesis/features/home_page/grid_items/questionnaire_page/questionnaire_repository.dart';
+import 'package:master_thesis/features/home_page/grid_items/thai_chi/thai_chi_interventions_repository.dart';
 import 'package:master_thesis/features/home_page/grid_items/thai_chi/thai_chi_lesson.dart';
+import 'package:master_thesis/features/home_page/grid_items/thai_chi/thai_chi_lessons_repository.dart';
 import 'package:master_thesis/service_locator.dart';
 
 class AdminPage extends StatefulWidget {
@@ -37,41 +37,45 @@ class _AdminPageState extends State<AdminPage> {
               decoration: const InputDecoration(hintText: 'Patient ID'),
             ),
             const SizedBox(height: 16),
-            TextButton(
-              child: const Text('Assign Thai Chi'),
-              onPressed: () async {
-                // final thaiChiIntervention = ThaiChiIntervention(
-                //   userId: 'ToeQtJmM48YjgNxvrdo2JEDG5mI2',
-                //   lessonsDone: const [],
-                //   lessonsToDo: const [],
-                //   startTimestamp: DateTime.now().millisecondsSinceEpoch,
-                //   endTimestamp: null,
-                //   earnedPoints: 0,
-                // );
-
-                final failureOrDocRef =
-                    await sl<ThaiChiInterventionsRepository>()
-                        .addThaiChiIntervention(
-                  userId: 'ToeQtJmM48YjgNxvrdo2JEDG5mI2',
-                );
-                failureOrDocRef.fold(
-                  (_) {},
-                  (docRef) {
-                    sl<UserRepository>().assignThaiChiInterventions(
-                        thaiChiInterventionId: docRef.id);
-                  },
-                );
-              },
-            ),
+            _buildAssignThaiChi(),
+            const SizedBox(height: 16),
+            _buildAddThaiChiLessons(),
             const SizedBox(height: 16),
             TextButton(
-              child: const Text('Add Thai Chi Lessons'),
-              onPressed: () => thaiChiLessons
-                  .forEach(sl<ThaiChiLessonsRepository>().addThaiChiLesson),
+              child: const Text('Add QLQ-C30'),
+              onPressed: () =>
+                  sl<QuestionnaireRepository>().addQuestionnaire(QLQ_C30),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildAddThaiChiLessons() {
+    return TextButton(
+      child: const Text('Add Thai Chi Lessons'),
+      onPressed: () => thaiChiLessons
+          .forEach(sl<ThaiChiLessonsRepository>().addThaiChiLesson),
+    );
+  }
+
+  Widget _buildAssignThaiChi() {
+    return TextButton(
+      child: const Text('Assign Thai Chi'),
+      onPressed: () async {
+        final failureOrDocRef =
+            await sl<ThaiChiInterventionsRepository>().addThaiChiIntervention(
+          userId: 'ToeQtJmM48YjgNxvrdo2JEDG5mI2',
+        );
+        failureOrDocRef.fold(
+          (_) {},
+          (docRef) {
+            sl<UserRepository>()
+                .assignThaiChiInterventions(thaiChiInterventionId: docRef.id);
+          },
+        );
+      },
     );
   }
 

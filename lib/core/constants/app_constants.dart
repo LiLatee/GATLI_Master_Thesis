@@ -1,4 +1,5 @@
 //! SharedPreferences Keys
+import 'package:master_thesis/features/home_page/grid_items/questionnaire_page/questionnaire_page.dart';
 import 'package:master_thesis/features/home_page/grid_items/thai_chi/thai_chi_intervention_page.dart';
 
 class SPKeys {
@@ -23,6 +24,10 @@ class AppConstants {
     'thai_chi': {
       'name': 'Thai Chi',
       'routeName': ThaiChiInterventionPage.routeName,
+    },
+    'QLQ-C30': {
+      'name': 'Questionnaire',
+      'routeName': QuestionnairePage.routeName,
     },
   };
 }

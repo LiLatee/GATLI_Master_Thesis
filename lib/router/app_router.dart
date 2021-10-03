@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:master_thesis/features/home_page/grid_items/admin_page/admin_page.dart';
+import 'package:master_thesis/features/home_page/grid_items/questionnaire_page/questionnaire_page.dart';
 import 'package:master_thesis/features/home_page/grid_items/thai_chi/thai_chi_intervention_page.dart';
 import 'package:master_thesis/features/home_page/grid_items/thai_chi/thai_chi_lesson.dart';
 import 'package:master_thesis/features/home_page/grid_items/thai_chi/thai_chi_page.dart';
@@ -22,6 +23,10 @@ class AppRouter {
       case AdminPage.routeName:
         return MaterialPageRoute(
           builder: (_) => const AdminPage(),
+        );
+      case QuestionnairePage.routeName:
+        return MaterialPageRoute(
+          builder: (_) => const QuestionnairePage(),
         );
       case ThaiChiPage.routeName:
         final args = settings.arguments as ThaiChiPageArguments;

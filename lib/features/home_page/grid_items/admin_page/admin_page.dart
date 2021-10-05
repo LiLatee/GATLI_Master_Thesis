@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:master_thesis/features/data/users_repository.dart';
 import 'package:master_thesis/features/home_page/grid_items/questionnaire_page/questionnaire.dart';
+import 'package:master_thesis/features/home_page/grid_items/questionnaire_page/questionnaire_intervention_repository.dart';
 import 'package:master_thesis/features/home_page/grid_items/questionnaire_page/questionnaire_repository.dart';
 import 'package:master_thesis/features/home_page/grid_items/thai_chi/thai_chi_interventions_repository.dart';
 import 'package:master_thesis/features/home_page/grid_items/thai_chi/thai_chi_lesson.dart';
@@ -46,6 +47,8 @@ class _AdminPageState extends State<AdminPage> {
               onPressed: () =>
                   sl<QuestionnaireRepository>().addQuestionnaire(QLQ_C30),
             ),
+            const SizedBox(height: 16),
+            _buildAssignQuestionnaire(),
           ],
         ),
       ),
@@ -72,9 +75,18 @@ class _AdminPageState extends State<AdminPage> {
           (_) {},
           (docRef) {
             sl<UserRepository>()
-                .assignThaiChiInterventions(thaiChiInterventionId: docRef.id);
+                .assignThaiChiIntervention(thaiChiInterventionId: docRef.id);
           },
         );
+      },
+    );
+  }
+
+  Widget _buildAssignQuestionnaire() {
+    return TextButton(
+      child: const Text('Assign Questionnaire'),
+      onPressed: () async {
+        await sl<UserRepository>().assignQuestionnaireIntervention();
       },
     );
   }

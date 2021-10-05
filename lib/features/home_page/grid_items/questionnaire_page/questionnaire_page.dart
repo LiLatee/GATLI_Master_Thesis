@@ -140,7 +140,7 @@ class _QuestionnairePageState extends State<QuestionnairePage> {
                   }
                   if (questionNumber == allQuestions.length) {
                     sl<QuestionnaireInterventionRepository>()
-                        .addQuestionnaire(answeredQuestionnaire);
+                        .addQuestionnaire(questionnaire: answeredQuestionnaire);
                   } else {
                     log(answeredQuestionnaire.toString());
                     pageController.nextPage(

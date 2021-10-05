@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:master_thesis/core/error/failures.dart';
 import 'package:master_thesis/features/data/user_app.dart';
+import 'package:master_thesis/features/home_page/grid_items/questionnaire_page/questionnaire_intervention_repository.dart';
+import 'package:master_thesis/service_locator.dart';
 
 class UserRepository {
   const UserRepository({
@@ -28,18 +30,62 @@ class UserRepository {
     return Right(documentReference);
   }
 
-  Future<Either<DefaultFailure, DocumentReference>> assignThaiChiInterventions(
+  Future<Either<DefaultFailure, DocumentReference>> assignThaiChiIntervention(
       {required String thaiChiInterventionId}) async {
     try {
-      await documentReference.update({
-        'activeInterventions': {
-          'thai_chi': [thaiChiInterventionId] // TODO it overwrites
+      final failureOrUserApp = await getUser();
+      failureOrUserApp.fold((l) {
+        log("Can't get UserApp: Error: $l");
+        return Left(DefaultFailure(
+            message: "Can't assign Thai Chi Intervention to user. Error: $l"));
+      }, (UserApp userApp) async {
+        final Map<String, List<String>> activeInterventions =
+            userApp.activeInterventions;
+
+        if (userApp.activeInterventions.containsKey('thai_chi')) {
+          activeInterventions['thai_chi']!.add(thaiChiInterventionId);
+        } else {
+          activeInterventions['thai_chi'] = [thaiChiInterventionId];
         }
+        await documentReference
+            .update({'activeInterventions': activeInterventions});
       });
     } catch (e) {
-      return Left(DefaultFailure(message: "Can't add user. Error: $e"));
+      return Left(DefaultFailure(
+          message: "Can't add Thai Chi Intervention to user. Error: $e"));
     }
     return Right(documentReference);
+  }
+
+  Future<Either<DefaultFailure, DocumentReference>>
+      assignQuestionnaireIntervention() async {
+    final String questionnaireInterventionId =
+        sl<QuestionnaireInterventionRepository>().generateQuestionnaireDocId();
+
+    try {
+      final failureOrUserApp = await getUser();
+      return failureOrUserApp.fold((l) {
+        log("Can't get UserApp: Error: $l");
+        return Left(DefaultFailure(
+            message:
+                "Can't assign Questionnaire Intervention to user. Error: $l"));
+      }, (UserApp userApp) async {
+        final Map<String, List<String>> activeInterventions =
+            userApp.activeInterventions;
+
+        if (userApp.activeInterventions.containsKey('QLQ-C30')) {
+          activeInterventions['QLQ-C30']!.add(questionnaireInterventionId);
+        } else {
+          activeInterventions['QLQ-C30'] = [questionnaireInterventionId];
+        }
+        await documentReference
+            .update({'activeInterventions': activeInterventions});
+        return Right(documentReference);
+      });
+    } catch (e) {
+      return Left(DefaultFailure(
+          message: "Can't add Thai Chi Intervention to user. Error: $e"));
+    }
   }
 
   Future<Either<DefaultFailure, UserApp>> getUser() async {

@@ -6,6 +6,7 @@ import 'package:master_thesis/core/error/failures.dart';
 import 'package:master_thesis/features/data/user_app.dart';
 import 'package:master_thesis/features/home_page/grid_items/questionnaire_page/questionnaire_intervention_repository.dart';
 import 'package:master_thesis/service_locator.dart';
+import 'package:pedometer/pedometer.dart';
 
 class UserRepository {
   const UserRepository({
@@ -89,12 +90,16 @@ class UserRepository {
   }
 
   Future<Either<DefaultFailure, UserApp>> getUser() async {
+    print('getUser');
+
     final Map<String, dynamic> userAppMap;
     try {
       userAppMap =
           (await documentReference.get()).data() as Map<String, dynamic>;
       return Right(UserApp.fromJson(userAppMap)); // usunięte .copyWith(id: id)
     } catch (e) {
+      print('getUser - failure');
+
       return Left(DefaultFailure(message: "Can't get user. Error: $e"));
     }
   }
@@ -109,6 +114,68 @@ class UserRepository {
       }
     } catch (e) {
       return Left(DefaultFailure(message: "Can't get user. Error: $e"));
+    }
+  }
+
+  Future<Either<DefaultFailure, void>> updateUserSteps() async {
+    print('updateUserSteps - start');
+    try {
+      final failureOrUserApp = await getUser();
+      return failureOrUserApp.fold(
+        (l) {
+          print('updateUserSteps - fail1');
+
+          log(l.message);
+          return Left(DefaultFailure(message: l.message));
+        },
+        (UserApp userApp) async {
+          print('updateUserSteps - in1');
+          var steps = 0;
+          try {
+            steps = (await Pedometer.stepCountStream
+                    .firstWhere((element) => element != null))
+                .steps;
+          } catch (e, s) {
+            print("updateUserSteps- error ${e}");
+            print("updateUserSteps - error ${s}");
+            return Left(DefaultFailure(message: 'aaaaa'));
+          }
+
+          print('updateUserSteps - in2');
+
+          await documentReference
+              .update(userApp.copyWith(steps: userApp.steps + steps).toJson());
+          print('updateUserSteps - done');
+
+          return const Right(null);
+        },
+      );
+    } catch (e) {
+      print('updateUserSteps - fail2');
+
+      log("Can't update user's steps. Error: $e");
+      return Left(
+          DefaultFailure(message: "Can't update user's steps. Error: $e"));
+    }
+  }
+
+  Future<Either<DefaultFailure, void>> addBadge(String badgeKey) async {
+    try {
+      final failureOrUserApp = await getUser();
+      return failureOrUserApp.fold(
+        (l) => Left(DefaultFailure(message: l.message)),
+        (UserApp userApp) async {
+          final newBadgesList = userApp.badgesKeys;
+          newBadgesList.add(badgeKey);
+
+          await documentReference
+              .update(userApp.copyWith(badgesKeys: newBadgesList).toJson());
+
+          return const Right(null);
+        },
+      );
+    } catch (e) {
+      return Left(DefaultFailure(message: "Can't add a badge. Error: $e"));
     }
   }
 

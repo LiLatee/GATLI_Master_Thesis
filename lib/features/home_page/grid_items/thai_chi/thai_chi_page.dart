@@ -1,13 +1,34 @@
+import 'dart:async';
 import 'dart:developer';
+import 'dart:io';
 
+import 'package:activity_recognition_flutter/activity_recognition_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:master_thesis/features/data/users_repository.dart';
 import 'package:master_thesis/features/home_page/grid_items/thai_chi/thai_chi_intervention.dart';
 import 'package:master_thesis/features/home_page/grid_items/thai_chi/thai_chi_interventions_repository.dart';
 import 'package:master_thesis/features/home_page/grid_items/thai_chi/thai_chi_lesson.dart';
+import 'package:master_thesis/features/widgets/badges.dart';
 import 'package:master_thesis/service_locator.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+
+enum ActivityEnum {
+  ACTIVE,
+  INACTIVE,
+}
+
+class Activity {
+  final ActivityEnum activityEnum;
+  final DateTime dateTime;
+
+  Activity({
+    required this.activityEnum,
+    required this.dateTime,
+  });
+}
 
 class ThaiChiPageArguments {
   ThaiChiPageArguments({
@@ -39,10 +60,55 @@ class _ThaiChiPageState extends State<ThaiChiPage> {
   late final YoutubePlayerController _controller;
   late final StopWatchTimer _stopWatchTimer;
   int _watchedTimeInSeconds = 0;
-
   bool _isWatchedVideo = false;
-
   bool fullscreen = false;
+
+  // late Stream<Activity> activityStream;
+  // List<Activity> _events = [];
+  // ActivityRecognition activityRecognition = ActivityRecognition.instance;
+  // late final StreamSubscription subscription;
+
+  // void _initActivityMonitoring() async {
+  //   /// Android requires explicitly asking permission
+  //   if (Platform.isAndroid) {
+  //     if (await Permission.activityRecognition.request().isGranted) {
+  //       _startTracking();
+  //     }
+  //   }
+
+  //   /// iOS does not
+  //   else {
+  //     _startTracking();
+  //   }
+  // }
+
+  // static const activeActivityTypes = [
+  //   ActivityType.ON_FOOT,
+  //   ActivityType.RUNNING,
+  //   ActivityType.TILTING,
+  //   ActivityType.WALKING,
+  // ];
+
+  // void _startTracking() {
+  //   activityStream = activityRecognition
+  //       .startStream(runForegroundService: false)
+  //       .map<Activity>((event) {
+  //     if (activeActivityTypes.contains(event.type)) {
+  //       return Activity(activityEnum: ActivityEnum.ACTIVE, dateTime: event.timeStamp,);
+  //     } else {
+  //       return Activity(activityEnum: ActivityEnum.INACTIVE, dateTime: event.timeStamp,);
+  //     }
+  //   });
+  //   subscription = activityStream.listen(onData);
+  // }
+
+  // void onData(Activity activityEvent) {
+  //   log(activityEvent.toString());
+  //   setState(() {
+  //     _events.add(activityEvent);
+  //   });
+  // }
+
   @override
   void initState() {
     super.initState();
@@ -65,8 +131,6 @@ class _ThaiChiPageState extends State<ThaiChiPage> {
           setState(() {
             _isWatchedVideo = true;
           });
-          ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Well done! Exercise performed.')));
 
           final lessonsDone = widget.thaiChiIntervention.lessonsDone +
               [widget.thaiChiLesson.id];
@@ -80,6 +144,15 @@ class _ThaiChiPageState extends State<ThaiChiPage> {
           );
           sl<ThaiChiInterventionsRepository>().updateThaiChiIntervention(
               newThaiChiIntervention: newThaiChiIntervention);
+          if (lessonsToDo.isEmpty) {
+            sl<UserRepository>().addBadge(BadgesKeys.thaiChiLevel1);
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                content:
+                    Text('Well done! A whole Thai Chi course performed!')));
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                content: Text('Well done! Exercise performed.')));
+          }
         }
       },
       // onChangeRawMinute: (value) => log('onChangeRawMinute $value'),

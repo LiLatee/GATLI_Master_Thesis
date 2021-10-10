@@ -1,9 +1,13 @@
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:master_thesis/core/constants/image_paths.dart';
+import 'package:master_thesis/features/data/user_app.dart';
+import 'package:master_thesis/features/data/users_repository.dart';
 import 'package:master_thesis/features/widgets/badges.dart';
+import 'package:master_thesis/service_locator.dart';
 
 // enum Level { BRONZE, SILVER, GOLD }
 
@@ -227,23 +231,70 @@ import 'package:master_thesis/features/widgets/badges.dart';
 class AchievementsPage extends StatelessWidget {
   const AchievementsPage({Key? key}) : super(key: key);
 
-  final myBadgesKeys = const ['badgeStepsLevel3', 'badgeKilometersLevel2'];
+  // final myBadgesKeys = const ['badgeStepsLevel3', 'badgeKilometersLevel2'];
 
   @override
   Widget build(BuildContext context) {
-    return SliverGrid(
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3, mainAxisExtent: 150),
-      delegate: SliverChildBuilderDelegate(
-        (BuildContext context, int index) {
-          return Card(
-            child: getBadgeUsingKey(
-                context: context, badgeKey: myBadgesKeys[index]),
-          );
-        },
-        childCount: myBadgesKeys.length,
-      ),
-    );
+    return StreamBuilder<DocumentSnapshot>(
+        stream: sl<UserRepository>().getStream(),
+        builder: (
+          BuildContext context,
+          AsyncSnapshot<DocumentSnapshot> snapshot,
+        ) {
+          if (snapshot.hasData) {
+            final UserApp userApp =
+                UserApp.fromJson(snapshot.data!.data() as Map<String, dynamic>);
+
+            final badgesMap = _countOccurences(userApp.badgesKeys);
+
+            return SliverGrid(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3, mainAxisExtent: 150),
+              delegate: SliverChildBuilderDelegate(
+                (BuildContext context, int index) {
+                  final String badgeKey;
+                  if (badgesMap.keys.toList()[index] ==
+                      BadgesKeys.thaiChiLevel1) {
+                    if (badgesMap.values.toList()[index] == 2) {
+                      badgeKey = BadgesKeys.thaiChiLevel2;
+                    } else if (badgesMap.values.toList()[index] > 2) {
+                      badgeKey = BadgesKeys.thaiChiLevel3;
+                    } else {
+                      badgeKey = BadgesKeys.thaiChiLevel1;
+                    }
+                  } else {
+                    badgeKey = badgesMap.keys.toList()[index];
+                  }
+
+                  return Card(
+                    child:
+                        getBadgeUsingKey(context: context, badgeKey: badgeKey),
+                  );
+                },
+                childCount: badgesMap.length,
+              ),
+            );
+          } else {
+            return const SliverToBoxAdapter(
+              child: Center(
+                child: Text('No data.'),
+              ),
+            );
+          }
+        });
+  }
+
+  Map<String, int> _countOccurences(List<dynamic> list) {
+    final map = <String, int>{};
+
+    list.forEach((element) {
+      if (!map.containsKey(element)) {
+        map[element] = 1;
+      } else {
+        map[element] = map[element]! + 1;
+      }
+    });
+    return map;
   }
 }
 

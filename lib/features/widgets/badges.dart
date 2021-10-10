@@ -83,6 +83,15 @@ class Badge extends StatelessWidget {
   }
 }
 
+abstract class BadgesKeys {
+  static const thaiChiLevel1 = 'thai_chi_LEVEL1';
+  static const thaiChiLevel2 = 'thai_chi_LEVEL2';
+  static const thaiChiLevel3 = 'thai_chi_LEVEL3';
+  static const stepsLevel1 = 'steps_LEVEL1';
+  static const stepsLevel2 = 'steps_LEVEL2';
+  static const stepsLevel3 = 'steps_LEVEL3';
+}
+
 Widget? getBadgeUsingKey(
     {required BuildContext context, required String badgeKey}) {
   final Map<String, Widget> badges = {
@@ -155,7 +164,7 @@ Widget? getBadgeUsingKey(
         width: 50,
       ),
     ),
-    'badgeStepsLevel1': Badge(
+    BadgesKeys.stepsLevel1: Badge(
       title: context.l10n.walker,
       subtitle: '10 000' + context.l10n.steps,
       lightColor: const Color(0xffFAE3B4),
@@ -167,7 +176,7 @@ Widget? getBadgeUsingKey(
         width: 50,
       ),
     ),
-    'badgeStepsLevel2': Badge(
+    BadgesKeys.stepsLevel2: Badge(
       title: context.l10n.walker,
       subtitle: '100 000' + context.l10n.steps,
       lightColor: const Color(0xffFAE3B4),
@@ -179,7 +188,7 @@ Widget? getBadgeUsingKey(
         width: 50,
       ),
     ),
-    'badgeStepsLevel3': Badge(
+    BadgesKeys.stepsLevel3: Badge(
       title: context.l10n.walker,
       subtitle: '1 000 000 ' + context.l10n.steps,
       lightColor: const Color(0xffFAE3B4),
@@ -191,17 +200,39 @@ Widget? getBadgeUsingKey(
         width: 50,
       ),
     ),
-    // Badge(
-    //       title: context.l10n.runner,
-    //   subtitle: '10 km',
-    //   lightColor: Color(0xff7FB2F0),
-    //   darkColor: Color(0xff624289),
-    //   level: Level.BRONZE,
-    //   icon: Icon(
-    //     Icons.local_activity,
-    //     size: 50,
-    //   ),
-    // ),
+    BadgesKeys.thaiChiLevel1: Badge(
+      title: 'Thai Chi',
+      subtitle: '1 time',
+      lightColor: Color(0xff7FB2F0),
+      darkColor: Color(0xff624289),
+      level: Level.BRONZE,
+      icon: Icon(
+        Icons.self_improvement,
+        size: 50,
+      ),
+    ),
+    BadgesKeys.thaiChiLevel2: Badge(
+      title: 'Thai Chi',
+      subtitle: '2 times',
+      lightColor: Color(0xff7FB2F0),
+      darkColor: Color(0xff624289),
+      level: Level.SILVER,
+      icon: Icon(
+        Icons.self_improvement,
+        size: 50,
+      ),
+    ),
+    BadgesKeys.thaiChiLevel3: Badge(
+      title: 'Thai Chi',
+      subtitle: '3 times',
+      lightColor: Color(0xff7FB2F0),
+      darkColor: Color(0xff624289),
+      level: Level.GOLD,
+      icon: Icon(
+        Icons.self_improvement,
+        size: 50,
+      ),
+    ),
     // Badge(
     //       title: context.l10n.runner,
     //   subtitle: '10 km',

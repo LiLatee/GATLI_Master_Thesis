@@ -11,6 +11,7 @@ import 'package:master_thesis/core/l10n/l10n.dart';
 import 'package:master_thesis/features/data/user_app.dart';
 import 'package:master_thesis/features/data/users_repository.dart';
 import 'package:master_thesis/service_locator.dart';
+import 'package:pedometer/pedometer.dart';
 
 class ProfilePageHeader extends SliverPersistentHeaderDelegate {
   ProfilePageHeader({
@@ -155,6 +156,16 @@ class ProfilePageHeader extends SliverPersistentHeaderDelegate {
     );
   }
 
+  final Stream<StepCount> _stepCountStream = Pedometer.stepCountStream;
+  int _steps = 0;
+
+  // void onStepCount(StepCount event) {
+  //   print(event);
+  //   setState(() {
+  //     _steps = event.steps.toString();
+  //   });
+  // }
+
   Widget _buildStepsAndDistance(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -167,11 +178,21 @@ class ProfilePageHeader extends SliverPersistentHeaderDelegate {
               width: 20,
             ),
             const SizedBox(width: 8),
-            Text(
-              '${_userApp.steps} ',
-              style:
-                  Theme.of(context).textTheme.bodyText2!.copyWith(fontSize: 16),
-            ),
+            StreamBuilder<StepCount>(
+                stream: _stepCountStream,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    _steps = snapshot.data!.steps;
+                  }
+
+                  return Text(
+                    '$_steps ',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText2!
+                        .copyWith(fontSize: 16),
+                  );
+                }),
             Text(
               context.l10n.steps,
               style:

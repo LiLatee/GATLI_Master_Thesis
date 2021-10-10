@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:master_thesis/core/constants/app_constants.dart';
 import 'package:master_thesis/features/data/user_app.dart';
 import 'package:master_thesis/features/data/users_repository.dart';
+import 'package:master_thesis/features/home_page/grid_items/activity/activity_page.dart';
 import 'package:master_thesis/features/home_page/grid_items/admin_page/admin_page.dart';
 import 'package:master_thesis/features/home_page/grid_items/questionnaire_page/questionnaire_page.dart';
 import 'package:master_thesis/features/home_page/grid_items/thai_chi/thai_chi_lesson.dart';
@@ -105,7 +106,7 @@ class ActionsGridView extends StatelessWidget {
           ),
         ),
       ),
-      onTap: () => Navigator.pushNamed(context, QuestionnairePage.routeName),
+      onTap: () => Navigator.pushNamed(context, ActivityPage.routeName),
     );
 
     return SliverGrid(

@@ -11,80 +11,80 @@ import 'package:master_thesis/features/data/user_session_repository.dart';
 import 'package:master_thesis/features/data/users_repository.dart';
 import 'package:master_thesis/service_locator.dart';
 
-Future<void> updateUserSteps() async {
-  await Firebase.initializeApp();
+// Future<void> updateUserSteps() async {
+//   await Firebase.initializeApp();
 
-  print("ROBI SIE1");
-  final failureOrUserId = await UserSessionRepository(
-          flutterSecureStorage: const FlutterSecureStorage())
-      .readSession();
-  print("ROBI SIE11");
+//   print("ROBI SIE1");
+//   final failureOrUserId = await UserSessionRepository(
+//           flutterSecureStorage: const FlutterSecureStorage())
+//       .readSession();
+//   print("ROBI SIE11");
 
-  await failureOrUserId.fold(
-    (l) {
-      print("ROBI SIE ${l.message}");
-      return dartz.Left(l);
-    },
-    (final String userId) async {
-      print("ROBI SIE2");
-      final userRepository = UserRepository(
-          documentReference:
-              FirebaseFirestore.instance.collection('users').doc(userId));
+//   await failureOrUserId.fold(
+//     (l) {
+//       print("ROBI SIE ${l.message}");
+//       return dartz.Left(l);
+//     },
+//     (final String userId) async {
+//       print("ROBI SIE2");
+//       final userRepository = UserRepository(
+//           documentReference:
+//               FirebaseFirestore.instance.collection('users').doc(userId));
 
-      print("ROBI SIE3");
+//       print("ROBI SIE3");
 
-      final failureOrSuccess;
-      try {
-        failureOrSuccess = await userRepository.updateUserSteps();
-      } catch (e, s) {
-        print("ROBI SIE3 - error ${e}");
-        print("ROBI SIE3 - error ${s}");
-        return;
-      }
+//       final failureOrSuccess;
+//       try {
+//         failureOrSuccess = await userRepository.updateUserSteps();
+//       } catch (e, s) {
+//         print("ROBI SIE3 - error ${e}");
+//         print("ROBI SIE3 - error ${s}");
+//         return;
+//       }
 
-      await failureOrSuccess.fold(
-        (l) {
-          print("ROBI SIE ${l.message}");
+//       await failureOrSuccess.fold(
+//         (l) {
+//           print("ROBI SIE ${l.message}");
 
-          return dartz.Left(l);
-        },
-        (_) {
-          print("ROBI SIE4");
+//           return dartz.Left(l);
+//         },
+//         (_) {
+//           print("ROBI SIE4");
 
-          return const dartz.Right(null);
-        },
-      );
-    },
-  );
-}
+//           return const dartz.Right(null);
+//         },
+//       );
+//     },
+//   );
+// }
 
 // [Android-only] This "Headless Task" is run when the Android app
 // is terminated with enableHeadless: true
-Future<void> backgroundFetchHeadlessTask(HeadlessTask task) async {
-  print('[BackgroundFetch] - backgroundFetchHeadlessTask');
-  final String taskId = task.taskId;
-  final bool isTimeout = task.timeout;
-  if (isTimeout) {
-    // This task has exceeded its allowed running-time.
-    // You must stop what you're doing and immediately .finish(taskId)
-    print('[BackgroundFetch] Headless task timed-out: $taskId');
-    BackgroundFetch.finish(taskId);
-    return;
-  }
-  print('[BackgroundFetch] Headless event received.');
-  // Do your work here...
-  print("[BackgroundFetch] ROBI SIE01");
+// Future<void> backgroundFetchHeadlessTask(HeadlessTask task) async {
+//   print('[BackgroundFetch] - backgroundFetchHeadlessTask');
+//   final String taskId = task.taskId;
+//   final bool isTimeout = task.timeout;
+//   if (isTimeout) {
+//     // This task has exceeded its allowed running-time.
+//     // You must stop what you're doing and immediately .finish(taskId)
+//     print('[BackgroundFetch] Headless task timed-out: $taskId');
+//     BackgroundFetch.finish(taskId);
+//     return;
+//   }
+//   print('[BackgroundFetch] Headless event received.');
+//   // Do your work here...
+//   print("[BackgroundFetch] ROBI SIE01");
 
-  await updateUserSteps();
-  // final failureOrUserId = await UserSessionRepository().readSession();
-  // print("[BackgroundFetch] - ${failureOrUserId.toString()}");
+//   await updateUserSteps();
+//   // final failureOrUserId = await UserSessionRepository().readSession();
+//   // print("[BackgroundFetch] - ${failureOrUserId.toString()}");
 
-  print('[BackgroundFetch] STEPS UPDATED');
+//   print('[BackgroundFetch] STEPS UPDATED');
 
-  print('Siemka tutaj event o godzinie ${DateTime.now().toString()}');
+//   print('Siemka tutaj event o godzinie ${DateTime.now().toString()}');
 
-  BackgroundFetch.finish(taskId);
-}
+//   BackgroundFetch.finish(taskId);
+// }
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -94,39 +94,39 @@ Future<void> main() async {
   // Register to receive BackgroundFetch events after app is terminated.
   // Requires {stopOnTerminate: false, enableHeadless: true}
 
-  await BackgroundFetch.configure(
-    BackgroundFetchConfig(
-      minimumFetchInterval: 1,
-      stopOnTerminate: false,
-      enableHeadless: true,
-      requiresBatteryNotLow: false,
-      requiresCharging: false,
-      requiresStorageNotLow: false,
-      requiresDeviceIdle: false,
-      requiredNetworkType: NetworkType.ANY,
-    ),
-    (String taskId) async {
-      // <-- Event handler
-      // This is the fetch-event callback.
-      print("[BackgroundFetch] Event received $taskId");
-      // if (DateTime.now().hour == DateTime())
-      await updateUserSteps();
-      // final failureOrUserId = await UserSessionRepository().readSession();
-      // print("[BackgroundFetch] - ${failureOrUserId.toString()}");
+  // await BackgroundFetch.configure(
+  //   BackgroundFetchConfig(
+  //     minimumFetchInterval: 1,
+  //     stopOnTerminate: false,
+  //     enableHeadless: true,
+  //     requiresBatteryNotLow: false,
+  //     requiresCharging: false,
+  //     requiresStorageNotLow: false,
+  //     requiresDeviceIdle: false,
+  //     requiredNetworkType: NetworkType.ANY,
+  //   ),
+  //   (String taskId) async {
+  //     // <-- Event handler
+  //     // This is the fetch-event callback.
+  //     print("[BackgroundFetch] Event received $taskId");
+  //     // if (DateTime.now().hour == DateTime())
+  //     await updateUserSteps();
+  //     // final failureOrUserId = await UserSessionRepository().readSession();
+  //     // print("[BackgroundFetch] - ${failureOrUserId.toString()}");
 
-      print('[BackgroundFetch] STEPS UPDATED');
-      // IMPORTANT:  You must signal completion of your task or the OS can punish your app
-      // for taking too long in the background.
-      BackgroundFetch.finish(taskId);
-    },
-    (String taskId) async {
-      // <-- Task timeout handler.
-      // This task has exceeded its allowed running-time.  You must stop what you're doing and immediately .finish(taskId)
-      print("[BackgroundFetch] TASK TIMEOUT taskId: $taskId");
-      BackgroundFetch.finish(taskId);
-    },
-  );
-  BackgroundFetch.registerHeadlessTask(backgroundFetchHeadlessTask);
+  //     print('[BackgroundFetch] STEPS UPDATED');
+  //     // IMPORTANT:  You must signal completion of your task or the OS can punish your app
+  //     // for taking too long in the background.
+  //     BackgroundFetch.finish(taskId);
+  //   },
+  //   (String taskId) async {
+  //     // <-- Task timeout handler.
+  //     // This task has exceeded its allowed running-time.  You must stop what you're doing and immediately .finish(taskId)
+  //     print("[BackgroundFetch] TASK TIMEOUT taskId: $taskId");
+  //     BackgroundFetch.finish(taskId);
+  //   },
+  // );
+  // BackgroundFetch.registerHeadlessTask(backgroundFetchHeadlessTask);
 
   final String? userId = await const FlutterSecureStorage()
       .read(key: UserSessionRepository.userSessionKey);

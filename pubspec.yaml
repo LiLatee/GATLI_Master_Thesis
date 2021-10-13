@@ -21,7 +21,7 @@ environment:
   sdk: ">=2.13.0 <3.0.0"
 
 dependencies:
-  activity_recognition_flutter: ^4.0.4
+  activity_recognition_flutter: ^4.0.5
   background_fetch: ^1.0.1
   cloud_firestore: ^2.5.2
   cupertino_icons: ^1.0.2
@@ -46,6 +46,7 @@ dependencies:
   google_fonts: ^2.1.0
   google_sign_in: ^5.1.1
   group_button: ^3.2.0
+  health: ^3.2.0
   intl: ^0.17.0
   json_annotation: ^4.1.0
   pedometer: ^3.0.0

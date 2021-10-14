@@ -5,7 +5,10 @@ import 'package:activity_recognition_flutter/activity_recognition_flutter.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:master_thesis/features/data/users_repository.dart';
+import 'package:master_thesis/features/home_page/grid_items/activity/activity_session.dart';
 import 'package:master_thesis/features/home_page/grid_items/activity/my_activity.dart';
+import 'package:master_thesis/service_locator.dart';
 import 'package:pedometer/pedometer.dart';
 
 import 'package:stop_watch_timer/stop_watch_timer.dart';
@@ -20,7 +23,8 @@ class ActivityStateLoading extends ActivityState {}
 class ActivityStateLoaded extends ActivityState {
   final ExerciseState exerciseState;
   final int steps;
-  final List<MyActivity> activities;
+  // final List<MyActivity> activities;
+  final ActivitySession activitySession;
   final int seconds;
 
   final int minutes;
@@ -29,7 +33,8 @@ class ActivityStateLoaded extends ActivityState {
   ActivityStateLoaded({
     required this.exerciseState,
     required this.steps,
-    required this.activities,
+    // required this.activities,
+    required this.activitySession,
     required this.seconds,
     required this.minutes,
     required this.hours,
@@ -39,7 +44,8 @@ class ActivityStateLoaded extends ActivityState {
   List<Object?> get props => [
         exerciseState,
         steps,
-        activities,
+        // activities,
+        activitySession,
         seconds,
         minutes,
         hours,
@@ -48,7 +54,8 @@ class ActivityStateLoaded extends ActivityState {
   ActivityStateLoaded copyWith({
     ExerciseState? exerciseState,
     int? steps,
-    List<MyActivity>? activities,
+    // List<MyActivity>? activities,
+    ActivitySession? activitySession,
     int? seconds,
     int? minutes,
     int? hours,
@@ -56,7 +63,8 @@ class ActivityStateLoaded extends ActivityState {
     return ActivityStateLoaded(
       exerciseState: exerciseState ?? this.exerciseState,
       steps: steps ?? this.steps,
-      activities: activities ?? List.from(this.activities),
+      // activities: activities ?? List.from(this.activities),
+      activitySession: activitySession ?? this.activitySession,
       seconds: seconds ?? this.seconds,
       minutes: minutes ?? this.minutes,
       hours: hours ?? this.hours,
@@ -122,7 +130,12 @@ class ActivityCubit extends Cubit<ActivityState> {
     emit(ActivityStateLoaded(
       exerciseState: ExerciseState.NOT_STARTED,
       steps: 0,
-      activities: const [],
+      // activities: const [],
+      activitySession: ActivitySession(
+        activities: const [],
+        startTime: DateTime.now(),
+        minutesOfActivity: 0,
+      ),
       seconds: 0,
       minutes: 0,
       hours: 0,
@@ -168,20 +181,22 @@ class ActivityCubit extends Cubit<ActivityState> {
     activitySubscription.resume();
 
     final currentState = state as ActivityStateLoaded;
-    if (currentState.activities.isEmpty) {
+    if (currentState.activitySession.activities.isEmpty) {
       log("START");
       emit(
         currentState.copyWith(
           exerciseState: ExerciseState.RUNNING,
-          activities: currentState.activities +
-              [
-                MyActivity(
-                  isActive: false,
-                  timestamp: DateTime.now(),
-                  isStart: true,
-                  durationInMinutes: 0,
-                )
-              ],
+          activitySession: currentState.activitySession.copyWith(
+            activities: currentState.activitySession.activities +
+                [
+                  MyActivity(
+                    isActive: false,
+                    timestamp: DateTime.now(),
+                    isStart: true,
+                    durationInMinutes: 0,
+                  ),
+                ],
+          ),
         ),
       );
     }
@@ -195,11 +210,10 @@ class ActivityCubit extends Cubit<ActivityState> {
     final currentState = state as ActivityStateLoaded;
 
     log("STOP");
-
-    emit(
-      currentState.copyWith(
-        exerciseState: ExerciseState.FINISHED,
-        activities: currentState.activities +
+    final newState = currentState.copyWith(
+      exerciseState: ExerciseState.FINISHED,
+      activitySession: currentState.activitySession.copyWith(
+        activities: currentState.activitySession.activities +
             [
               MyActivity(
                 isActive: false,
@@ -208,31 +222,38 @@ class ActivityCubit extends Cubit<ActivityState> {
                 durationInMinutes: 0,
               )
             ],
+        endTime: DateTime.now(),
       ),
     );
+
+    sl<UserRepository>().addUserActivitySession(newState.activitySession);
+    emit(newState);
   }
 
   void listenOnActivity(MyActivity event) {
     final newState = ActivityStateLoaded(
       exerciseState: ExerciseState.RUNNING,
       steps: (state as ActivityStateLoaded).steps,
-      activities: (state as ActivityStateLoaded)
-          .activities
-          .map((e) => MyActivity(
-                isActive: e.isActive,
-                timestamp: e.timestamp,
-                confidence: e.confidence,
-                durationInMinutes: e.durationInMinutes,
-                isEnd: e.isEnd,
-                isStart: e.isStart,
-                type: e.type,
-              ))
-          .toList(),
+      activitySession: (state as ActivityStateLoaded).activitySession.copyWith(
+            activities: (state as ActivityStateLoaded)
+                .activitySession
+                .activities
+                .map((e) => MyActivity(
+                      isActive: e.isActive,
+                      timestamp: e.timestamp,
+                      confidence: e.confidence,
+                      durationInMinutes: e.durationInMinutes,
+                      isEnd: e.isEnd,
+                      isStart: e.isStart,
+                      type: e.type,
+                    ))
+                .toList(),
+          ),
       seconds: currentSeconds,
       minutes: currentMinutes,
       hours: currentHours,
     );
-    final currentStateActivities = newState.activities;
+    final currentStateActivities = newState.activitySession.activities;
 
     final int diff = event.timestamp
         .difference(
@@ -244,16 +265,33 @@ class ActivityCubit extends Cubit<ActivityState> {
                 event.isActive) &&
             currentStateActivities[currentStateActivities.length - 1].isStart ==
                 false;
-
+    log('diff: ${diff.toString()}');
     if (isSameAction && diff > 0) {
+      log('sameAction');
       currentStateActivities[currentStateActivities.length - 1]
           .durationInMinutes = diff;
 
       emit(newState);
     } else if (!isSameAction && diff > 1) {
-      emit((state as ActivityStateLoaded).copyWith(
-          activities: (state as ActivityStateLoaded).activities +
-              [event.copyWith(durationInMinutes: 2)]));
+      log('not sameAction');
+
+      emit(
+        (state as ActivityStateLoaded).copyWith(
+          activitySession: (state as ActivityStateLoaded)
+              .activitySession
+              .copyWith(
+                activities:
+                    (state as ActivityStateLoaded).activitySession.activities +
+                        [
+                          event.copyWith(
+                              durationInMinutes: 2,
+                              timestamp: event.timestamp.subtract(
+                                const Duration(minutes: 2),
+                              ))
+                        ],
+              ),
+        ),
+      );
     }
   }
 

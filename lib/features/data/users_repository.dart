@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:master_thesis/core/error/failures.dart';
 import 'package:master_thesis/features/data/user_app.dart';
+import 'package:master_thesis/features/home_page/grid_items/activity/activity_session.dart';
 import 'package:master_thesis/features/home_page/grid_items/questionnaire_page/questionnaire_intervention_repository.dart';
 import 'package:master_thesis/service_locator.dart';
 import 'package:pedometer/pedometer.dart';
@@ -156,6 +157,32 @@ class UserRepository {
       log("Can't update user's steps. Error: $e");
       return Left(
           DefaultFailure(message: "Can't update user's steps. Error: $e"));
+    }
+  }
+
+  Future<Either<DefaultFailure, void>> addUserActivitySession(
+      ActivitySession activitySession) async {
+    try {
+      final failureOrUserApp = await getUser();
+      return failureOrUserApp.fold(
+        (l) {
+          log(l.message);
+          return Left(DefaultFailure(message: l.message));
+        },
+        (UserApp userApp) async {
+          await documentReference.update(userApp
+              .copyWith(
+                  activitySessions:
+                      userApp.activitySessions + [activitySession])
+              .toJson());
+
+          return const Right(null);
+        },
+      );
+    } catch (e) {
+      log("Can't add ActivitySession to user. Error: $e");
+      return Left(DefaultFailure(
+          message: "Can't add ActivitySession to user. Error: $e"));
     }
   }
 

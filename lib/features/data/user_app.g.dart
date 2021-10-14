@@ -26,6 +26,10 @@ UserApp _$UserAppFromJson(Map<String, dynamic> json) => UserApp(
         (k, e) =>
             MapEntry(k, (e as List<dynamic>).map((e) => e as String).toList()),
       ),
+      activitySessions: (json['activitySessions'] as List<dynamic>?)
+              ?.map((e) => ActivitySession.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
     );
 
 Map<String, dynamic> _$UserAppToJson(UserApp instance) => <String, dynamic>{
@@ -38,4 +42,6 @@ Map<String, dynamic> _$UserAppToJson(UserApp instance) => <String, dynamic>{
       'emojiSVG': instance.emojiSVG,
       'activeInterventions': instance.activeInterventions,
       'pastInterventions': instance.pastInterventions,
+      'activitySessions':
+          instance.activitySessions.map((e) => e.toJson()).toList(),
     };

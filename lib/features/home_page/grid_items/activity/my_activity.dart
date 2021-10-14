@@ -2,6 +2,8 @@ import 'package:activity_recognition_flutter/activity_recognition_flutter.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
+part 'my_activity.g.dart';
+
 MyActivityType activityTypeToMyActivityType(ActivityType activityType) {
   if (activityType == ActivityType.INVALID) {
     return MyActivityType.INVALID;

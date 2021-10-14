@@ -237,10 +237,11 @@ class _ActivityPageState extends State<ActivityPage> {
         body: BlocBuilder<ActivityCubit, ActivityState>(
           builder: (context, state) {
             if (state is ActivityStateLoaded) {
-              final events = state.activities;
+              final events = state.activitySession.activities;
               int minutesOfActivity = 0;
-              state.activities.where((element) => element.isActive).forEach(
-                  (MyActivity myActivity) =>
+              state.activitySession.activities
+                  .where((element) => element.isActive)
+                  .forEach((MyActivity myActivity) =>
                       minutesOfActivity += myActivity.durationInMinutes);
 
               return Padding(
@@ -268,7 +269,7 @@ class _ActivityPageState extends State<ActivityPage> {
                       ],
                     ),
                     Container(
-                      height: 110,
+                      height: 200,
                       child: ListView(
                         scrollDirection: Axis.horizontal,
                         children: events
@@ -471,7 +472,7 @@ class _ActivityPageState extends State<ActivityPage> {
   TimelineTile _inProgressTimelineTile(MyActivity current) {
     return TimelineTile(
       axis: TimelineAxis.horizontal,
-      alignment: TimelineAlign.start,
+      alignment: TimelineAlign.center,
       indicatorStyle: IndicatorStyle(
         indicatorXY: 0.5,
         drawGap: true,
@@ -523,7 +524,7 @@ class _ActivityPageState extends State<ActivityPage> {
     return TimelineTile(
       isLast: true,
       axis: TimelineAxis.horizontal,
-      alignment: TimelineAlign.start,
+      alignment: TimelineAlign.center,
       indicatorStyle: IndicatorStyle(
         indicatorXY: 0.5,
         drawGap: true,
@@ -536,7 +537,7 @@ class _ActivityPageState extends State<ActivityPage> {
           iconData: Icons.stop,
         ),
       ),
-      endChild: Container(
+      startChild: Container(
         padding: const EdgeInsets.symmetric(horizontal: 8),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
@@ -563,7 +564,7 @@ class _ActivityPageState extends State<ActivityPage> {
     return TimelineTile(
       isFirst: true,
       axis: TimelineAxis.horizontal,
-      alignment: TimelineAlign.start,
+      alignment: TimelineAlign.center,
       indicatorStyle: IndicatorStyle(
         indicatorXY: 0.5,
         drawGap: true,
@@ -576,7 +577,7 @@ class _ActivityPageState extends State<ActivityPage> {
           iconData: Icons.play_arrow,
         ),
       ),
-      endChild: Container(
+      startChild: Container(
         padding: const EdgeInsets.symmetric(horizontal: 8),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,

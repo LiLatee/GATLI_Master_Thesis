@@ -1,8 +1,9 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:master_thesis/features/home_page/grid_items/activity/activity_session.dart';
 part 'user_app.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class UserApp extends Equatable {
   const UserApp({
     required this.id,
@@ -14,6 +15,7 @@ class UserApp extends Equatable {
     required this.emojiSVG,
     required this.activeInterventions,
     required this.pastInterventions,
+    this.activitySessions = const [],
   });
 
   final String? id;
@@ -25,6 +27,7 @@ class UserApp extends Equatable {
   final String emojiSVG;
   final Map<String, List<String>> activeInterventions;
   final Map<String, List<String>> pastInterventions;
+  final List<ActivitySession> activitySessions;
 
   @override
   List<Object?> get props => [
@@ -36,7 +39,8 @@ class UserApp extends Equatable {
         kilometers,
         emojiSVG,
         activeInterventions,
-        pastInterventions
+        pastInterventions,
+        activitySessions,
       ];
 
   factory UserApp.fromJson(Map<String, dynamic> json) =>
@@ -98,6 +102,7 @@ class UserApp extends Equatable {
     String? emojiSVG,
     Map<String, List<String>>? activeInterventions,
     Map<String, List<String>>? pastInterventions,
+    List<ActivitySession>? activitySessions,
   }) {
     return UserApp(
       id: id ?? this.id,
@@ -109,6 +114,7 @@ class UserApp extends Equatable {
       emojiSVG: emojiSVG ?? this.emojiSVG,
       activeInterventions: activeInterventions ?? this.activeInterventions,
       pastInterventions: pastInterventions ?? this.pastInterventions,
+      activitySessions: activitySessions ?? this.activitySessions,
     );
   }
 }

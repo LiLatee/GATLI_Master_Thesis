@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:master_thesis/features/data/users_repository.dart';
+import 'package:master_thesis/features/home_page/grid_items/30x30_challange/challange_30x30_intervention_repository.dart';
 import 'package:master_thesis/features/home_page/grid_items/questionnaire_page/questionnaire.dart';
 import 'package:master_thesis/features/home_page/grid_items/questionnaire_page/questionnaire_intervention_repository.dart';
 import 'package:master_thesis/features/home_page/grid_items/questionnaire_page/questionnaire_repository.dart';
@@ -49,6 +50,8 @@ class _AdminPageState extends State<AdminPage> {
             ),
             const SizedBox(height: 16),
             _buildAssignQuestionnaire(),
+            const SizedBox(height: 16),
+            _buildAssign30x30Challange(),
           ],
         ),
       ),
@@ -87,6 +90,26 @@ class _AdminPageState extends State<AdminPage> {
       child: const Text('Assign Questionnaire'),
       onPressed: () async {
         await sl<UserRepository>().assignQuestionnaireIntervention();
+      },
+    );
+  }
+
+  Widget _buildAssign30x30Challange() {
+    return TextButton(
+      child: const Text('Assign 30x30 Challange'),
+      onPressed: () async {
+        final failureOrDocRef = await sl<Challange30x30InterventionRepository>()
+            .addChallange30x30Intervention(
+          userId: 'ToeQtJmM48YjgNxvrdo2JEDG5mI2',
+        );
+
+        failureOrDocRef.fold(
+          (_) {},
+          (docRef) {
+            sl<UserRepository>().assign30x30ChallangeIntervention(
+                challanhe30x30InterventionId: docRef.id);
+          },
+        );
       },
     );
   }

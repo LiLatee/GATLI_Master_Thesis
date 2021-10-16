@@ -11,12 +11,14 @@ class ActivitySession extends Equatable {
   final DateTime startTime;
   final DateTime? endTime;
   final int minutesOfActivity;
+  final int steps;
 
   const ActivitySession({
     required this.activities,
     required this.startTime,
     this.endTime,
     required this.minutesOfActivity,
+    required this.steps,
   });
 
   factory ActivitySession.fromJson(Map<String, dynamic> json) =>
@@ -30,6 +32,7 @@ class ActivitySession extends Equatable {
         startTime,
         endTime,
         minutesOfActivity,
+        steps,
       ];
 
   ActivitySession copyWith({
@@ -37,12 +40,13 @@ class ActivitySession extends Equatable {
     DateTime? startTime,
     DateTime? endTime,
     int? minutesOfActivity,
+    int? steps,
   }) {
     return ActivitySession(
-      activities: activities ?? this.activities,
-      startTime: startTime ?? this.startTime,
-      endTime: endTime ?? this.endTime,
-      minutesOfActivity: minutesOfActivity ?? this.minutesOfActivity,
-    );
+        activities: activities ?? this.activities,
+        startTime: startTime ?? this.startTime,
+        endTime: endTime ?? this.endTime,
+        minutesOfActivity: minutesOfActivity ?? this.minutesOfActivity,
+        steps: steps ?? this.steps);
   }
 }

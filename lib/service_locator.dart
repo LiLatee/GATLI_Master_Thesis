@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:master_thesis/features/app/app_cubit.dart';
+import 'package:master_thesis/features/home_page/grid_items/30x30_challange/challange_30x30_intervention_repository.dart';
 import 'package:master_thesis/features/home_page/grid_items/questionnaire_page/questionnaire_intervention_repository.dart';
 import 'package:master_thesis/features/home_page/grid_items/questionnaire_page/questionnaire_repository.dart';
 import 'package:master_thesis/features/home_page/grid_items/thai_chi/thai_chi_interventions_repository.dart';
@@ -40,6 +41,9 @@ Future<void> initServiceLocator() async {
   sl.registerLazySingleton(() => QuestionnaireInterventionRepository(
       collectionReference: sl<FirebaseFirestore>()
           .collection('questionnaire_QLQ-C30_interventions')));
+  sl.registerLazySingleton(() => Challange30x30InterventionRepository(
+      collectionReference:
+          sl<FirebaseFirestore>().collection('30x30_challange_interventions')));
 
   //! Data source
   sl.registerLazySingleton(() => FirebaseAuth.instance);

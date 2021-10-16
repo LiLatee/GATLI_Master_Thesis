@@ -17,11 +17,14 @@ class ProfilePageHeader extends SliverPersistentHeaderDelegate {
   ProfilePageHeader({
     required this.minExtent,
     required this.maxExtent,
+    this.stepsToday = 0,
   });
   @override
   final double minExtent;
   @override
   final double maxExtent;
+
+  final int stepsToday;
 
   late UserApp _userApp;
 
@@ -37,7 +40,7 @@ class ProfilePageHeader extends SliverPersistentHeaderDelegate {
           if (snapshot.hasData) {
             _userApp =
                 UserApp.fromJson(snapshot.data!.data() as Map<String, dynamic>);
-            log(_userApp.toString());
+            // log(_userApp.toString());
             return Stack(
               fit: StackFit.expand,
               children: [
@@ -178,21 +181,26 @@ class ProfilePageHeader extends SliverPersistentHeaderDelegate {
               width: 20,
             ),
             const SizedBox(width: 8),
-            StreamBuilder<StepCount>(
-                stream: _stepCountStream,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    _steps = snapshot.data!.steps;
-                  }
+            Text(
+              '$stepsToday ',
+              style:
+                  Theme.of(context).textTheme.bodyText2!.copyWith(fontSize: 16),
+            ),
+            // StreamBuilder<StepCount>(
+            //     stream: _stepCountStream,
+            //     builder: (context, snapshot) {
+            //       if (snapshot.hasData) {
+            //         _steps = snapshot.data!.steps;
+            //       }
 
-                  return Text(
-                    '$_steps ',
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText2!
-                        .copyWith(fontSize: 16),
-                  );
-                }),
+            // return Text(
+            //   '$_steps ',
+            //   style: Theme.of(context)
+            //       .textTheme
+            //       .bodyText2!
+            //       .copyWith(fontSize: 16),
+            // );
+            //     }),
             Text(
               context.l10n.steps,
               style:

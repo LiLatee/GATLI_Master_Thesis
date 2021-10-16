@@ -82,7 +82,7 @@ class EmailSignUpCubit extends Cubit<EmailSignUpState> {
             return null;
           },
           (UserApp userApp) {
-            log(userApp.toJson().toString());
+            // log(userApp.toJson().toString());
             emit(EmailSignUpSuccess());
             return userApp;
           },

@@ -126,7 +126,7 @@ class LoginCubit extends Cubit<LoginState> {
             return null;
           },
           (UserApp userApp) {
-            log(userApp.toJson().toString());
+            // log(userApp.toJson().toString());
             emit(LoginSignUpSuccess());
             return userApp;
           },

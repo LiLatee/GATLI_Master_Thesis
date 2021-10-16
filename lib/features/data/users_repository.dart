@@ -90,6 +90,39 @@ class UserRepository {
     }
   }
 
+  Future<Either<DefaultFailure, DocumentReference>>
+      assign30x30ChallangeIntervention(
+          {required String challanhe30x30InterventionId}) async {
+    try {
+      final failureOrUserApp = await getUser();
+      failureOrUserApp.fold((l) {
+        log("Can't get UserApp: Error: $l");
+        return Left(DefaultFailure(
+            message:
+                "Can't assign 30x30 Challange Intervention to user. Error: $l"));
+      }, (UserApp userApp) async {
+        final Map<String, List<String>> activeInterventions =
+            userApp.activeInterventions;
+
+        if (userApp.activeInterventions.containsKey('30x30_challange')) {
+          activeInterventions['30x30_challange']!
+              .add(challanhe30x30InterventionId);
+        } else {
+          activeInterventions['30x30_challange'] = [
+            challanhe30x30InterventionId
+          ];
+        }
+        await documentReference
+            .update({'activeInterventions': activeInterventions});
+      });
+    } catch (e) {
+      return Left(DefaultFailure(
+          message:
+              "Can't add 30x30 Challange Intervention to user. Error: $e"));
+    }
+    return Right(documentReference);
+  }
+
   Future<Either<DefaultFailure, UserApp>> getUser() async {
     print('getUser');
 

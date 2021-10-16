@@ -1,4 +1,5 @@
 //! SharedPreferences Keys
+import 'package:master_thesis/features/home_page/grid_items/30x30_challange/challange_30x30_page.dart';
 import 'package:master_thesis/features/home_page/grid_items/questionnaire_page/questionnaire_page.dart';
 import 'package:master_thesis/features/home_page/grid_items/thai_chi/thai_chi_intervention_page.dart';
 
@@ -28,6 +29,10 @@ class AppConstants {
     'QLQ-C30': {
       'name': 'Questionnaire',
       'routeName': QuestionnairePage.routeName,
+    },
+    '30x30_challange': {
+      'name': '30x30 Challange',
+      'routeName': Challange30x30Page.routeName,
     },
   };
 }

@@ -69,23 +69,23 @@ class ThaiChiInterventionsRepository {
     }
   }
 
-  Future<Either<DefaultFailure, ThaiChiIntervention>>
-      getThaiChiInterventionOfUser({required String userId}) async {
-    final Map<String, dynamic> thaiChiInterventionAppMap;
-    try {
-      thaiChiInterventionAppMap = (await (await collectionReference
-                  .where('userId', isEqualTo: 'userId'))
-              .snapshots()
-              .first)
-          .docs[0]
-          .data() as Map<String, dynamic>;
+  // Future<Either<DefaultFailure, ThaiChiIntervention>>
+  //     getThaiChiInterventionOfUser({required String userId}) async {
+  //   final Map<String, dynamic> thaiChiInterventionAppMap;
+  //   try {
+  //     thaiChiInterventionAppMap = (await (await collectionReference
+  //                 .where('userId', isEqualTo: 'userId'))
+  //             .snapshots()
+  //             .first)
+  //         .docs[0]
+  //         .data() as Map<String, dynamic>;
 
-      return Right(ThaiChiIntervention.fromJson(thaiChiInterventionAppMap));
-    } catch (e) {
-      return Left(DefaultFailure(
-          message: "Can't get Thai Chi Intervention. Error: $e"));
-    }
-  }
+  //     return Right(ThaiChiIntervention.fromJson(thaiChiInterventionAppMap));
+  //   } catch (e) {
+  //     return Left(DefaultFailure(
+  //         message: "Can't get Thai Chi Intervention. Error: $e"));
+  //   }
+  // }
 
   Future<Either<DefaultFailure, bool>> exists(String id) async {
     try {

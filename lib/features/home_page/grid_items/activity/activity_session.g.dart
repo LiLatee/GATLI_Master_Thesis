@@ -16,6 +16,7 @@ ActivitySession _$ActivitySessionFromJson(Map<String, dynamic> json) =>
           ? null
           : DateTime.parse(json['endTime'] as String),
       minutesOfActivity: json['minutesOfActivity'] as int,
+      steps: json['steps'] as int,
     );
 
 Map<String, dynamic> _$ActivitySessionToJson(ActivitySession instance) =>
@@ -24,4 +25,5 @@ Map<String, dynamic> _$ActivitySessionToJson(ActivitySession instance) =>
       'startTime': instance.startTime.toIso8601String(),
       'endTime': instance.endTime?.toIso8601String(),
       'minutesOfActivity': instance.minutesOfActivity,
+      'steps': instance.steps,
     };

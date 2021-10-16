@@ -4,8 +4,17 @@ import 'dart:developer';
 import 'package:activity_recognition_flutter/activity_recognition_flutter.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:master_thesis/core/error/failures.dart';
+import 'package:master_thesis/features/data/user_app.dart';
 import 'package:master_thesis/features/data/users_repository.dart';
+import 'package:master_thesis/features/home_page/grid_items/30x30_challange/challange_30x30_cubit.dart';
+import 'package:master_thesis/features/home_page/grid_items/30x30_challange/challange_30x30_intervention.dart';
+
+import 'package:master_thesis/features/home_page/grid_items/30x30_challange/challange_30x30_intervention_repository.dart';
+import 'package:master_thesis/features/home_page/grid_items/30x30_challange/challange_one_day_stats.dart';
+
 import 'package:master_thesis/features/home_page/grid_items/activity/activity_session.dart';
 import 'package:master_thesis/features/home_page/grid_items/activity/my_activity.dart';
 import 'package:master_thesis/service_locator.dart';
@@ -99,6 +108,11 @@ class ActivityCubit extends Cubit<ActivityState> {
     ActivityType.WALKING,
   ];
 
+  final UserRepository userRepository = sl<UserRepository>();
+
+  final Challange30x30InterventionRepository challangeRepository =
+      sl<Challange30x30InterventionRepository>();
+
   Future<void> init() async {
     //StopWatchTimer
     stopWatchTimer = StopWatchTimer(
@@ -132,10 +146,10 @@ class ActivityCubit extends Cubit<ActivityState> {
       steps: 0,
       // activities: const [],
       activitySession: ActivitySession(
-        activities: const [],
-        startTime: DateTime.now(),
-        minutesOfActivity: 0,
-      ),
+          activities: const [],
+          startTime: DateTime.now(),
+          minutesOfActivity: 0,
+          steps: 0),
       seconds: 0,
       minutes: 0,
       hours: 0,
@@ -226,8 +240,63 @@ class ActivityCubit extends Cubit<ActivityState> {
       ),
     );
 
-    sl<UserRepository>().addUserActivitySession(newState.activitySession);
+    // sl<UserRepository>().addUserActivitySession(newState.activitySession
+    //     .copyWith(steps: (state as ActivityStateLoaded).steps));
+
+    update30x30ChallangeIntervention();
+
     emit(newState);
+  }
+
+  Future<void> update30x30ChallangeIntervention() async {
+    final failureOrUser = await userRepository.getUser();
+    final currentState = state as ActivityStateLoaded;
+
+    log("CURRENT STEPS: ${currentState.steps}");
+    failureOrUser.fold(
+      (DefaultFailure failure) => log('ActivityCubit - cannot get user'),
+      (UserApp userApp) async {
+        final failureOrChallangeIntervention =
+            await challangeRepository.getChallange30x30Intervention(
+                id: userApp.activeInterventions['30x30_challange']![0]);
+
+        failureOrChallangeIntervention.fold(
+          (DefaultFailure failure) =>
+              log('ActivityCubit - cannot get 30x30 Challange intervention'),
+          (intervention) {
+            final currentState = state as ActivityStateLoaded;
+            final String todayString = DateFormat('yyyy-MM-dd')
+                .format(currentState.activitySession.startTime);
+            final days = intervention.days;
+
+            final ChallangeOneDayStats? challangeDayStats = days![todayString];
+            log('challangeDayStats: ${challangeDayStats.toString()}');
+
+            final ChallangeOneDayStats updatedChallangeDayStats =
+                ChallangeOneDayStats(
+              day: challangeDayStats?.day ??
+                  DateTime(
+                    currentState.activitySession.startTime.year,
+                    currentState.activitySession.startTime.month,
+                    currentState.activitySession.startTime.day,
+                  ),
+              steps: (challangeDayStats?.steps ?? 0) + currentState.steps,
+              minutesOfMove: (challangeDayStats?.minutesOfMove ?? 0) +
+                  currentState.minutes,
+            );
+            days[todayString] = updatedChallangeDayStats;
+            log('updatedChallangeDayStats: ${updatedChallangeDayStats.toString()}');
+            log("days[todayString]: ${days[todayString].toString()}");
+            final Challange30x30Intervention newChallange30x30Intervention =
+                intervention.copyWith(days: days);
+
+            log('newChallange30x30Intervention: ${newChallange30x30Intervention.toString()}');
+            challangeRepository.updateChallange30x30Intervention(
+                newChallange30x30Intervention: newChallange30x30Intervention);
+          },
+        );
+      },
+    );
   }
 
   void listenOnActivity(MyActivity event) {

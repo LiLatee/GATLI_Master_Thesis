@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:master_thesis/core/constants/app_constants.dart';
 import 'package:master_thesis/features/data/user_app.dart';
 import 'package:master_thesis/features/data/users_repository.dart';
+import 'package:master_thesis/features/home_page/grid_items/activity/activity_history_page.dart';
 import 'package:master_thesis/features/home_page/grid_items/activity/activity_page.dart';
 import 'package:master_thesis/features/home_page/grid_items/admin_page/admin_page.dart';
 import 'package:master_thesis/features/home_page/grid_items/questionnaire_page/questionnaire_page.dart';
+import 'package:master_thesis/features/home_page/grid_items/test/test.dart';
 import 'package:master_thesis/features/home_page/grid_items/thai_chi/thai_chi_lesson.dart';
 import 'package:master_thesis/service_locator.dart';
 
@@ -70,9 +72,27 @@ class ActionsGridView extends StatelessWidget {
         )
         .toList();
 
+    final activitiesWidget = GestureDetector(
+      child: Card(
+        color: Theme.of(context).colorScheme.primary,
+        elevation: 4,
+        child: GridTile(
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Center(
+              child: Text(
+                'Activities',
+                style: Theme.of(context).textTheme.headline5,
+              ),
+            ),
+          ),
+        ),
+      ),
+      onTap: () => Navigator.pushNamed(context, ActivityHistoryPage.routeName),
+    );
+
     final adminWidget = GestureDetector(
       child: Card(
-        // color: Theme.of(context).colorScheme.primary,
         elevation: 4,
         child: GridTile(
           child: Padding(
@@ -81,6 +101,7 @@ class ActionsGridView extends StatelessWidget {
               child: Text(
                 'Admin panel',
                 style: Theme.of(context).textTheme.headline5,
+                textAlign: TextAlign.center,
               ),
             ),
           ),
@@ -106,7 +127,7 @@ class ActionsGridView extends StatelessWidget {
           ),
         ),
       ),
-      onTap: () => Navigator.pushNamed(context, ActivityPage.routeName),
+      // onTap: () => Navigator.pushNamed(context, TestFit.routeName),
     );
 
     return SliverGrid(
@@ -115,7 +136,11 @@ class ActionsGridView extends StatelessWidget {
           mainAxisSpacing: 16,
           crossAxisCount: 2,
         ),
-        delegate: SliverChildListDelegate(
-            interventionsWidgets + [adminWidget, testWidget]));
+        delegate: SliverChildListDelegate(interventionsWidgets +
+            [
+              activitiesWidget,
+              adminWidget,
+              testWidget,
+            ]));
   }
 }

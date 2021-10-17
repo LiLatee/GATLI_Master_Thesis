@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:master_thesis/features/data/points_entry.dart';
 import 'package:master_thesis/features/home_page/grid_items/activity/activity_session.dart';
 part 'user_app.g.dart';
 
@@ -16,6 +17,7 @@ class UserApp extends Equatable {
     required this.activeInterventions,
     required this.pastInterventions,
     this.activitySessions = const [],
+    this.pointsEntries = const [],
   });
 
   final String? id;
@@ -28,6 +30,7 @@ class UserApp extends Equatable {
   final Map<String, List<String>> activeInterventions;
   final Map<String, List<String>> pastInterventions;
   final List<ActivitySession> activitySessions;
+  final List<PointsEntry> pointsEntries;
 
   @override
   List<Object?> get props => [
@@ -41,56 +44,13 @@ class UserApp extends Equatable {
         activeInterventions,
         pastInterventions,
         activitySessions,
+        pointsEntries,
       ];
 
   factory UserApp.fromJson(Map<String, dynamic> json) =>
       _$UserAppFromJson(json);
 
   Map<String, dynamic> toJson() => _$UserAppToJson(this);
-
-  // Map<String, dynamic> toMap() {
-  //   return {
-  //     'id': id,
-  //     'nickname': nickname,
-  //     'email': email,
-  //     'badgesKeys': badgesKeys,
-  //     'steps': steps,
-  //     'kilometers': kilometers,
-  //     'emojiSVG': emojiSVG,
-  //     'activeInterventions': activeInterventions,
-  //     'pastInterventions': pastInterventions,
-  //   };
-  // }
-
-  // factory UserApp.fromMap(Map<String, dynamic> map) {
-  //   log('kkkkk');
-  //   log(map['activeInterventions'].toString());
-  //   // log(jsonDecode(map['activeInterventions'].toString()).toString());
-  //   return UserApp(
-  //       id: map['id'],
-  //       nickname: map['nickname'],
-  //       email: map['email'],
-  //       badgesKeys: List<String>.from(map['badgesKeys']),
-  //       steps: map['steps'],
-  //       kilometers: map['kilometers'],
-  //       emojiSVG: map['emojiSVG'],
-  //       activeInterventions: <String, List<String>>{
-  //         'thai_chi': map['activeInterventions']['thai_chi'] as List<String>
-  //       },
-  //       pastInterventions: <String, List<String>>{
-  //         'thai_chi': map['pastInterventions']['thai_chi'] as List<String>
-  //       }
-  //       // activeInterventions: Map<String, List<String>>.from(
-  //       //     map['activeInterventions']),
-  //       // pastInterventions: Map<String, List<String>>.from(
-  //       //     map['pastInterventions']),
-  //       );
-  // }
-
-  // String toJson() => json.encode(toMap());
-
-  // factory UserApp.fromJson(String source) =>
-  //     UserApp.fromMap(json.decode(source));
 
   UserApp copyWith({
     String? id,
@@ -103,6 +63,7 @@ class UserApp extends Equatable {
     Map<String, List<String>>? activeInterventions,
     Map<String, List<String>>? pastInterventions,
     List<ActivitySession>? activitySessions,
+    List<PointsEntry>? pointsEntries,
   }) {
     return UserApp(
       id: id ?? this.id,
@@ -115,6 +76,7 @@ class UserApp extends Equatable {
       activeInterventions: activeInterventions ?? this.activeInterventions,
       pastInterventions: pastInterventions ?? this.pastInterventions,
       activitySessions: activitySessions ?? this.activitySessions,
+      pointsEntries: pointsEntries ?? this.pointsEntries,
     );
   }
 }

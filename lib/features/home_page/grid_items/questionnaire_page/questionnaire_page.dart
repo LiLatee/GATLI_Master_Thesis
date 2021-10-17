@@ -95,6 +95,7 @@ class _QuestionnairePageState extends State<QuestionnairePage> {
   Widget _buildBody(List<Question> allQuestions) {
     return Expanded(
       child: PageView.builder(
+        physics: const NeverScrollableScrollPhysics(),
         itemCount: allQuestions.length,
         controller: pageController,
         itemBuilder: (context, index) {

@@ -56,11 +56,26 @@ class ActionsGridView extends StatelessWidget {
               child: GridTile(
                 child: Padding(
                   padding: const EdgeInsets.all(16),
-                  child: Center(
-                    child: Text(
-                      AppConstants.interventionsKeysMapper[key]['name'],
-                      style: Theme.of(context).textTheme.headline5,
-                    ),
+                  child: Stack(
+                    children: [
+                      Positioned.fill(
+                        child: Opacity(
+                          opacity: 0.1,
+                          child: FittedBox(
+                            fit: BoxFit.fill,
+                            child: Icon(AppConstants
+                                .interventionsKeysMapper[key]['icon']),
+                          ),
+                        ),
+                      ),
+                      Center(
+                        child: Text(
+                          AppConstants.interventionsKeysMapper[key]['name'],
+                          style: Theme.of(context).textTheme.headline5,
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -79,11 +94,25 @@ class ActionsGridView extends StatelessWidget {
         child: GridTile(
           child: Padding(
             padding: const EdgeInsets.all(16),
-            child: Center(
-              child: Text(
-                'Activities',
-                style: Theme.of(context).textTheme.headline5,
-              ),
+            child: Stack(
+              children: [
+                const Positioned.fill(
+                  child: Opacity(
+                    opacity: 0.1,
+                    child: FittedBox(
+                      fit: BoxFit.fill,
+                      child: Icon(Icons.directions_run),
+                    ),
+                  ),
+                ),
+                Center(
+                  child: Text(
+                    'Activities',
+                    style: Theme.of(context).textTheme.headline5,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ],
             ),
           ),
         ),
@@ -94,15 +123,29 @@ class ActionsGridView extends StatelessWidget {
     final adminWidget = GestureDetector(
       child: Card(
         elevation: 4,
+        color: Theme.of(context).colorScheme.secondary,
         child: GridTile(
           child: Padding(
             padding: const EdgeInsets.all(16),
-            child: Center(
-              child: Text(
-                'Admin panel',
-                style: Theme.of(context).textTheme.headline5,
-                textAlign: TextAlign.center,
-              ),
+            child: Stack(
+              children: [
+                const Positioned.fill(
+                  child: Opacity(
+                    opacity: 0.1,
+                    child: FittedBox(
+                      fit: BoxFit.fill,
+                      child: Icon(Icons.admin_panel_settings),
+                    ),
+                  ),
+                ),
+                Center(
+                  child: Text(
+                    'Admin panel',
+                    style: Theme.of(context).textTheme.headline5,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ],
             ),
           ),
         ),
@@ -122,6 +165,7 @@ class ActionsGridView extends StatelessWidget {
               child: Text(
                 'Test',
                 style: Theme.of(context).textTheme.headline5,
+                textAlign: TextAlign.center,
               ),
             ),
           ),

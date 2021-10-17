@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:master_thesis/features/data/user_app.dart';
 import 'package:master_thesis/features/data/users_repository.dart';
@@ -30,21 +31,69 @@ class ActivityHistoryPage extends StatelessWidget {
             if (snapshot.hasData) {
               final _userApp = UserApp.fromJson(
                   snapshot.data!.data() as Map<String, dynamic>);
-              return ListView.builder(
-                itemCount: _userApp.activitySessions.length,
-                itemBuilder: (context, index) {
-                  return _buildListTile(
-                    context: context,
-                    activitySession: _userApp.activitySessions[index],
-                  );
-                },
-              );
+              return _buildContent(context: context, userApp: _userApp);
             } else {
               return const Center(
                 child: CircularProgressIndicator(),
               );
             }
           }),
+    );
+  }
+
+  Widget _buildContent({
+    required BuildContext context,
+    required UserApp userApp,
+  }) {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            children: [
+              Text(
+                'Hello!',
+                style: Theme.of(context).textTheme.headline5!.copyWith(
+                      color: Theme.of(context).colorScheme.primaryVariant,
+                    ),
+              ),
+              const SizedBox(height: 8),
+              RichText(
+                text: TextSpan(
+                  text:
+                      'Here you are able to monitor your physical activity, by pressing ',
+                  style: Theme.of(context).textTheme.subtitle1,
+                  children: [
+                    TextSpan(
+                      text: '+ Track activity',
+                      style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).colorScheme.secondary),
+                    ),
+                    const TextSpan(
+                        text: ' button and also see your past activities. 🚴'),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        Expanded(
+          child: ListView.builder(
+            itemCount: userApp.activitySessions.length + 1,
+            itemBuilder: (context, index) {
+              if (index == userApp.activitySessions.length) {
+                return const SizedBox(height: 64);
+              } else {
+                return _buildListTile(
+                  context: context,
+                  activitySession: userApp.activitySessions[index],
+                );
+              }
+            },
+          ),
+        ),
+      ],
     );
   }
 

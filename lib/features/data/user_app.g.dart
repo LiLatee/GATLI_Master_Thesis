@@ -30,6 +30,10 @@ UserApp _$UserAppFromJson(Map<String, dynamic> json) => UserApp(
               ?.map((e) => ActivitySession.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
+      pointsEntries: (json['pointsEntries'] as List<dynamic>?)
+              ?.map((e) => PointsEntry.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
     );
 
 Map<String, dynamic> _$UserAppToJson(UserApp instance) => <String, dynamic>{
@@ -44,4 +48,5 @@ Map<String, dynamic> _$UserAppToJson(UserApp instance) => <String, dynamic>{
       'pastInterventions': instance.pastInterventions,
       'activitySessions':
           instance.activitySessions.map((e) => e.toJson()).toList(),
+      'pointsEntries': instance.pointsEntries.map((e) => e.toJson()).toList(),
     };

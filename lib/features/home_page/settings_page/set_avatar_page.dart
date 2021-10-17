@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:fluttermoji/fluttermoji.dart';
 import 'package:get/get.dart';
@@ -78,15 +80,16 @@ class _SetAvatarPageState extends State<SetAvatarPage> {
         Get.find<FluttermojiController>().setFluttermoji();
         final failureOrUserId = await sl<UserSessionRepository>().readSession();
         failureOrUserId.fold(
-          (l) => null,
+          (l) => log('SetAvatarPage - ${l.message}'),
           (userId) async {
             final failureOrUser = await sl<UserRepository>().getUser();
             failureOrUser.fold(
-              (l) => null,
+              (l) => log('SetAvatarPage - ${l.message}'),
               (user) async {
                 await sl<UserRepository>().updateUser(user.copyWith(
                     emojiSVG:
                         await FluttermojiFunctions().encodeMySVGtoString()));
+                Navigator.pop(context);
               },
             );
           },

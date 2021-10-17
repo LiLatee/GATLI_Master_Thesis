@@ -25,7 +25,7 @@
     "isEditFinishedYes": "Tak, skończyłem",
     "isEditFinishedNo": "Nie, wróć",
     "steps": "kroki",
-    "anyPhysicalActivity": "Aktywność fizyczna",
+    "anyPhysicalActivity": "Aktywność fizyczna\n> 30 min",
     "thaiChi": "Thai Chi",
     "todaysStatistics": "Dzisiejsze statystki",
     "runner": "Biegacz",

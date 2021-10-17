@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:math' as math;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -10,6 +9,7 @@ import 'package:master_thesis/core/constants/image_paths.dart';
 import 'package:master_thesis/core/l10n/l10n.dart';
 import 'package:master_thesis/features/data/user_app.dart';
 import 'package:master_thesis/features/data/users_repository.dart';
+import 'package:master_thesis/features/home_page/grid_items/activity/activity_session.dart';
 import 'package:master_thesis/service_locator.dart';
 import 'package:pedometer/pedometer.dart';
 
@@ -71,7 +71,7 @@ class ProfilePageHeader extends SliverPersistentHeaderDelegate {
                     ],
                   ),
                 ),
-                _buildContent(context, shrinkOffset),
+                _buildContent(context, shrinkOffset, _userApp),
               ],
             );
           } else {
@@ -82,7 +82,8 @@ class ProfilePageHeader extends SliverPersistentHeaderDelegate {
         });
   }
 
-  Widget _buildContent(BuildContext context, double shrinkOffset) {
+  Widget _buildContent(
+      BuildContext context, double shrinkOffset, UserApp userApp) {
     return Positioned(
       top: 2 * AppConstants.homePageAvatarRadius,
       width: MediaQuery.of(context).size.width,
@@ -92,22 +93,20 @@ class ProfilePageHeader extends SliverPersistentHeaderDelegate {
           children: [
             const Divider(thickness: 3, height: 0),
             const SizedBox(height: 8),
-            _buildTodaysStatistics(context),
+            _buildTodaysStatistics(context, userApp),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildTodaysStatistics(BuildContext context) {
+  Widget _buildTodaysStatistics(BuildContext context, UserApp userApp) {
     return Column(
       children: [
         Row(
           children: [
             Text(
-              // "Today's statistics:",
               context.l10n.todaysStatistics,
-
               style: Theme.of(context).textTheme.headline6,
             ),
           ],
@@ -117,7 +116,7 @@ class ProfilePageHeader extends SliverPersistentHeaderDelegate {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             _buildStepsAndDistance(context),
-            _buildCheckboxes(context),
+            _buildCheckboxes(context, userApp),
           ],
         ),
         // const SizedBox(height: 8),
@@ -125,7 +124,9 @@ class ProfilePageHeader extends SliverPersistentHeaderDelegate {
     );
   }
 
-  Widget _buildCheckboxes(BuildContext context) {
+  Widget _buildCheckboxes(BuildContext context, UserApp userApp) {
+    final bool wasActivityAbove30Mins = _checkTodayActivity(userApp);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -134,9 +135,7 @@ class ProfilePageHeader extends SliverPersistentHeaderDelegate {
             const Icon(Icons.check_box_outlined),
             const SizedBox(width: 8),
             Text(
-              // "Thai Chi Exercise",
               context.l10n.thaiChi,
-
               style:
                   Theme.of(context).textTheme.bodyText2!.copyWith(fontSize: 16),
             ),
@@ -145,10 +144,11 @@ class ProfilePageHeader extends SliverPersistentHeaderDelegate {
         const SizedBox(height: 8),
         Row(
           children: [
-            const Icon(Icons.check_box_outline_blank),
+            Icon(wasActivityAbove30Mins
+                ? Icons.check_box_outlined
+                : Icons.check_box_outline_blank),
             const SizedBox(width: 8),
             Text(
-              // "Any physical activity",
               context.l10n.anyPhysicalActivity,
               style:
                   Theme.of(context).textTheme.bodyText2!.copyWith(fontSize: 16),
@@ -295,5 +295,36 @@ class ProfilePageHeader extends SliverPersistentHeaderDelegate {
   @override
   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
     return true;
+  }
+
+  bool _checkTodayActivity(UserApp userApp) {
+    final DateTime now = DateTime.now();
+    final DateTime today = DateTime(now.year, now.month, now.day);
+
+    final List<ActivitySession> todaysActivities =
+        userApp.activitySessions.where((element) {
+      final DateTime activityDay = DateTime(
+        element.startTime.year,
+        element.startTime.month,
+        element.startTime.day,
+      );
+
+      if (activityDay.compareTo(today) == 0) {
+        return true;
+      } else {
+        return false;
+      }
+    }).toList();
+
+    final int todaysMinutesOfActivity = todaysActivities.fold(
+        0,
+        (int previousValue, element) =>
+            previousValue + element.minutesOfActivity);
+
+    if (todaysMinutesOfActivity >= 30) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

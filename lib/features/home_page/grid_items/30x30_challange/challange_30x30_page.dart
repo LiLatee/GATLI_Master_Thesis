@@ -44,14 +44,117 @@ class _Challange30x30State extends State<Challange30x30Page> {
 
             return Padding(
               padding: const EdgeInsets.all(16),
-              child: GridView(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 4,
-                  mainAxisSpacing: 4,
-                  crossAxisSpacing: 4,
-                  mainAxisExtent: 120,
-                ),
-                children: widgets,
+              child: Column(
+                children: [
+                  Column(
+                    children: [
+                      Text(
+                        'Nice to see you here!',
+                        style: Theme.of(context).textTheme.headline5!.copyWith(
+                              color:
+                                  Theme.of(context).colorScheme.primaryVariant,
+                            ),
+                      ),
+                      const SizedBox(height: 8),
+                      RichText(
+                        text: TextSpan(
+                          text: 'Here you are able to see you progress in ',
+                          style: Theme.of(context).textTheme.subtitle1,
+                          children: [
+                            TextSpan(
+                              text: '30x30 Challange',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle1!
+                                  .copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary),
+                            ),
+                            const TextSpan(
+                                text:
+                                    '. 30x30 means 30 minutes of activity for 30 days.'),
+                            TextSpan(
+                              text: ' Good luck!',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle1!
+                                  .copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        children: [
+                          _getDayStatusWidget(dayStatus: DayStatus.DONE),
+                          const SizedBox(width: 8),
+                          const Expanded(
+                            child: Text(
+                              'Hooray! You have performed 30 mins of activity that day.',
+                              maxLines: 2,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        children: [
+                          _getDayStatusWidget(dayStatus: DayStatus.IN_PROGRESS),
+                          const SizedBox(width: 8),
+                          const Expanded(
+                            child: Text(
+                              "It's not done yet, but it's today so you are still able to do it!",
+                              maxLines: 2,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        children: [
+                          _getDayStatusWidget(dayStatus: DayStatus.FUTURE),
+                          const SizedBox(width: 8),
+                          const Expanded(
+                            child: Text(
+                              "Don't mind. It's a future thing. 😄",
+                              maxLines: 2,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        children: [
+                          _getDayStatusWidget(dayStatus: DayStatus.FAILURE),
+                          const SizedBox(width: 8),
+                          const Expanded(
+                            child: Text(
+                              "Unfortunately, you didn't make it that day, but it's just a single day 😉.",
+                              maxLines: 2,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  Expanded(
+                    child: GridView(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 4,
+                        mainAxisSpacing: 4,
+                        crossAxisSpacing: 4,
+                        mainAxisExtent: 120,
+                      ),
+                      children: widgets,
+                    ),
+                  ),
+                ],
               ),
             );
           } else if (state is Challange30x30StateLoading) {

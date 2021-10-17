@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:activity_recognition_flutter/activity_recognition_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:master_thesis/features/data/points_entry.dart';
 import 'package:master_thesis/features/data/users_repository.dart';
 import 'package:master_thesis/features/home_page/grid_items/thai_chi/thai_chi_intervention.dart';
 import 'package:master_thesis/features/home_page/grid_items/thai_chi/thai_chi_interventions_repository.dart';
@@ -132,8 +133,15 @@ class _ThaiChiPageState extends State<ThaiChiPage> {
             _isWatchedVideo = true;
           });
 
-          final lessonsDone = widget.thaiChiIntervention.lessonsDone +
-              [widget.thaiChiLesson.id];
+          final List<String> lessonsDone;
+          if (!widget.thaiChiIntervention.lessonsDone
+              .contains(widget.thaiChiLesson.id)) {
+            lessonsDone = widget.thaiChiIntervention.lessonsDone +
+                [widget.thaiChiLesson.id];
+          } else {
+            lessonsDone = widget.thaiChiIntervention.lessonsDone;
+          }
+
           final lessonsToDo = widget.thaiChiIntervention.lessonsToDo;
           lessonsToDo.remove(widget.thaiChiLesson.id);
 
@@ -144,14 +152,24 @@ class _ThaiChiPageState extends State<ThaiChiPage> {
           );
           sl<ThaiChiInterventionsRepository>().updateThaiChiIntervention(
               newThaiChiIntervention: newThaiChiIntervention);
-          if (lessonsToDo.isEmpty) {
+          if (lessonsToDo.isEmpty &&
+              widget.thaiChiIntervention.lessonsToDo.isNotEmpty) {
             sl<UserRepository>().addBadge(BadgesKeys.thaiChiLevel1);
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                content:
-                    Text('Well done! A whole Thai Chi course performed!')));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(
+                    'Well done! A whole Thai Chi course performed! Earned ${PredefinedEntryPoints.thaiChiWholeCourse.points.toString()} points')));
+
+            sl<UserRepository>().addUserPointsEntry(PredefinedEntryPoints
+                .thaiChiWholeCourse
+                .copyWith(datetime: DateTime.now()));
           } else {
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                content: Text('Well done! Exercise performed.')));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(
+                    'Well done! Exercise performed. Earned ${PredefinedEntryPoints.thaiChiSingleVideo.points.toString()} points')));
+
+            sl<UserRepository>().addUserPointsEntry(PredefinedEntryPoints
+                .thaiChiSingleVideo
+                .copyWith(datetime: DateTime.now()));
           }
         }
       },

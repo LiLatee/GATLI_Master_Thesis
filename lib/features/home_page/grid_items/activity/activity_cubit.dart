@@ -240,8 +240,8 @@ class ActivityCubit extends Cubit<ActivityState> {
       ),
     );
 
-    // sl<UserRepository>().addUserActivitySession(newState.activitySession
-    //     .copyWith(steps: (state as ActivityStateLoaded).steps));
+    sl<UserRepository>().addUserActivitySession(newState.activitySession
+        .copyWith(steps: (state as ActivityStateLoaded).steps));
 
     update30x30ChallangeIntervention();
 
@@ -250,9 +250,7 @@ class ActivityCubit extends Cubit<ActivityState> {
 
   Future<void> update30x30ChallangeIntervention() async {
     final failureOrUser = await userRepository.getUser();
-    final currentState = state as ActivityStateLoaded;
 
-    log("CURRENT STEPS: ${currentState.steps}");
     failureOrUser.fold(
       (DefaultFailure failure) => log('ActivityCubit - cannot get user'),
       (UserApp userApp) async {
@@ -270,7 +268,6 @@ class ActivityCubit extends Cubit<ActivityState> {
             final days = intervention.days;
 
             final ChallangeOneDayStats? challangeDayStats = days![todayString];
-            log('challangeDayStats: ${challangeDayStats.toString()}');
 
             final ChallangeOneDayStats updatedChallangeDayStats =
                 ChallangeOneDayStats(
@@ -284,13 +281,12 @@ class ActivityCubit extends Cubit<ActivityState> {
               minutesOfMove: (challangeDayStats?.minutesOfMove ?? 0) +
                   currentState.minutes,
             );
+
             days[todayString] = updatedChallangeDayStats;
-            log('updatedChallangeDayStats: ${updatedChallangeDayStats.toString()}');
-            log("days[todayString]: ${days[todayString].toString()}");
+
             final Challange30x30Intervention newChallange30x30Intervention =
                 intervention.copyWith(days: days);
 
-            log('newChallange30x30Intervention: ${newChallange30x30Intervention.toString()}');
             challangeRepository.updateChallange30x30Intervention(
                 newChallange30x30Intervention: newChallange30x30Intervention);
           },

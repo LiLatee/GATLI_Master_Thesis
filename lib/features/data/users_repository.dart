@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:master_thesis/core/error/failures.dart';
+import 'package:master_thesis/features/data/points_entry.dart';
 import 'package:master_thesis/features/data/user_app.dart';
 import 'package:master_thesis/features/home_page/grid_items/activity/activity_session.dart';
 import 'package:master_thesis/features/home_page/grid_items/questionnaire_page/questionnaire_intervention_repository.dart';
@@ -151,47 +152,47 @@ class UserRepository {
     }
   }
 
-  Future<Either<DefaultFailure, void>> updateUserSteps() async {
-    print('updateUserSteps - start');
-    try {
-      final failureOrUserApp = await getUser();
-      return failureOrUserApp.fold(
-        (l) {
-          print('updateUserSteps - fail1');
+  // Future<Either<DefaultFailure, void>> updateUserSteps() async {
+  //   print('updateUserSteps - start');
+  //   try {
+  //     final failureOrUserApp = await getUser();
+  //     return failureOrUserApp.fold(
+  //       (l) {
+  //         print('updateUserSteps - fail1');
 
-          log(l.message);
-          return Left(DefaultFailure(message: l.message));
-        },
-        (UserApp userApp) async {
-          print('updateUserSteps - in1');
-          var steps = 0;
-          try {
-            steps = (await Pedometer.stepCountStream
-                    .firstWhere((element) => element != null))
-                .steps;
-          } catch (e, s) {
-            print("updateUserSteps- error ${e}");
-            print("updateUserSteps - error ${s}");
-            return Left(DefaultFailure(message: 'aaaaa'));
-          }
+  //         log(l.message);
+  //         return Left(DefaultFailure(message: l.message));
+  //       },
+  //       (UserApp userApp) async {
+  //         print('updateUserSteps - in1');
+  //         var steps = 0;
+  //         try {
+  //           steps = (await Pedometer.stepCountStream
+  //                   .firstWhere((element) => element != null))
+  //               .steps;
+  //         } catch (e, s) {
+  //           print("updateUserSteps- error ${e}");
+  //           print("updateUserSteps - error ${s}");
+  //           return Left(DefaultFailure(message: 'aaaaa'));
+  //         }
 
-          print('updateUserSteps - in2');
+  //         print('updateUserSteps - in2');
 
-          await documentReference
-              .update(userApp.copyWith(steps: userApp.steps + steps).toJson());
-          print('updateUserSteps - done');
+  //         await documentReference
+  //             .update(userApp.copyWith(steps: userApp.steps + steps).toJson());
+  //         print('updateUserSteps - done');
 
-          return const Right(null);
-        },
-      );
-    } catch (e) {
-      print('updateUserSteps - fail2');
+  //         return const Right(null);
+  //       },
+  //     );
+  //   } catch (e) {
+  //     print('updateUserSteps - fail2');
 
-      log("Can't update user's steps. Error: $e");
-      return Left(
-          DefaultFailure(message: "Can't update user's steps. Error: $e"));
-    }
-  }
+  //     log("Can't update user's steps. Error: $e");
+  //     return Left(
+  //         DefaultFailure(message: "Can't update user's steps. Error: $e"));
+  //   }
+  // }
 
   Future<Either<DefaultFailure, void>> addUserActivitySession(
       ActivitySession activitySession) async {
@@ -214,6 +215,30 @@ class UserRepository {
       );
     } catch (e) {
       log("Can't add ActivitySession to user. Error: $e");
+      return Left(DefaultFailure(
+          message: "Can't add ActivitySession to user. Error: $e"));
+    }
+  }
+
+  Future<Either<DefaultFailure, void>> addUserPointsEntry(
+      PointsEntry pointsEntry) async {
+    try {
+      final failureOrUserApp = await getUser();
+      return failureOrUserApp.fold(
+        (l) {
+          log(l.message);
+          return Left(DefaultFailure(message: l.message));
+        },
+        (UserApp userApp) async {
+          await documentReference.update(userApp
+              .copyWith(pointsEntries: userApp.pointsEntries + [pointsEntry])
+              .toJson());
+
+          return const Right(null);
+        },
+      );
+    } catch (e) {
+      log("Can't add PointsEntry to user. Error: $e");
       return Left(DefaultFailure(
           message: "Can't add ActivitySession to user. Error: $e"));
     }

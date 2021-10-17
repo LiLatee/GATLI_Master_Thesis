@@ -1,13 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:master_thesis/features/data/user_app.dart';
+import 'package:master_thesis/features/home_page/achievements_page/points_history_page.dart';
 import 'package:master_thesis/features/home_page/grid_items/30x30_challange/challange_30x30_page.dart';
 import 'package:master_thesis/features/home_page/grid_items/activity/activity_history_page.dart';
 import 'package:master_thesis/features/home_page/grid_items/activity/activity_page.dart';
 import 'package:master_thesis/features/home_page/grid_items/admin_page/admin_page.dart';
+import 'package:master_thesis/features/home_page/grid_items/questionnaire_page/questionnaire_intro_page.dart';
 import 'package:master_thesis/features/home_page/grid_items/questionnaire_page/questionnaire_page.dart';
 import 'package:master_thesis/features/home_page/grid_items/test/test.dart';
 import 'package:master_thesis/features/home_page/grid_items/thai_chi/thai_chi_intervention_page.dart';
-import 'package:master_thesis/features/home_page/grid_items/thai_chi/thai_chi_lesson.dart';
 import 'package:master_thesis/features/home_page/grid_items/thai_chi/thai_chi_page.dart';
 import 'package:master_thesis/features/home_page/home_screen.dart';
 import 'package:master_thesis/features/home_page/settings_page/set_avatar_page.dart';
@@ -28,6 +30,15 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => const AdminPage(),
         );
+      case PointsHistoryPage.routeName:
+        return MaterialPageRoute(
+          builder: (_) =>
+              PointsHistoryPage(userApp: settings.arguments as UserApp),
+        );
+      case QuestionnaireIntroPage.routeName:
+        return MaterialPageRoute(
+          builder: (_) => const QuestionnaireIntroPage(),
+        );
       case QuestionnairePage.routeName:
         return MaterialPageRoute(
           builder: (_) => const QuestionnairePage(),
@@ -42,11 +53,11 @@ class AppRouter {
         );
       case Challange30x30Page.routeName:
         return MaterialPageRoute(
-          builder: (_) => Challange30x30Page(),
+          builder: (_) => const Challange30x30Page(),
         );
       case TestTile.routeName:
         return MaterialPageRoute(
-          builder: (_) => TestTile(),
+          builder: (_) => const TestTile(),
         );
       case ThaiChiPage.routeName:
         final args = settings.arguments as ThaiChiPageArguments;

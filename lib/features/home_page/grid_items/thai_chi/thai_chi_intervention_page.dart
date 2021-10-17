@@ -46,35 +46,59 @@ class _ThaiChiInterventionPageState extends State<ThaiChiInterventionPage> {
     );
   }
 
-  ListView _buildLoaded(ThaiChiInterventionStateLoaded state) {
-    return ListView.builder(
-      itemCount: state.lessons.length,
-      itemBuilder: (context, index) {
-        final lesson = state.lessons[index];
-        return Card(
-          child: ListTile(
-              title: Text(lesson.title),
-              trailing: lesson.isPerformed
-                  ? Icon(
-                      Icons.check_box,
-                      color: Theme.of(context).colorScheme.secondary,
-                    )
-                  : Icon(
-                      Icons.check_box_outline_blank,
-                      color: Theme.of(context).colorScheme.secondary,
+  Widget _buildLoaded(ThaiChiInterventionStateLoaded state) {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            children: [
+              Text(
+                'Hi!',
+                style: Theme.of(context).textTheme.headline5!.copyWith(
+                      color: Theme.of(context).colorScheme.primaryVariant,
                     ),
-              leading: Image.network(
-                  'https://img.youtube.com/vi/${lesson.ytVideoId}/mqdefault.jpg'),
-              onTap: () => Navigator.pushNamed(
-                    context,
-                    ThaiChiPage.routeName,
-                    arguments: ThaiChiPageArguments(
-                      thaiChiLesson: state.lessons[index],
-                      thaiChiIntervention: state.thaiChiIntervention,
-                    ),
-                  )),
-        );
-      },
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Here are recommended Thai Chi lessons for you. You have freedom in choosing the order of lessons. 😊',
+                style: Theme.of(context).textTheme.subtitle1,
+              ),
+            ],
+          ),
+        ),
+        Expanded(
+          child: ListView.builder(
+            itemCount: state.lessons.length,
+            itemBuilder: (context, index) {
+              final lesson = state.lessons[index];
+              return Card(
+                child: ListTile(
+                    title: Text(lesson.title),
+                    trailing: lesson.isPerformed
+                        ? Icon(
+                            Icons.check_box,
+                            color: Theme.of(context).colorScheme.secondary,
+                          )
+                        : Icon(
+                            Icons.check_box_outline_blank,
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
+                    leading: Image.network(
+                        'https://img.youtube.com/vi/${lesson.ytVideoId}/mqdefault.jpg'),
+                    onTap: () => Navigator.pushNamed(
+                          context,
+                          ThaiChiPage.routeName,
+                          arguments: ThaiChiPageArguments(
+                            thaiChiLesson: state.lessons[index],
+                            thaiChiIntervention: state.thaiChiIntervention,
+                          ),
+                        )),
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 }

@@ -132,8 +132,8 @@ class _HomePageState extends State<HomePage> {
               delegate: ProfilePageHeader(
                 // minExtent: AppConstants.homePageAvatarRadius * 2 + 8 * 2,
                 stepsToday: stepsToday,
-                minExtent: 185,
-                maxExtent: 185,
+                minExtent: 200,
+                maxExtent: 200,
               ),
             ),
             _options[_selectedIndex],

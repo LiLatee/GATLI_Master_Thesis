@@ -10,6 +10,7 @@ import 'package:master_thesis/features/data/users_repository.dart';
 import 'package:master_thesis/features/home_page/grid_items/thai_chi/thai_chi_intervention.dart';
 import 'package:master_thesis/features/home_page/grid_items/thai_chi/thai_chi_interventions_repository.dart';
 import 'package:master_thesis/features/home_page/grid_items/thai_chi/thai_chi_lesson.dart';
+import 'package:master_thesis/features/home_page/home_screen.dart';
 import 'package:master_thesis/features/widgets/badges.dart';
 import 'package:master_thesis/service_locator.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -64,52 +65,6 @@ class _ThaiChiPageState extends State<ThaiChiPage> {
   bool _isWatchedVideo = false;
   bool fullscreen = false;
 
-  // late Stream<Activity> activityStream;
-  // List<Activity> _events = [];
-  // ActivityRecognition activityRecognition = ActivityRecognition.instance;
-  // late final StreamSubscription subscription;
-
-  // void _initActivityMonitoring() async {
-  //   /// Android requires explicitly asking permission
-  //   if (Platform.isAndroid) {
-  //     if (await Permission.activityRecognition.request().isGranted) {
-  //       _startTracking();
-  //     }
-  //   }
-
-  //   /// iOS does not
-  //   else {
-  //     _startTracking();
-  //   }
-  // }
-
-  // static const activeActivityTypes = [
-  //   ActivityType.ON_FOOT,
-  //   ActivityType.RUNNING,
-  //   ActivityType.TILTING,
-  //   ActivityType.WALKING,
-  // ];
-
-  // void _startTracking() {
-  //   activityStream = activityRecognition
-  //       .startStream(runForegroundService: false)
-  //       .map<Activity>((event) {
-  //     if (activeActivityTypes.contains(event.type)) {
-  //       return Activity(activityEnum: ActivityEnum.ACTIVE, dateTime: event.timeStamp,);
-  //     } else {
-  //       return Activity(activityEnum: ActivityEnum.INACTIVE, dateTime: event.timeStamp,);
-  //     }
-  //   });
-  //   subscription = activityStream.listen(onData);
-  // }
-
-  // void onData(Activity activityEvent) {
-  //   log(activityEvent.toString());
-  //   setState(() {
-  //     _events.add(activityEvent);
-  //   });
-  // }
-
   @override
   void initState() {
     super.initState();
@@ -117,7 +72,7 @@ class _ThaiChiPageState extends State<ThaiChiPage> {
     _stopWatchTimer = StopWatchTimer(
       mode: StopWatchMode.countUp,
       // onChange: (value) => log('onChange $value'),
-      onChangeRawSecond: (value) {
+      onChangeRawSecond: (value) async {
         log('onChangeRawSecond $value');
         _watchedTimeInSeconds = value;
         final bool isWatchedVideo = 5 < _watchedTimeInSeconds;
@@ -156,14 +111,22 @@ class _ThaiChiPageState extends State<ThaiChiPage> {
 
           if (lessonsToDo.isEmpty &&
               widget.thaiChiIntervention.lessonsToDo.isNotEmpty) {
-            sl<UserRepository>().addBadge(BadgesKeys.thaiChiLevel1);
+            var result =
+                sl<UserRepository>().addBadge(BadgesKeys.thaiChiLevel1);
+            await result;
+
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text(
                     'Well done! A whole Thai Chi course performed! Earned ${PredefinedEntryPoints.thaiChiWholeCourse.points.toString()} points')));
 
-            sl<UserRepository>().addUserPointsEntry(PredefinedEntryPoints
-                .thaiChiWholeCourse
-                .copyWith(datetime: DateTime.now()));
+            result = sl<UserRepository>().addUserPointsEntry(
+                PredefinedEntryPoints.thaiChiWholeCourse
+                    .copyWith(datetime: DateTime.now()));
+            await result;
+
+            result = sl<UserRepository>().doneThaiChiIntervention(
+                thaiChiInterventionId: widget.thaiChiIntervention.id);
+            await result;
           } else {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text(
@@ -202,41 +165,6 @@ class _ThaiChiPageState extends State<ThaiChiPage> {
           : AppBar(
               title: Text(widget.thaiChiLesson.title),
             ),
-      // floatingActionButton: fullscreen
-      //     ? null
-      //     : FloatingActionButton.extended(
-      //         label: const Text('Done'),
-      //         icon: const Icon(Icons.done),
-      //         onPressed: () {
-      //           // final bool isWatchedVideo =
-      //           //     _controller.metadata.duration.inSeconds * 0.9 <
-      //           //         _watchedTimeInSeconds;
-
-      //           // TODO for tests
-      //           final bool isWatchedVideo = 5 < _watchedTimeInSeconds;
-
-      //           if (isWatchedVideo == false) {
-      //             ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-      //                 content: Text('Please perform whole video')));
-      //           } else {
-      //             ScaffoldMessenger.of(context)
-      //                 .showSnackBar(const SnackBar(content: Text('well done')));
-      //             final lessonsDone = widget.thaiChiIntervention.lessonsDone +
-      //                 [widget.thaiChiLesson.id];
-      //             final lessonsToDo = widget.thaiChiIntervention.lessonsToDo;
-      //             lessonsToDo.remove(widget.thaiChiLesson.id);
-
-      //             final ThaiChiIntervention newThaiChiIntervention =
-      //                 widget.thaiChiIntervention.copyWith(
-      //               lessonsDone: lessonsDone,
-      //               lessonsToDo: lessonsToDo,
-      //             );
-      //             sl<ThaiChiInterventionsRepository>()
-      //                 .updateThaiChiIntervention(
-      //                     newThaiChiIntervention: newThaiChiIntervention);
-      //           }
-      //         },
-      //       ),
       body: YoutubePlayerBuilder(
         onEnterFullScreen: () {
           setState(() {

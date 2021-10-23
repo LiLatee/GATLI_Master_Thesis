@@ -6,7 +6,6 @@ import 'package:app_install_date/app_install_date.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:health/health.dart';
-import 'package:intl/intl.dart';
 import 'package:master_thesis/features/data/user_app.dart';
 import 'package:master_thesis/features/data/users_repository.dart';
 import 'package:master_thesis/features/home_page/achievements_page/achievements_page.dart';

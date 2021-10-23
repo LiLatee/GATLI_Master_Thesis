@@ -37,25 +37,66 @@ class UserRepository {
       {required String thaiChiInterventionId}) async {
     try {
       final failureOrUserApp = await getUser();
-      failureOrUserApp.fold((l) {
-        log("Can't get UserApp: Error: $l");
-        return Left(DefaultFailure(
-            message: "Can't assign Thai Chi Intervention to user. Error: $l"));
-      }, (UserApp userApp) async {
-        final Map<String, List<String>> activeInterventions =
-            userApp.activeInterventions;
+      failureOrUserApp.fold(
+        (l) {
+          log("Can't get UserApp: Error: $l");
+          return Left(DefaultFailure(
+              message:
+                  "Can't assign Thai Chi Intervention to user. Error: $l"));
+        },
+        (UserApp userApp) async {
+          final Map<String, List<String>> activeInterventions =
+              userApp.activeInterventions;
 
-        if (userApp.activeInterventions.containsKey('thai_chi')) {
-          activeInterventions['thai_chi']!.add(thaiChiInterventionId);
-        } else {
-          activeInterventions['thai_chi'] = [thaiChiInterventionId];
-        }
-        await documentReference
-            .update({'activeInterventions': activeInterventions});
-      });
+          if (userApp.activeInterventions.containsKey('thai_chi')) {
+            activeInterventions['thai_chi']!.add(thaiChiInterventionId);
+          } else {
+            activeInterventions['thai_chi'] = [thaiChiInterventionId];
+          }
+          await documentReference
+              .update({'activeInterventions': activeInterventions});
+        },
+      );
     } catch (e) {
       return Left(DefaultFailure(
           message: "Can't add Thai Chi Intervention to user. Error: $e"));
+    }
+    return Right(documentReference);
+  }
+
+  Future<Either<DefaultFailure, DocumentReference>> doneThaiChiIntervention(
+      {required String thaiChiInterventionId}) async {
+    try {
+      final failureOrUserApp = await getUser();
+      failureOrUserApp.fold(
+        (l) {
+          return Left(DefaultFailure(
+              message:
+                  "Can't make done Thai Chi Intervention for user. Error: $l"));
+        },
+        (UserApp userApp) async {
+          final Map<String, List<String>> pastInterventions =
+              userApp.pastInterventions;
+          final Map<String, List<String>> activeInterventions =
+              userApp.activeInterventions;
+          activeInterventions.remove('thai_chi');
+
+          if (userApp.pastInterventions.containsKey('thai_chi')) {
+            pastInterventions['thai_chi']!.add(thaiChiInterventionId);
+          } else {
+            pastInterventions['thai_chi'] = [thaiChiInterventionId];
+          }
+
+          await documentReference.update({
+            'pastInterventions': pastInterventions,
+            'activeInterventions': activeInterventions
+          });
+        },
+      );
+    } catch (e) {
+      return Left(DefaultFailure(
+          message:
+              "Can't make done Thai Chi Intervention for user. Error: $e"));
     }
     return Right(documentReference);
   }
@@ -152,48 +193,6 @@ class UserRepository {
     }
   }
 
-  // Future<Either<DefaultFailure, void>> updateUserSteps() async {
-  //   print('updateUserSteps - start');
-  //   try {
-  //     final failureOrUserApp = await getUser();
-  //     return failureOrUserApp.fold(
-  //       (l) {
-  //         print('updateUserSteps - fail1');
-
-  //         log(l.message);
-  //         return Left(DefaultFailure(message: l.message));
-  //       },
-  //       (UserApp userApp) async {
-  //         print('updateUserSteps - in1');
-  //         var steps = 0;
-  //         try {
-  //           steps = (await Pedometer.stepCountStream
-  //                   .firstWhere((element) => element != null))
-  //               .steps;
-  //         } catch (e, s) {
-  //           print("updateUserSteps- error ${e}");
-  //           print("updateUserSteps - error ${s}");
-  //           return Left(DefaultFailure(message: 'aaaaa'));
-  //         }
-
-  //         print('updateUserSteps - in2');
-
-  //         await documentReference
-  //             .update(userApp.copyWith(steps: userApp.steps + steps).toJson());
-  //         print('updateUserSteps - done');
-
-  //         return const Right(null);
-  //       },
-  //     );
-  //   } catch (e) {
-  //     print('updateUserSteps - fail2');
-
-  //     log("Can't update user's steps. Error: $e");
-  //     return Left(
-  //         DefaultFailure(message: "Can't update user's steps. Error: $e"));
-  //   }
-  // }
-
   Future<Either<DefaultFailure, void>> addUserActivitySession(
       ActivitySession activitySession) async {
     try {
@@ -204,12 +203,6 @@ class UserRepository {
           return Left(DefaultFailure(message: l.message));
         },
         (UserApp userApp) async {
-          log('ACTIVITY');
-          log(userApp.activitySessions.length.toString());
-          log(activitySession.toString());
-          log(userApp.email.toString());
-          log(userApp.id.toString());
-
           await documentReference.update(userApp
               .copyWith(
                   activitySessions:

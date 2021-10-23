@@ -3,14 +3,20 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:fluttermoji/fluttermoji.dart';
 import 'package:get/get.dart';
+
 import 'package:master_thesis/core/constants/app_constants.dart';
 import 'package:master_thesis/core/l10n/l10n.dart';
 import 'package:master_thesis/features/data/user_session_repository.dart';
 import 'package:master_thesis/features/data/users_repository.dart';
+import 'package:master_thesis/features/home_page/home_screen.dart';
 import 'package:master_thesis/service_locator.dart';
 
 class SetAvatarPage extends StatefulWidget {
-  const SetAvatarPage({Key? key}) : super(key: key);
+  const SetAvatarPage({
+    Key? key,
+    this.fromSettings = false,
+  }) : super(key: key);
+  final bool fromSettings;
 
   static const String routeName = '/setAvatarPage';
 
@@ -27,6 +33,7 @@ class _SetAvatarPageState extends State<SetAvatarPage> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text(context.l10n.setProfileAvatar),
+        automaticallyImplyLeading: widget.fromSettings,
       ),
       body: _buildBody(context),
     );
@@ -89,7 +96,11 @@ class _SetAvatarPageState extends State<SetAvatarPage> {
                 await sl<UserRepository>().updateUser(user.copyWith(
                     emojiSVG:
                         await FluttermojiFunctions().encodeMySVGtoString()));
-                Navigator.pop(context);
+                if (widget.fromSettings) {
+                  Navigator.pop(context);
+                } else {
+                  Navigator.pushReplacementNamed(context, HomePage.routeName);
+                }
               },
             );
           },

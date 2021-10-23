@@ -166,7 +166,7 @@ Widget? getBadgeUsingKey(
     ),
     BadgesKeys.stepsLevel1: Badge(
       title: context.l10n.walker,
-      subtitle: '10 000' + context.l10n.steps,
+      subtitle: '10 000 ' + context.l10n.steps,
       lightColor: const Color(0xffFAE3B4),
       darkColor: const Color(0xfff5c563),
       level: Level.BRONZE,
@@ -178,7 +178,7 @@ Widget? getBadgeUsingKey(
     ),
     BadgesKeys.stepsLevel2: Badge(
       title: context.l10n.walker,
-      subtitle: '100 000' + context.l10n.steps,
+      subtitle: '100 000 ' + context.l10n.steps,
       lightColor: const Color(0xffFAE3B4),
       darkColor: const Color(0xfff5c563),
       level: Level.SILVER,

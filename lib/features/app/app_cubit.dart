@@ -26,7 +26,7 @@ class AppCubit extends Cubit<AppState> {
         emit(AppState.unauthorized);
       },
       (userId) {
-        log('authorized');
+        log('authorized: userId');
         sl.registerLazySingleton(() => UserRepository(
             documentReference:
                 sl<FirebaseFirestore>().collection('users').doc(userId)));

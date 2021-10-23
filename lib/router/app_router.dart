@@ -72,8 +72,14 @@ class AppRouter {
           builder: (_) => const ThaiChiInterventionPage(),
         );
       case SetAvatarPage.routeName:
+        final bool fromSettings;
+        if (settings.arguments == null) {
+          fromSettings = false;
+        } else {
+          fromSettings = settings.arguments as bool;
+        }
         return SlideRightRoute(
-          page: const SetAvatarPage(),
+          page: SetAvatarPage(fromSettings: fromSettings),
         );
     }
   }

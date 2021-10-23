@@ -174,6 +174,7 @@ class LoginCubit extends Cubit<LoginState> {
         log('Error: ${failure.message}');
       },
       (UserApp userApp) {
+        log('tete: ${userApp.id.toString()}');
         userSessionRepository.writeSession(userId: userApp.id!); // TODO !
         emit(LoginSuccess(userId: userApp.id));
       },

@@ -1,8 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:master_thesis/features/data/user_session_repository.dart';
 import 'package:master_thesis/features/data/users_repository.dart';
 import 'package:master_thesis/features/home_page/grid_items/30x30_challange/challange_30x30_intervention_repository.dart';
 import 'package:master_thesis/features/home_page/grid_items/questionnaire_page/questionnaire.dart';
-import 'package:master_thesis/features/home_page/grid_items/questionnaire_page/questionnaire_intervention_repository.dart';
 import 'package:master_thesis/features/home_page/grid_items/questionnaire_page/questionnaire_repository.dart';
 import 'package:master_thesis/features/home_page/grid_items/thai_chi/thai_chi_interventions_repository.dart';
 import 'package:master_thesis/features/home_page/grid_items/thai_chi/thai_chi_lesson.dart';
@@ -21,10 +23,23 @@ class AdminPage extends StatefulWidget {
 class _AdminPageState extends State<AdminPage> {
   late final TextEditingController _patientIDController;
 
+  Future<void> getCurrentUserId() async {
+    final failureOrUserId = await sl<UserSessionRepository>().readSession();
+    failureOrUserId.fold(
+      (l) => log('AdminPage Error ${l.message}'),
+      (String userId) {
+        setState(() {
+          _patientIDController.text = userId;
+        });
+      },
+    );
+  }
+
   @override
   void initState() {
     super.initState();
     _patientIDController = TextEditingController();
+    getCurrentUserId();
   }
 
   @override
@@ -36,7 +51,10 @@ class _AdminPageState extends State<AdminPage> {
           children: [
             TextFormField(
               controller: _patientIDController,
-              decoration: const InputDecoration(hintText: 'Patient ID'),
+              decoration: const InputDecoration(
+                hintText: 'Patient ID',
+                label: Text('Patient ID'),
+              ),
             ),
             const SizedBox(height: 16),
             _buildAssignThaiChi(),
@@ -72,7 +90,7 @@ class _AdminPageState extends State<AdminPage> {
       onPressed: () async {
         final failureOrDocRef =
             await sl<ThaiChiInterventionsRepository>().addThaiChiIntervention(
-          userId: 'ToeQtJmM48YjgNxvrdo2JEDG5mI2',
+          userId: _patientIDController.text,
         );
         failureOrDocRef.fold(
           (_) {},
@@ -100,7 +118,7 @@ class _AdminPageState extends State<AdminPage> {
       onPressed: () async {
         final failureOrDocRef = await sl<Challange30x30InterventionRepository>()
             .addChallange30x30Intervention(
-          userId: 'ToeQtJmM48YjgNxvrdo2JEDG5mI2',
+          userId: _patientIDController.text,
         );
 
         failureOrDocRef.fold(

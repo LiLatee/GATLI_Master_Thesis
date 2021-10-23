@@ -6,6 +6,8 @@ import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:group_button/group_button.dart';
+import 'package:master_thesis/features/data/points_entry.dart';
+import 'package:master_thesis/features/data/users_repository.dart';
 import 'package:master_thesis/features/home_page/grid_items/questionnaire_page/question.dart';
 import 'package:master_thesis/features/home_page/grid_items/questionnaire_page/question_user.dart';
 import 'package:master_thesis/features/home_page/grid_items/questionnaire_page/questionnaire.dart';
@@ -28,7 +30,7 @@ class _QuestionnairePageState extends State<QuestionnairePage> {
   int step = 1;
   String stepName = 'General Questions';
   int questionNumber = 1;
-  // Map<String, List<QuestionUser>> answers = {};
+
   Questionnaire<QuestionUser> answeredQuestionnaire =
       Questionnaire<QuestionUser>(
     languageCode: 'en',
@@ -142,6 +144,14 @@ class _QuestionnairePageState extends State<QuestionnairePage> {
                   if (questionNumber == allQuestions.length) {
                     sl<QuestionnaireInterventionRepository>()
                         .addQuestionnaire(questionnaire: answeredQuestionnaire);
+
+                    sl<UserRepository>().addUserPointsEntry(
+                      PredefinedEntryPoints.questionnaireDone
+                          .copyWith(datetime: DateTime.now()),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text('Thanks! You got 500 points!')));
+                    Navigator.pop(context);
                   } else {
                     log(answeredQuestionnaire.toString());
                     pageController.nextPage(

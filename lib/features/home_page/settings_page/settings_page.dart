@@ -28,8 +28,9 @@ class _SettingsPageState extends State<SettingsPage> {
                   SettingsTile(
                     title: 'Change avatar',
                     leading: const Icon(Icons.person),
-                    onPressed: (context) =>
-                        Navigator.pushNamed(context, SetAvatarPage.routeName),
+                    onPressed: (context) => Navigator.pushNamed(
+                        context, SetAvatarPage.routeName,
+                        arguments: true),
                   )
                 ],
               ),

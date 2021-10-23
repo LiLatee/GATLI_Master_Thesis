@@ -22,6 +22,7 @@ environment:
 
 dependencies:
   activity_recognition_flutter: ^4.0.5
+  app_install_date: ^0.1.1
   background_fetch: ^1.0.1
   cloud_firestore: ^2.5.2
   cupertino_icons: ^1.0.2

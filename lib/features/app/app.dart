@@ -79,6 +79,7 @@ class _AppState extends State<App> {
 
   MaterialApp _buildMaterialApp() {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       onGenerateRoute: sl<AppRouter>().onGenerateRoute,
       theme: myLightThemeData,

@@ -204,6 +204,12 @@ class UserRepository {
           return Left(DefaultFailure(message: l.message));
         },
         (UserApp userApp) async {
+          log('ACTIVITY');
+          log(userApp.activitySessions.length.toString());
+          log(activitySession.toString());
+          log(userApp.email.toString());
+          log(userApp.id.toString());
+
           await documentReference.update(userApp
               .copyWith(
                   activitySessions:

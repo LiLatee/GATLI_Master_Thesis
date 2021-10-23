@@ -142,7 +142,8 @@ class _ThaiChiPageState extends State<ThaiChiPage> {
             lessonsDone = widget.thaiChiIntervention.lessonsDone;
           }
 
-          final lessonsToDo = widget.thaiChiIntervention.lessonsToDo;
+          final List<String> lessonsToDo =
+              List.from(widget.thaiChiIntervention.lessonsToDo);
           lessonsToDo.remove(widget.thaiChiLesson.id);
 
           final ThaiChiIntervention newThaiChiIntervention =
@@ -152,6 +153,7 @@ class _ThaiChiPageState extends State<ThaiChiPage> {
           );
           sl<ThaiChiInterventionsRepository>().updateThaiChiIntervention(
               newThaiChiIntervention: newThaiChiIntervention);
+
           if (lessonsToDo.isEmpty &&
               widget.thaiChiIntervention.lessonsToDo.isNotEmpty) {
             sl<UserRepository>().addBadge(BadgesKeys.thaiChiLevel1);

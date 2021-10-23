@@ -1,6 +1,5 @@
 import 'dart:math' as math;
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:fluttermoji/fluttermojiCircleAvatar.dart';
@@ -8,17 +7,16 @@ import 'package:master_thesis/core/constants/app_constants.dart';
 import 'package:master_thesis/core/constants/image_paths.dart';
 import 'package:master_thesis/core/l10n/l10n.dart';
 import 'package:master_thesis/features/data/user_app.dart';
-import 'package:master_thesis/features/data/users_repository.dart';
 import 'package:master_thesis/features/home_page/grid_items/activity/activity_session.dart';
-import 'package:master_thesis/service_locator.dart';
-import 'package:pedometer/pedometer.dart';
 
 class ProfilePageHeader extends SliverPersistentHeaderDelegate {
   ProfilePageHeader({
     required this.minExtent,
     required this.maxExtent,
+    required this.userApp,
     this.stepsToday = 0,
   });
+
   @override
   final double minExtent;
   @override
@@ -26,60 +24,44 @@ class ProfilePageHeader extends SliverPersistentHeaderDelegate {
 
   final int stepsToday;
 
-  late UserApp _userApp;
+  final UserApp userApp;
 
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return StreamBuilder<DocumentSnapshot>(
-        stream: sl<UserRepository>().getStream(),
-        builder: (
-          BuildContext context,
-          AsyncSnapshot<DocumentSnapshot> snapshot,
-        ) {
-          if (snapshot.hasData) {
-            _userApp =
-                UserApp.fromJson(snapshot.data!.data() as Map<String, dynamic>);
-            // log(_userApp.toString());
-            return Stack(
-              fit: StackFit.expand,
-              children: [
-                Container(
-                  padding: const EdgeInsets.only(bottom: 8.0),
-                  child: Card(
-                    elevation: 8,
-                    color: Theme.of(context).colorScheme.primary,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(
-                          AppConstants.cornersRoundingRadius),
-                    ),
-                  ),
-                ),
-                Positioned(
-                  top: 8.0,
-                  child: Row(
-                    children: [
-                      FluttermojiCircleAvatar(
-                        radius: AppConstants.homePageAvatarRadius,
-                        backgroundColor: Colors.transparent,
-                      ),
-                      const SizedBox(width: 8.0),
-                      Text(
-                        _userApp.nickname,
-                        style: Theme.of(context).textTheme.headline5,
-                      ),
-                    ],
-                  ),
-                ),
-                _buildContent(context, shrinkOffset, _userApp),
-              ],
-            );
-          } else {
-            return const Center(
-              child: Text('No data.'),
-            );
-          }
-        });
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        Container(
+          padding: const EdgeInsets.only(bottom: 8.0),
+          child: Card(
+            elevation: 8,
+            color: Theme.of(context).colorScheme.primary,
+            shape: RoundedRectangleBorder(
+              borderRadius:
+                  BorderRadius.circular(AppConstants.cornersRoundingRadius),
+            ),
+          ),
+        ),
+        Positioned(
+          top: 8.0,
+          child: Row(
+            children: [
+              FluttermojiCircleAvatar(
+                radius: AppConstants.homePageAvatarRadius,
+                backgroundColor: Colors.transparent,
+              ),
+              const SizedBox(width: 8.0),
+              Text(
+                userApp.nickname,
+                style: Theme.of(context).textTheme.headline5,
+              ),
+            ],
+          ),
+        ),
+        _buildContent(context, shrinkOffset, userApp),
+      ],
+    );
   }
 
   Widget _buildContent(
@@ -159,16 +141,6 @@ class ProfilePageHeader extends SliverPersistentHeaderDelegate {
     );
   }
 
-  final Stream<StepCount> _stepCountStream = Pedometer.stepCountStream;
-  int _steps = 0;
-
-  // void onStepCount(StepCount event) {
-  //   print(event);
-  //   setState(() {
-  //     _steps = event.steps.toString();
-  //   });
-  // }
-
   Widget _buildStepsAndDistance(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -186,21 +158,6 @@ class ProfilePageHeader extends SliverPersistentHeaderDelegate {
               style:
                   Theme.of(context).textTheme.bodyText2!.copyWith(fontSize: 16),
             ),
-            // StreamBuilder<StepCount>(
-            //     stream: _stepCountStream,
-            //     builder: (context, snapshot) {
-            //       if (snapshot.hasData) {
-            //         _steps = snapshot.data!.steps;
-            //       }
-
-            // return Text(
-            //   '$_steps ',
-            //   style: Theme.of(context)
-            //       .textTheme
-            //       .bodyText2!
-            //       .copyWith(fontSize: 16),
-            // );
-            //     }),
             Text(
               context.l10n.steps,
               style:
@@ -218,7 +175,7 @@ class ProfilePageHeader extends SliverPersistentHeaderDelegate {
             ),
             const SizedBox(width: 8),
             Text(
-              '${_userApp.kilometers} km',
+              '${userApp.kilometers} km',
               style:
                   Theme.of(context).textTheme.bodyText2!.copyWith(fontSize: 16),
             ),

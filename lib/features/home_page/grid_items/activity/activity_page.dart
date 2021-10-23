@@ -4,9 +4,12 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:master_thesis/features/data/points_entry.dart';
+import 'package:master_thesis/features/data/users_repository.dart';
 import 'package:master_thesis/features/home_page/grid_items/activity/activity_cubit.dart';
 import 'package:master_thesis/features/home_page/grid_items/activity/my_activity.dart';
 import 'package:master_thesis/features/widgets/whole_screen_width_button.dart';
+import 'package:master_thesis/service_locator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
@@ -171,7 +174,18 @@ class _ActivityPageState extends State<ActivityPage> {
             ),
           ),
         ),
-        onPressed: action,
+        onPressed: () {
+          action!();
+          if (state.minutes >= 30) {
+            sl<UserRepository>().addUserPointsEntry(
+              PredefinedEntryPoints.activityAbove30Mins
+                  .copyWith(datetime: DateTime.now()),
+            );
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                content: Text(
+                    'Well done! Got additional 50 points for activity above 30 mins!')));
+          }
+        },
         child: Padding(
           padding: const EdgeInsets.all(4.0),
           child: Column(

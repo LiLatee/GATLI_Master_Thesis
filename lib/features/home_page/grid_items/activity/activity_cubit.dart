@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:master_thesis/core/error/failures.dart';
+import 'package:master_thesis/features/data/points_entry.dart';
 import 'package:master_thesis/features/data/user_app.dart';
 import 'package:master_thesis/features/data/users_repository.dart';
 import 'package:master_thesis/features/home_page/grid_items/30x30_challange/challange_30x30_cubit.dart';
@@ -159,6 +160,7 @@ class ActivityCubit extends Cubit<ActivityState> {
       log('stepCountStream Error: $e');
       log('stepCountStream Stack: $s');
     });
+
     activitySubscription = activityStream.map((event) {
       if (activeActivityTypes.contains(event.type)) {
         return MyActivity(
@@ -216,7 +218,7 @@ class ActivityCubit extends Cubit<ActivityState> {
     }
   }
 
-  void finish() {
+  Future<void> finish() async {
     stopWatchTimer.onExecute.add(StopWatchExecute.stop);
 
     stepsSubscription.pause();
@@ -240,10 +242,23 @@ class ActivityCubit extends Cubit<ActivityState> {
       ),
     );
 
-    sl<UserRepository>().addUserActivitySession(newState.activitySession
-        .copyWith(steps: (state as ActivityStateLoaded).steps));
+    final failureOrNewUser = sl<UserRepository>().addUserActivitySession(
+      newState.activitySession.copyWith(
+        steps: (state as ActivityStateLoaded).steps,
+        minutesOfActivity: (state as ActivityStateLoaded).minutes,
+      ),
+    );
 
-    update30x30ChallangeIntervention();
+    await failureOrNewUser;
+
+    await update30x30ChallangeIntervention();
+
+    sl<UserRepository>().addUserPointsEntry(
+      PredefinedEntryPoints.activityXMins.copyWith(
+        datetime: DateTime.now(),
+        points: currentState.minutes,
+      ),
+    );
 
     emit(newState);
   }
@@ -331,13 +346,14 @@ class ActivityCubit extends Cubit<ActivityState> {
             currentStateActivities[currentStateActivities.length - 1].isStart ==
                 false;
     log('diff: ${diff.toString()}');
-    if (isSameAction && diff > 0) {
+    final int minimumMinutes = 1;
+    if (isSameAction && diff > minimumMinutes - 1) {
       log('sameAction');
       currentStateActivities[currentStateActivities.length - 1]
           .durationInMinutes = diff;
 
       emit(newState);
-    } else if (!isSameAction && diff > 1) {
+    } else if (!isSameAction && diff > minimumMinutes) {
       log('not sameAction');
 
       emit(
@@ -349,9 +365,9 @@ class ActivityCubit extends Cubit<ActivityState> {
                     (state as ActivityStateLoaded).activitySession.activities +
                         [
                           event.copyWith(
-                              durationInMinutes: 2,
+                              durationInMinutes: minimumMinutes,
                               timestamp: event.timestamp.subtract(
-                                const Duration(minutes: 2),
+                                Duration(minutes: minimumMinutes),
                               ))
                         ],
               ),

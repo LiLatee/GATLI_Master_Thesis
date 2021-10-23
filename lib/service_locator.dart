@@ -21,6 +21,7 @@ Future<void> initServiceLocator() async {
   //! Other
   sl.registerLazySingleton(() => AppRouter());
   sl.registerLazySingleton(() => const FlutterSecureStorage());
+  sl.registerLazySingleton(() => sharedPreferences);
 
   //! Bloc/Cubit
   sl.registerLazySingleton(() => AppCubit());

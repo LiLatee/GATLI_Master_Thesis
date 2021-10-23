@@ -27,7 +27,10 @@ class QuestionnaireIntroPage extends StatelessWidget {
                 '''We are interested in some things about you and your health. Please answer all of the questions yourself that best applies to you. There are no "right" or "wrong" answers. The information that you provide will
 remain strictly confidential.
 
-That will help us to better understand your needs and adjust app to you.''',
+That will help us to better understand your needs and adjust app to you.
+
+In gratitude you will get 500 points!
+''',
                 style: Theme.of(context).textTheme.subtitle1,
               ),
               const SizedBox(height: 16),

@@ -6,9 +6,9 @@ import 'package:master_thesis/features/data/users_repository.dart';
 import 'package:master_thesis/features/home_page/grid_items/30x30_challange/challange_30x30_intervention_repository.dart';
 import 'package:master_thesis/features/home_page/grid_items/questionnaire_page/questionnaire.dart';
 import 'package:master_thesis/features/home_page/grid_items/questionnaire_page/questionnaire_repository.dart';
-import 'package:master_thesis/features/home_page/grid_items/thai_chi/thai_chi_interventions_repository.dart';
-import 'package:master_thesis/features/home_page/grid_items/thai_chi/thai_chi_lesson.dart';
-import 'package:master_thesis/features/home_page/grid_items/thai_chi/thai_chi_lessons_repository.dart';
+import 'package:master_thesis/features/home_page/grid_items/tai_chi/tai_chi_interventions_repository.dart';
+import 'package:master_thesis/features/home_page/grid_items/tai_chi/tai_chi_lesson.dart';
+import 'package:master_thesis/features/home_page/grid_items/tai_chi/tai_chi_lessons_repository.dart';
 import 'package:master_thesis/service_locator.dart';
 
 class AdminPage extends StatefulWidget {
@@ -57,9 +57,9 @@ class _AdminPageState extends State<AdminPage> {
               ),
             ),
             const SizedBox(height: 16),
-            _buildAssignThaiChi(),
+            _buildAssignTaiChi(),
             const SizedBox(height: 16),
-            _buildAddThaiChiLessons(),
+            _buildAddTaiChiLessons(),
             const SizedBox(height: 16),
             TextButton(
               child: const Text('Add QLQ-C30'),
@@ -76,27 +76,27 @@ class _AdminPageState extends State<AdminPage> {
     );
   }
 
-  Widget _buildAddThaiChiLessons() {
+  Widget _buildAddTaiChiLessons() {
     return TextButton(
-      child: const Text('Add Thai Chi Lessons'),
-      onPressed: () => thaiChiLessons
-          .forEach(sl<ThaiChiLessonsRepository>().addThaiChiLesson),
+      child: const Text('Add Tai Chi Lessons'),
+      onPressed: () =>
+          taiChiLessons.forEach(sl<TaiChiLessonsRepository>().addTaiChiLesson),
     );
   }
 
-  Widget _buildAssignThaiChi() {
+  Widget _buildAssignTaiChi() {
     return TextButton(
-      child: const Text('Assign Thai Chi'),
+      child: const Text('Assign Tai Chi'),
       onPressed: () async {
         final failureOrDocRef =
-            await sl<ThaiChiInterventionsRepository>().addThaiChiIntervention(
+            await sl<TaiChiInterventionsRepository>().addTaiChiIntervention(
           userId: _patientIDController.text,
         );
         failureOrDocRef.fold(
           (_) {},
           (docRef) {
             sl<UserRepository>()
-                .assignThaiChiIntervention(thaiChiInterventionId: docRef.id);
+                .assignTaiChiIntervention(taiChiInterventionId: docRef.id);
           },
         );
       },

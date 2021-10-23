@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:master_thesis/features/home_page/grid_items/30x30_challange/challange_30x30_page.dart';
 import 'package:master_thesis/features/home_page/grid_items/questionnaire_page/questionnaire_intro_page.dart';
-import 'package:master_thesis/features/home_page/grid_items/thai_chi/thai_chi_intervention_page.dart';
+import 'package:master_thesis/features/home_page/grid_items/tai_chi/tai_chi_intervention_page.dart';
 
 class SPKeys {
   static const theme = 'theme';
@@ -23,9 +23,9 @@ class AppConstants {
 
   //! Other
   static const Map<String, dynamic> interventionsKeysMapper = {
-    'thai_chi': {
-      'name': 'Thai Chi',
-      'routeName': ThaiChiInterventionPage.routeName,
+    'tai_chi': {
+      'name': 'Tai Chi',
+      'routeName': TaiChiInterventionPage.routeName,
       'icon': Icons.self_improvement,
     },
     'QLQ-C30': {

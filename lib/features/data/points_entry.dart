@@ -45,14 +45,14 @@ class PointsEntry extends Equatable {
 }
 
 abstract class PredefinedEntryPoints {
-  static const thaiChiSingleVideo = PointsEntry(
-    reasonKey: 'thaiChiSingleVideo',
+  static const taiChiSingleVideo = PointsEntry(
+    reasonKey: 'taiChiSingleVideo',
     points: 10,
     title: 'Watched Tha Chi lesson',
   );
 
-  static const thaiChiWholeCourse = PointsEntry(
-    reasonKey: 'thaiChiSingleVideo',
+  static const taiChiWholeCourse = PointsEntry(
+    reasonKey: 'taiChiSingleVideo',
     points: 100,
     title: 'Watched Tha Chi whole course',
   );

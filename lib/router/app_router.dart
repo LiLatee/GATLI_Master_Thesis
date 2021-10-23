@@ -9,8 +9,8 @@ import 'package:master_thesis/features/home_page/grid_items/admin_page/admin_pag
 import 'package:master_thesis/features/home_page/grid_items/questionnaire_page/questionnaire_intro_page.dart';
 import 'package:master_thesis/features/home_page/grid_items/questionnaire_page/questionnaire_page.dart';
 import 'package:master_thesis/features/home_page/grid_items/test/test.dart';
-import 'package:master_thesis/features/home_page/grid_items/thai_chi/thai_chi_intervention_page.dart';
-import 'package:master_thesis/features/home_page/grid_items/thai_chi/thai_chi_page.dart';
+import 'package:master_thesis/features/home_page/grid_items/tai_chi/tai_chi_intervention_page.dart';
+import 'package:master_thesis/features/home_page/grid_items/tai_chi/tai_chi_page.dart';
 import 'package:master_thesis/features/home_page/home_screen.dart';
 import 'package:master_thesis/features/home_page/settings_page/set_avatar_page.dart';
 import 'package:master_thesis/features/login/login_page.dart';
@@ -59,17 +59,17 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => const TestTile(),
         );
-      case ThaiChiPage.routeName:
-        final args = settings.arguments as ThaiChiPageArguments;
+      case TaiChiPage.routeName:
+        final args = settings.arguments as TaiChiPageArguments;
         return MaterialPageRoute(
-          builder: (_) => ThaiChiPage(
-            thaiChiLesson: args.thaiChiLesson,
-            thaiChiIntervention: args.thaiChiIntervention,
+          builder: (_) => TaiChiPage(
+            taiChiLesson: args.taiChiLesson,
+            taiChiIntervention: args.taiChiIntervention,
           ),
         );
-      case ThaiChiInterventionPage.routeName:
+      case TaiChiInterventionPage.routeName:
         return MaterialPageRoute(
-          builder: (_) => const ThaiChiInterventionPage(),
+          builder: (_) => const TaiChiInterventionPage(),
         );
       case SetAvatarPage.routeName:
         final bool fromSettings;

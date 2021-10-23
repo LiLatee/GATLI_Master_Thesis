@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
 
-class ThaiChiLesson extends Equatable {
-  const ThaiChiLesson({
+class TaiChiLesson extends Equatable {
+  const TaiChiLesson({
     required this.id,
     required this.ytVideoId,
     required this.title,
@@ -14,15 +14,15 @@ class ThaiChiLesson extends Equatable {
   final String title;
   final String description;
 
-  factory ThaiChiLesson.fromThaiChiLessonNoId({
-    required ThaiChiLessonNoId thaiChiLessonNoId,
+  factory TaiChiLesson.fromTaiChiLessonNoId({
+    required TaiChiLessonNoId taiChiLessonNoId,
     required String docId,
   }) {
-    return ThaiChiLesson(
+    return TaiChiLesson(
       id: docId,
-      description: thaiChiLessonNoId.description,
-      title: thaiChiLessonNoId.title,
-      ytVideoId: thaiChiLessonNoId.ytVideoId,
+      description: taiChiLessonNoId.description,
+      title: taiChiLessonNoId.title,
+      ytVideoId: taiChiLessonNoId.ytVideoId,
     );
   }
 
@@ -34,13 +34,13 @@ class ThaiChiLesson extends Equatable {
         description,
       ];
 
-  ThaiChiLesson copyWith({
+  TaiChiLesson copyWith({
     String? id,
     String? ytVideoId,
     String? title,
     String? description,
   }) {
-    return ThaiChiLesson(
+    return TaiChiLesson(
       id: id ?? this.id,
       ytVideoId: ytVideoId ?? this.ytVideoId,
       title: title ?? this.title,
@@ -57,8 +57,8 @@ class ThaiChiLesson extends Equatable {
     };
   }
 
-  factory ThaiChiLesson.fromMap(Map<String, dynamic> map) {
-    return ThaiChiLesson(
+  factory TaiChiLesson.fromMap(Map<String, dynamic> map) {
+    return TaiChiLesson(
       id: map['id'],
       ytVideoId: map['ytVideoId'],
       title: map['title'],
@@ -68,12 +68,12 @@ class ThaiChiLesson extends Equatable {
 
   String toJson() => json.encode(toMap());
 
-  factory ThaiChiLesson.fromJson(String source) =>
-      ThaiChiLesson.fromMap(json.decode(source));
+  factory TaiChiLesson.fromJson(String source) =>
+      TaiChiLesson.fromMap(json.decode(source));
 }
 
-class ThaiChiLessonNoId {
-  const ThaiChiLessonNoId({
+class TaiChiLessonNoId {
+  const TaiChiLessonNoId({
     required this.ytVideoId,
     required this.title,
     required this.description,
@@ -83,8 +83,8 @@ class ThaiChiLessonNoId {
   final String description;
 }
 
-final List<ThaiChiLessonNoId> thaiChiLessons = [
-  ThaiChiLessonNoId(
+final List<TaiChiLessonNoId> taiChiLessons = [
+  TaiChiLessonNoId(
     ytVideoId: 'cEOS2zoyQw4',
     title: 'Tai Chi 5 Minutes a Day Module 01 - easy for beginners',
     description: """
@@ -111,7 +111,7 @@ For the next videos in the series:
 https://www.taiflow.com/Silver-Freest...
     """,
   ),
-  ThaiChiLessonNoId(
+  TaiChiLessonNoId(
     ytVideoId: 'fNm2FWi1vkI',
     title: 'UPDATED: Tai Chi 5 min a day Module 02 - no music',
     description:
@@ -138,7 +138,7 @@ For the next videos in the series:
 https://www.taiflow.com/Silver-Freest...
 """,
   ),
-  ThaiChiLessonNoId(
+  TaiChiLessonNoId(
     ytVideoId: 'X1dyl_yHA84',
     title: 'UPDATED: Module 03 beginners Tai Chi (one camera new music)',
     description:
@@ -164,7 +164,7 @@ Follow me on Twitter: @cohenleia
 For the next videos in the series: 
 https://www.taiflow.com/Silver-Freest...""",
   ),
-  ThaiChiLessonNoId(
+  TaiChiLessonNoId(
     ytVideoId: 'RoIqYtiTLFI',
     title: 'UPDATED: Module 04 beginners Tai Chi (one camera - new music)',
     description:
@@ -190,7 +190,7 @@ Follow me on Twitter: @cohenleia
 For the next videos in the series: 
 https://www.taiflow.com/Silver-Freest...""",
   ),
-  ThaiChiLessonNoId(
+  TaiChiLessonNoId(
     ytVideoId: 'HJi-T2_0OeM',
     title: 'Tai Chi five minutes a day module 05 - no music',
     description:

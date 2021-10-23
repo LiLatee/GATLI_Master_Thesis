@@ -84,9 +84,9 @@ class Badge extends StatelessWidget {
 }
 
 abstract class BadgesKeys {
-  static const thaiChiLevel1 = 'thai_chi_LEVEL1';
-  static const thaiChiLevel2 = 'thai_chi_LEVEL2';
-  static const thaiChiLevel3 = 'thai_chi_LEVEL3';
+  static const taiChiLevel1 = 'tai_chi_LEVEL1';
+  static const taiChiLevel2 = 'tai_chi_LEVEL2';
+  static const taiChiLevel3 = 'tai_chi_LEVEL3';
   static const stepsLevel1 = 'steps_LEVEL1';
   static const stepsLevel2 = 'steps_LEVEL2';
   static const stepsLevel3 = 'steps_LEVEL3';
@@ -200,8 +200,8 @@ Widget? getBadgeUsingKey(
         width: 50,
       ),
     ),
-    BadgesKeys.thaiChiLevel1: Badge(
-      title: 'Thai Chi',
+    BadgesKeys.taiChiLevel1: Badge(
+      title: 'Tai Chi',
       subtitle: '1 time',
       lightColor: Color(0xff7FB2F0),
       darkColor: Color(0xff624289),
@@ -211,8 +211,8 @@ Widget? getBadgeUsingKey(
         size: 50,
       ),
     ),
-    BadgesKeys.thaiChiLevel2: Badge(
-      title: 'Thai Chi',
+    BadgesKeys.taiChiLevel2: Badge(
+      title: 'Tai Chi',
       subtitle: '2 times',
       lightColor: Color(0xff7FB2F0),
       darkColor: Color(0xff624289),
@@ -222,8 +222,8 @@ Widget? getBadgeUsingKey(
         size: 50,
       ),
     ),
-    BadgesKeys.thaiChiLevel3: Badge(
-      title: 'Thai Chi',
+    BadgesKeys.taiChiLevel3: Badge(
+      title: 'Tai Chi',
       subtitle: '3 times',
       lightColor: Color(0xff7FB2F0),
       darkColor: Color(0xff624289),

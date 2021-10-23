@@ -117,7 +117,7 @@ class ProfilePageHeader extends SliverPersistentHeaderDelegate {
             const Icon(Icons.check_box_outlined),
             const SizedBox(width: 8),
             Text(
-              context.l10n.thaiChi,
+              context.l10n.taiChi,
               style:
                   Theme.of(context).textTheme.bodyText2!.copyWith(fontSize: 16),
             ),

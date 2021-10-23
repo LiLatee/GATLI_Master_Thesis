@@ -7,9 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:master_thesis/features/data/points_entry.dart';
 import 'package:master_thesis/features/data/users_repository.dart';
-import 'package:master_thesis/features/home_page/grid_items/thai_chi/thai_chi_intervention.dart';
-import 'package:master_thesis/features/home_page/grid_items/thai_chi/thai_chi_interventions_repository.dart';
-import 'package:master_thesis/features/home_page/grid_items/thai_chi/thai_chi_lesson.dart';
+import 'package:master_thesis/features/home_page/grid_items/tai_chi/tai_chi_intervention.dart';
+import 'package:master_thesis/features/home_page/grid_items/tai_chi/tai_chi_interventions_repository.dart';
+import 'package:master_thesis/features/home_page/grid_items/tai_chi/tai_chi_lesson.dart';
 import 'package:master_thesis/features/home_page/home_screen.dart';
 import 'package:master_thesis/features/widgets/badges.dart';
 import 'package:master_thesis/service_locator.dart';
@@ -32,33 +32,33 @@ class Activity {
   });
 }
 
-class ThaiChiPageArguments {
-  ThaiChiPageArguments({
-    required this.thaiChiLesson,
-    required this.thaiChiIntervention,
+class TaiChiPageArguments {
+  TaiChiPageArguments({
+    required this.taiChiLesson,
+    required this.taiChiIntervention,
   });
 
-  final ThaiChiLesson thaiChiLesson;
-  final ThaiChiIntervention thaiChiIntervention;
+  final TaiChiLesson taiChiLesson;
+  final TaiChiIntervention taiChiIntervention;
 }
 
-class ThaiChiPage extends StatefulWidget {
-  const ThaiChiPage({
+class TaiChiPage extends StatefulWidget {
+  const TaiChiPage({
     Key? key,
-    required this.thaiChiLesson,
-    required this.thaiChiIntervention,
+    required this.taiChiLesson,
+    required this.taiChiIntervention,
   }) : super(key: key);
 
-  static const routeName = '/thaiChi';
+  static const routeName = '/taiChi';
 
-  final ThaiChiLesson thaiChiLesson;
-  final ThaiChiIntervention thaiChiIntervention;
+  final TaiChiLesson taiChiLesson;
+  final TaiChiIntervention taiChiIntervention;
 
   @override
-  State<ThaiChiPage> createState() => _ThaiChiPageState();
+  State<TaiChiPage> createState() => _TaiChiPageState();
 }
 
-class _ThaiChiPageState extends State<ThaiChiPage> {
+class _TaiChiPageState extends State<TaiChiPage> {
   late final YoutubePlayerController _controller;
   late final StopWatchTimer _stopWatchTimer;
   int _watchedTimeInSeconds = 0;
@@ -89,51 +89,50 @@ class _ThaiChiPageState extends State<ThaiChiPage> {
           });
 
           final List<String> lessonsDone;
-          if (!widget.thaiChiIntervention.lessonsDone
-              .contains(widget.thaiChiLesson.id)) {
-            lessonsDone = widget.thaiChiIntervention.lessonsDone +
-                [widget.thaiChiLesson.id];
+          if (!widget.taiChiIntervention.lessonsDone
+              .contains(widget.taiChiLesson.id)) {
+            lessonsDone = widget.taiChiIntervention.lessonsDone +
+                [widget.taiChiLesson.id];
           } else {
-            lessonsDone = widget.thaiChiIntervention.lessonsDone;
+            lessonsDone = widget.taiChiIntervention.lessonsDone;
           }
 
           final List<String> lessonsToDo =
-              List.from(widget.thaiChiIntervention.lessonsToDo);
-          lessonsToDo.remove(widget.thaiChiLesson.id);
+              List.from(widget.taiChiIntervention.lessonsToDo);
+          lessonsToDo.remove(widget.taiChiLesson.id);
 
-          final ThaiChiIntervention newThaiChiIntervention =
-              widget.thaiChiIntervention.copyWith(
+          final TaiChiIntervention newTaiChiIntervention =
+              widget.taiChiIntervention.copyWith(
             lessonsDone: lessonsDone,
             lessonsToDo: lessonsToDo,
           );
-          sl<ThaiChiInterventionsRepository>().updateThaiChiIntervention(
-              newThaiChiIntervention: newThaiChiIntervention);
+          sl<TaiChiInterventionsRepository>().updateTaiChiIntervention(
+              newTaiChiIntervention: newTaiChiIntervention);
 
           if (lessonsToDo.isEmpty &&
-              widget.thaiChiIntervention.lessonsToDo.isNotEmpty) {
-            var result =
-                sl<UserRepository>().addBadge(BadgesKeys.thaiChiLevel1);
+              widget.taiChiIntervention.lessonsToDo.isNotEmpty) {
+            var result = sl<UserRepository>().addBadge(BadgesKeys.taiChiLevel1);
             await result;
 
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text(
-                    'Well done! A whole Thai Chi course performed! Earned ${PredefinedEntryPoints.thaiChiWholeCourse.points.toString()} points')));
+                    'Well done! A whole Tai Chi course performed! Earned ${PredefinedEntryPoints.taiChiWholeCourse.points.toString()} points')));
 
             result = sl<UserRepository>().addUserPointsEntry(
-                PredefinedEntryPoints.thaiChiWholeCourse
+                PredefinedEntryPoints.taiChiWholeCourse
                     .copyWith(datetime: DateTime.now()));
             await result;
 
-            result = sl<UserRepository>().doneThaiChiIntervention(
-                thaiChiInterventionId: widget.thaiChiIntervention.id);
+            result = sl<UserRepository>().doneTaiChiIntervention(
+                taiChiInterventionId: widget.taiChiIntervention.id);
             await result;
           } else {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text(
-                    'Well done! Exercise performed. Earned ${PredefinedEntryPoints.thaiChiSingleVideo.points.toString()} points')));
+                    'Well done! Exercise performed. Earned ${PredefinedEntryPoints.taiChiSingleVideo.points.toString()} points')));
 
             sl<UserRepository>().addUserPointsEntry(PredefinedEntryPoints
-                .thaiChiSingleVideo
+                .taiChiSingleVideo
                 .copyWith(datetime: DateTime.now()));
           }
         }
@@ -142,7 +141,7 @@ class _ThaiChiPageState extends State<ThaiChiPage> {
     );
 
     _controller = YoutubePlayerController(
-      initialVideoId: widget.thaiChiLesson.ytVideoId,
+      initialVideoId: widget.taiChiLesson.ytVideoId,
       flags: const YoutubePlayerFlags(
         autoPlay: false,
         mute: false,
@@ -163,7 +162,7 @@ class _ThaiChiPageState extends State<ThaiChiPage> {
       appBar: fullscreen
           ? null
           : AppBar(
-              title: Text(widget.thaiChiLesson.title),
+              title: Text(widget.taiChiLesson.title),
             ),
       body: YoutubePlayerBuilder(
         onEnterFullScreen: () {
@@ -206,7 +205,7 @@ class _ThaiChiPageState extends State<ThaiChiPage> {
                   child: ListView(
                     children: [
                       SelectableText(
-                        widget.thaiChiLesson.title,
+                        widget.taiChiLesson.title,
                         style: Theme.of(context)
                             .textTheme
                             .headline5!
@@ -214,7 +213,7 @@ class _ThaiChiPageState extends State<ThaiChiPage> {
                       ),
                       const SizedBox(height: 16),
                       SelectableText(
-                        widget.thaiChiLesson.description,
+                        widget.taiChiLesson.description,
                       ),
                       const SizedBox(height: 48),
                     ],

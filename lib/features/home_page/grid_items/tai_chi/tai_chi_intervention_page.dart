@@ -1,38 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:master_thesis/features/home_page/grid_items/thai_chi/thai_chi_intervention_cubit.dart';
-import 'package:master_thesis/features/home_page/grid_items/thai_chi/thai_chi_page.dart';
+import 'package:master_thesis/features/home_page/grid_items/tai_chi/tai_chi_intervention_cubit.dart';
+import 'package:master_thesis/features/home_page/grid_items/tai_chi/tai_chi_page.dart';
 
-class ThaiChiInterventionPage extends StatefulWidget {
-  const ThaiChiInterventionPage({Key? key}) : super(key: key);
+class TaiChiInterventionPage extends StatefulWidget {
+  const TaiChiInterventionPage({Key? key}) : super(key: key);
 
-  static const routeName = '/thaiChiIntervention';
+  static const routeName = '/taiChiIntervention';
 
   @override
-  State<ThaiChiInterventionPage> createState() =>
-      _ThaiChiInterventionPageState();
+  State<TaiChiInterventionPage> createState() => _TaiChiInterventionPageState();
 }
 
-class _ThaiChiInterventionPageState extends State<ThaiChiInterventionPage> {
-  late final ThaiChiInterventionCubit _cubit;
+class _TaiChiInterventionPageState extends State<TaiChiInterventionPage> {
+  late final TaiChiInterventionCubit _cubit;
   @override
   void initState() {
     super.initState();
-    _cubit = ThaiChiInterventionCubit();
+    _cubit = TaiChiInterventionCubit();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Thai Chi Intervention'),
+        title: const Text('Tai Chi Intervention'),
       ),
       body: BlocBuilder(
         bloc: _cubit,
         builder: (context, state) {
-          if (state is ThaiChiInterventionStateLoaded) {
+          if (state is TaiChiInterventionStateLoaded) {
             return _buildLoaded(state);
-          } else if (state is ThaiChiInterventionStateLoading) {
+          } else if (state is TaiChiInterventionStateLoading) {
             return const Center(
               child: CircularProgressIndicator(),
             );
@@ -46,7 +45,7 @@ class _ThaiChiInterventionPageState extends State<ThaiChiInterventionPage> {
     );
   }
 
-  Widget _buildLoaded(ThaiChiInterventionStateLoaded state) {
+  Widget _buildLoaded(TaiChiInterventionStateLoaded state) {
     return Column(
       children: [
         Padding(
@@ -61,7 +60,7 @@ class _ThaiChiInterventionPageState extends State<ThaiChiInterventionPage> {
               ),
               const SizedBox(height: 8),
               Text(
-                'Here are recommended Thai Chi lessons for you. You have freedom in choosing the order of lessons. 😊',
+                'Here are recommended Tai Chi lessons for you. You have freedom in choosing the order of lessons. 😊',
                 style: Theme.of(context).textTheme.subtitle1,
               ),
             ],
@@ -88,10 +87,10 @@ class _ThaiChiInterventionPageState extends State<ThaiChiInterventionPage> {
                         'https://img.youtube.com/vi/${lesson.ytVideoId}/mqdefault.jpg'),
                     onTap: () => Navigator.pushNamed(
                           context,
-                          ThaiChiPage.routeName,
-                          arguments: ThaiChiPageArguments(
-                            thaiChiLesson: state.lessons[index],
-                            thaiChiIntervention: state.thaiChiIntervention,
+                          TaiChiPage.routeName,
+                          arguments: TaiChiPageArguments(
+                            taiChiLesson: state.lessons[index],
+                            taiChiIntervention: state.taiChiIntervention,
                           ),
                         )),
               );

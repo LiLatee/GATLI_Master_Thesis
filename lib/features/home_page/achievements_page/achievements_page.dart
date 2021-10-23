@@ -88,13 +88,13 @@ class AchievementsPage extends StatelessWidget {
       ),
       itemBuilder: (BuildContext context, int index) {
         final String badgeKey;
-        if (badgesMap.keys.toList()[index] == BadgesKeys.thaiChiLevel1) {
+        if (badgesMap.keys.toList()[index] == BadgesKeys.taiChiLevel1) {
           if (badgesMap.values.toList()[index] == 2) {
-            badgeKey = BadgesKeys.thaiChiLevel2;
+            badgeKey = BadgesKeys.taiChiLevel2;
           } else if (badgesMap.values.toList()[index] > 2) {
-            badgeKey = BadgesKeys.thaiChiLevel3;
+            badgeKey = BadgesKeys.taiChiLevel3;
           } else {
-            badgeKey = BadgesKeys.thaiChiLevel1;
+            badgeKey = BadgesKeys.taiChiLevel1;
           }
         } else {
           badgeKey = badgesMap.keys.toList()[index];
@@ -114,13 +114,13 @@ class AchievementsPage extends StatelessWidget {
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
           final String badgeKey;
-          if (badgesMap.keys.toList()[index] == BadgesKeys.thaiChiLevel1) {
+          if (badgesMap.keys.toList()[index] == BadgesKeys.taiChiLevel1) {
             if (badgesMap.values.toList()[index] == 2) {
-              badgeKey = BadgesKeys.thaiChiLevel2;
+              badgeKey = BadgesKeys.taiChiLevel2;
             } else if (badgesMap.values.toList()[index] > 2) {
-              badgeKey = BadgesKeys.thaiChiLevel3;
+              badgeKey = BadgesKeys.taiChiLevel3;
             } else {
-              badgeKey = BadgesKeys.thaiChiLevel1;
+              badgeKey = BadgesKeys.taiChiLevel1;
             }
           } else {
             badgeKey = badgesMap.keys.toList()[index];

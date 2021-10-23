@@ -33,25 +33,24 @@ class UserRepository {
     return Right(documentReference);
   }
 
-  Future<Either<DefaultFailure, DocumentReference>> assignThaiChiIntervention(
-      {required String thaiChiInterventionId}) async {
+  Future<Either<DefaultFailure, DocumentReference>> assignTaiChiIntervention(
+      {required String taiChiInterventionId}) async {
     try {
       final failureOrUserApp = await getUser();
       failureOrUserApp.fold(
         (l) {
           log("Can't get UserApp: Error: $l");
           return Left(DefaultFailure(
-              message:
-                  "Can't assign Thai Chi Intervention to user. Error: $l"));
+              message: "Can't assign Tai Chi Intervention to user. Error: $l"));
         },
         (UserApp userApp) async {
           final Map<String, List<String>> activeInterventions =
               userApp.activeInterventions;
 
-          if (userApp.activeInterventions.containsKey('thai_chi')) {
-            activeInterventions['thai_chi']!.add(thaiChiInterventionId);
+          if (userApp.activeInterventions.containsKey('tai_chi')) {
+            activeInterventions['tai_chi']!.add(taiChiInterventionId);
           } else {
-            activeInterventions['thai_chi'] = [thaiChiInterventionId];
+            activeInterventions['tai_chi'] = [taiChiInterventionId];
           }
           await documentReference
               .update({'activeInterventions': activeInterventions});
@@ -59,32 +58,32 @@ class UserRepository {
       );
     } catch (e) {
       return Left(DefaultFailure(
-          message: "Can't add Thai Chi Intervention to user. Error: $e"));
+          message: "Can't add Tai Chi Intervention to user. Error: $e"));
     }
     return Right(documentReference);
   }
 
-  Future<Either<DefaultFailure, DocumentReference>> doneThaiChiIntervention(
-      {required String thaiChiInterventionId}) async {
+  Future<Either<DefaultFailure, DocumentReference>> doneTaiChiIntervention(
+      {required String taiChiInterventionId}) async {
     try {
       final failureOrUserApp = await getUser();
       failureOrUserApp.fold(
         (l) {
           return Left(DefaultFailure(
               message:
-                  "Can't make done Thai Chi Intervention for user. Error: $l"));
+                  "Can't make done Tai Chi Intervention for user. Error: $l"));
         },
         (UserApp userApp) async {
           final Map<String, List<String>> pastInterventions =
               userApp.pastInterventions;
           final Map<String, List<String>> activeInterventions =
               userApp.activeInterventions;
-          activeInterventions.remove('thai_chi');
+          activeInterventions.remove('tai_chi');
 
-          if (userApp.pastInterventions.containsKey('thai_chi')) {
-            pastInterventions['thai_chi']!.add(thaiChiInterventionId);
+          if (userApp.pastInterventions.containsKey('tai_chi')) {
+            pastInterventions['tai_chi']!.add(taiChiInterventionId);
           } else {
-            pastInterventions['thai_chi'] = [thaiChiInterventionId];
+            pastInterventions['tai_chi'] = [taiChiInterventionId];
           }
 
           await documentReference.update({
@@ -95,8 +94,7 @@ class UserRepository {
       );
     } catch (e) {
       return Left(DefaultFailure(
-          message:
-              "Can't make done Thai Chi Intervention for user. Error: $e"));
+          message: "Can't make done Tai Chi Intervention for user. Error: $e"));
     }
     return Right(documentReference);
   }
@@ -128,7 +126,7 @@ class UserRepository {
       });
     } catch (e) {
       return Left(DefaultFailure(
-          message: "Can't add Thai Chi Intervention to user. Error: $e"));
+          message: "Can't add Tai Chi Intervention to user. Error: $e"));
     }
   }
 

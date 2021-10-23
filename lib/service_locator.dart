@@ -6,8 +6,8 @@ import 'package:master_thesis/features/app/app_cubit.dart';
 import 'package:master_thesis/features/home_page/grid_items/30x30_challange/challange_30x30_intervention_repository.dart';
 import 'package:master_thesis/features/home_page/grid_items/questionnaire_page/questionnaire_intervention_repository.dart';
 import 'package:master_thesis/features/home_page/grid_items/questionnaire_page/questionnaire_repository.dart';
-import 'package:master_thesis/features/home_page/grid_items/thai_chi/thai_chi_interventions_repository.dart';
-import 'package:master_thesis/features/home_page/grid_items/thai_chi/thai_chi_lessons_repository.dart';
+import 'package:master_thesis/features/home_page/grid_items/tai_chi/tai_chi_interventions_repository.dart';
+import 'package:master_thesis/features/home_page/grid_items/tai_chi/tai_chi_lessons_repository.dart';
 import 'package:master_thesis/features/data/user_session_repository.dart';
 import 'package:master_thesis/features/data/users_repository.dart';
 import 'package:master_thesis/router/app_router.dart';
@@ -30,12 +30,12 @@ Future<void> initServiceLocator() async {
   // sl.registerLazySingleton(() =>
   //     UserRepository(collection: sl<FirebaseFirestore>().collection('users')));
   sl.registerLazySingleton(() => UserSessionRepository());
-  sl.registerLazySingleton(() => ThaiChiLessonsRepository(
+  sl.registerLazySingleton(() => TaiChiLessonsRepository(
       collectionReference:
-          sl<FirebaseFirestore>().collection('thai_chi_lessons')));
-  sl.registerLazySingleton(() => ThaiChiInterventionsRepository(
+          sl<FirebaseFirestore>().collection('tai_chi_lessons')));
+  sl.registerLazySingleton(() => TaiChiInterventionsRepository(
       collectionReference:
-          sl<FirebaseFirestore>().collection('thai_chi_interventions')));
+          sl<FirebaseFirestore>().collection('tai_chi_interventions')));
   sl.registerLazySingleton(() => QuestionnaireRepository(
       collectionReference:
           sl<FirebaseFirestore>().collection('questionnaire_QLQ-C30')));

@@ -8,7 +8,7 @@ import 'package:master_thesis/features/home_page/grid_items/activity/activity_pa
 import 'package:master_thesis/features/home_page/grid_items/admin_page/admin_page.dart';
 import 'package:master_thesis/features/home_page/grid_items/questionnaire_page/questionnaire_page.dart';
 import 'package:master_thesis/features/home_page/grid_items/test/test.dart';
-import 'package:master_thesis/features/home_page/grid_items/thai_chi/thai_chi_lesson.dart';
+import 'package:master_thesis/features/home_page/grid_items/tai_chi/tai_chi_lesson.dart';
 import 'package:master_thesis/service_locator.dart';
 
 class ActionsGridView extends StatelessWidget {
@@ -82,7 +82,7 @@ class ActionsGridView extends StatelessWidget {
             ),
             onTap: () => Navigator.pushNamed(
                 context, AppConstants.interventionsKeysMapper[key]['routeName'],
-                arguments: thaiChiLessons[0]),
+                arguments: taiChiLessons[0]),
           ),
         )
         .toList();
@@ -151,7 +151,7 @@ class ActionsGridView extends StatelessWidget {
         ),
       ),
       onTap: () => Navigator.pushNamed(context, AdminPage.routeName,
-          arguments: thaiChiLessons[0]),
+          arguments: taiChiLessons[0]),
     );
 
     final testWidget = GestureDetector(

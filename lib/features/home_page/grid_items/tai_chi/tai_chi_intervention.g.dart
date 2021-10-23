@@ -1,13 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'thai_chi_intervention.dart';
+part of 'tai_chi_intervention.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-ThaiChiIntervention _$ThaiChiInterventionFromJson(Map<String, dynamic> json) =>
-    ThaiChiIntervention(
+TaiChiIntervention _$TaiChiInterventionFromJson(Map<String, dynamic> json) =>
+    TaiChiIntervention(
       id: json['id'] as String,
       userId: json['userId'] as String,
       lessonsDone: (json['lessonsDone'] as List<dynamic>)
@@ -21,8 +21,7 @@ ThaiChiIntervention _$ThaiChiInterventionFromJson(Map<String, dynamic> json) =>
       earnedPoints: json['earnedPoints'] as int,
     );
 
-Map<String, dynamic> _$ThaiChiInterventionToJson(
-        ThaiChiIntervention instance) =>
+Map<String, dynamic> _$TaiChiInterventionToJson(TaiChiIntervention instance) =>
     <String, dynamic>{
       'id': instance.id,
       'userId': instance.userId,

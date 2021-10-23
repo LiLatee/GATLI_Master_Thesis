@@ -1,10 +1,10 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'thai_chi_intervention.g.dart';
+part 'tai_chi_intervention.g.dart';
 
 @JsonSerializable()
-class ThaiChiIntervention extends Equatable {
+class TaiChiIntervention extends Equatable {
   final String id;
   final String userId;
   final List<String> lessonsDone;
@@ -13,7 +13,7 @@ class ThaiChiIntervention extends Equatable {
   final int? endTimestamp;
   final int earnedPoints;
 
-  const ThaiChiIntervention({
+  const TaiChiIntervention({
     required this.id,
     required this.userId,
     required this.lessonsDone,
@@ -23,10 +23,10 @@ class ThaiChiIntervention extends Equatable {
     required this.earnedPoints,
   });
 
-  factory ThaiChiIntervention.fromJson(Map<String, dynamic> json) =>
-      _$ThaiChiInterventionFromJson(json);
+  factory TaiChiIntervention.fromJson(Map<String, dynamic> json) =>
+      _$TaiChiInterventionFromJson(json);
 
-  Map<String, dynamic> toJson() => _$ThaiChiInterventionToJson(this);
+  Map<String, dynamic> toJson() => _$TaiChiInterventionToJson(this);
 
   @override
   List<Object?> get props => [
@@ -39,7 +39,7 @@ class ThaiChiIntervention extends Equatable {
         earnedPoints,
       ];
 
-  ThaiChiIntervention copyWith({
+  TaiChiIntervention copyWith({
     String? id,
     String? userId,
     List<String>? lessonsDone,
@@ -48,7 +48,7 @@ class ThaiChiIntervention extends Equatable {
     int? endTimestamp,
     int? earnedPoints,
   }) {
-    return ThaiChiIntervention(
+    return TaiChiIntervention(
       id: id ?? this.id,
       userId: userId ?? this.userId,
       lessonsDone: lessonsDone ?? this.lessonsDone,

@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -13,6 +14,7 @@ import 'package:master_thesis/features/home_page/grid_items/questionnaire_page/q
 import 'package:master_thesis/features/home_page/grid_items/questionnaire_page/questionnaire.dart';
 import 'package:master_thesis/features/home_page/grid_items/questionnaire_page/questionnaire_cubit.dart';
 import 'package:master_thesis/features/home_page/grid_items/questionnaire_page/questionnaire_intervention_repository.dart';
+import 'package:master_thesis/features/widgets/badges.dart';
 import 'package:master_thesis/service_locator.dart';
 
 class QuestionnairePage extends StatefulWidget {
@@ -121,7 +123,7 @@ class _QuestionnairePageState extends State<QuestionnairePage> {
                         '4. Very Much',
                       ]
                     : ['1', '2', '3', '4', '5', '6', '7'],
-                onSelected: (index, value) {
+                onSelected: (index, value) async {
                   if (step == 1) {
                     answeredQuestionnaire.generalQuestions
                         .add(QuestionUser.fromQuestion(
@@ -142,18 +144,34 @@ class _QuestionnairePageState extends State<QuestionnairePage> {
                     ));
                   }
                   if (questionNumber == allQuestions.length) {
-                    sl<QuestionnaireInterventionRepository>()
-                        .addQuestionnaire(questionnaire: answeredQuestionnaire);
+                    final UserRepository userRepository = sl<UserRepository>();
+                    final failureOrDocRef =
+                        await sl<QuestionnaireInterventionRepository>()
+                            .addQuestionnaire(
+                                questionnaire: answeredQuestionnaire);
 
-                    sl<UserRepository>().addUserPointsEntry(
+                    await userRepository.addUserPointsEntry(
                       PredefinedEntryPoints.questionnaireDone
                           .copyWith(datetime: DateTime.now()),
                     );
+
+                    await userRepository
+                        .addBadge(BadgesKeys.questionnaireFillerLevel1);
+
+                    await failureOrDocRef.fold(
+                      (l) async => log(l.message),
+                      (DocumentReference ref) async {
+                        await userRepository.doneQuestionnaireIntervention(
+                            questionnaireInterventionId: ref.id);
+                      },
+                    );
+
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text('Thanks! You got 500 points!')));
+
+                    Navigator.pop(context);
                     Navigator.pop(context);
                   } else {
-                    log(answeredQuestionnaire.toString());
                     pageController.nextPage(
                       duration: const Duration(milliseconds: 300),
                       curve: Curves.easeIn,

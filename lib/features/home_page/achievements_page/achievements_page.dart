@@ -84,24 +84,64 @@ class AchievementsPage extends StatelessWidget {
       primary: true,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
-        mainAxisExtent: 150,
+        mainAxisExtent: 170,
       ),
       itemBuilder: (BuildContext context, int index) {
-        final String badgeKey;
-        if (badgesMap.keys.toList()[index] == BadgesKeys.taiChiLevel1) {
-          if (badgesMap.values.toList()[index] == 2) {
-            badgeKey = BadgesKeys.taiChiLevel2;
-          } else if (badgesMap.values.toList()[index] > 2) {
-            badgeKey = BadgesKeys.taiChiLevel3;
-          } else {
-            badgeKey = BadgesKeys.taiChiLevel1;
-          }
-        } else {
-          badgeKey = badgesMap.keys.toList()[index];
+        String? badgeKey;
+        final key = badgesMap.keys.toList()[index];
+        final occurences = badgesMap.values.toList()[index];
+
+        switch (key) {
+          case BadgesKeys.taiChiLevel1:
+            {
+              if (occurences >= 10) {
+                badgeKey = BadgesKeys.taiChiLevel3;
+              } else if (occurences >= 5) {
+                badgeKey = BadgesKeys.taiChiLevel2;
+              } else if (occurences > 0) {
+                badgeKey = BadgesKeys.taiChiLevel1;
+              }
+            }
+            break;
+          case BadgesKeys.stepsLevel1:
+            badgeKey = BadgesKeys.stepsLevel1;
+            break;
+          case BadgesKeys.stepsLevel2:
+            badgeKey = BadgesKeys.stepsLevel2;
+            break;
+          case BadgesKeys.stepsLevel3:
+            badgeKey = BadgesKeys.stepsLevel3;
+            break;
+          case BadgesKeys.questionnaireFillerLevel1:
+            {
+              if (occurences >= 10) {
+                badgeKey = BadgesKeys.questionnaireFillerLevel3;
+              } else if (occurences >= 5) {
+                badgeKey = BadgesKeys.questionnaireFillerLevel2;
+              } else if (occurences > 0) {
+                badgeKey = BadgesKeys.questionnaireFillerLevel1;
+              }
+            }
+            break;
+          case BadgesKeys.challanger30x30Level1:
+            {
+              if (occurences >= 10) {
+                badgeKey = BadgesKeys.challanger30x30Level3;
+              } else if (occurences >= 5) {
+                badgeKey = BadgesKeys.challanger30x30Level2;
+              } else if (occurences > 0) {
+                badgeKey = BadgesKeys.challanger30x30Level1;
+              }
+            }
+            break;
+        }
+
+        if (badgeKey == null) {
+          return const SizedBox();
         }
 
         return Card(
-          child: getBadgeUsingKey(context: context, badgeKey: badgeKey),
+          child: getBadgeUsingKey(badgeKey: badgeKey),
         );
       },
     );
@@ -127,7 +167,7 @@ class AchievementsPage extends StatelessWidget {
           }
 
           return Card(
-            child: getBadgeUsingKey(context: context, badgeKey: badgeKey),
+            child: getBadgeUsingKey(badgeKey: badgeKey),
           );
         },
         childCount: badgesMap.length,

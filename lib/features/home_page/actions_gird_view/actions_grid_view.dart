@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:master_thesis/core/constants/app_constants.dart';
 import 'package:master_thesis/features/data/user_app.dart';
 import 'package:master_thesis/features/data/users_repository.dart';
+import 'package:master_thesis/features/home_page/grid_items/activity/activity_cubit.dart';
 import 'package:master_thesis/features/home_page/grid_items/activity/activity_history_page.dart';
-import 'package:master_thesis/features/home_page/grid_items/activity/activity_page.dart';
 import 'package:master_thesis/features/home_page/grid_items/admin_page/admin_page.dart';
-import 'package:master_thesis/features/home_page/grid_items/questionnaire_page/questionnaire_page.dart';
-import 'package:master_thesis/features/home_page/grid_items/test/test.dart';
 import 'package:master_thesis/features/home_page/grid_items/tai_chi/tai_chi_lesson.dart';
+import 'package:master_thesis/features/home_page/grid_items/tai_chi/tai_chi_page.dart';
 import 'package:master_thesis/service_locator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ActionsGridView extends StatelessWidget {
   const ActionsGridView({
@@ -47,45 +47,90 @@ class ActionsGridView extends StatelessWidget {
 
   SliverGrid _buildGrid(
       {required BuildContext context, required UserApp userApp}) {
-    final interventionsWidgets = userApp.activeInterventions.keys
-        .map(
-          (String key) => GestureDetector(
-            child: Card(
-              color: Theme.of(context).colorScheme.primary,
-              elevation: 4,
-              child: GridTile(
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Stack(
-                    children: [
-                      Positioned.fill(
-                        child: Opacity(
-                          opacity: 0.1,
-                          child: FittedBox(
-                            fit: BoxFit.fill,
-                            child: Icon(AppConstants
-                                .interventionsKeysMapper[key]['icon']),
+    final interventionsWidgets = userApp.activeInterventions.keys.map(
+      (String key) {
+        bool isDoneToday = false;
+        if (key == 'tai_chi') {
+          if (sl<SharedPreferences>().containsKey(TaiChiPage.lastTaiChiDate)) {
+            final DateTime lastThaiChiDate = DateTime.parse(
+                sl<SharedPreferences>().getString(TaiChiPage.lastTaiChiDate)!);
+            final DateTime now = DateTime.now().toUtc();
+            final DateTime today = DateTime(now.year, now.month, now.day);
+            if (today.compareTo(lastThaiChiDate) == 0) {
+              isDoneToday = true;
+            }
+          }
+        } else if (key == '30x30_challange') {
+          if (sl<SharedPreferences>()
+              .containsKey(ActivityCubit.last30MinActivityDoneDate)) {
+            final DateTime last30MinActivityDoneDate = DateTime.parse(
+                sl<SharedPreferences>()
+                    .getString(ActivityCubit.last30MinActivityDoneDate)!);
+            final DateTime now = DateTime.now().toUtc();
+            final DateTime today = DateTime(now.year, now.month, now.day);
+            if (today.compareTo(last30MinActivityDoneDate) == 0) {
+              isDoneToday = true;
+            }
+          }
+        }
+
+        return GestureDetector(
+          child: Card(
+            color: Theme.of(context).colorScheme.primary,
+            elevation: 4,
+            child: GridTile(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Stack(
+                  children: [
+                    Positioned.fill(
+                      child: Opacity(
+                        opacity: 0.1,
+                        child: FittedBox(
+                          fit: BoxFit.fill,
+                          child: Icon(AppConstants.interventionsKeysMapper[key]
+                              ['icon']),
+                        ),
+                      ),
+                    ),
+                    Center(
+                      child: Text(
+                        AppConstants.interventionsKeysMapper[key]['name'],
+                        style: Theme.of(context).textTheme.headline5,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    if (isDoneToday)
+                      Positioned(
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: Icon(
+                            Icons.done_outline,
+                            color:
+                                Theme.of(context).colorScheme.secondaryVariant,
+                            size: 36,
                           ),
                         ),
                       ),
-                      Center(
-                        child: Text(
-                          AppConstants.interventionsKeysMapper[key]['name'],
-                          style: Theme.of(context).textTheme.headline5,
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ],
-                  ),
+                  ],
                 ),
               ),
             ),
-            onTap: () => Navigator.pushNamed(
-                context, AppConstants.interventionsKeysMapper[key]['routeName'],
-                arguments: taiChiLessons[0]),
           ),
-        )
-        .toList();
+          onTap: () {
+            if (isDoneToday) {
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content: Text('You have done this today. Back tomorrow 😊')));
+              return;
+            } else {
+              Navigator.pushNamed(context,
+                  AppConstants.interventionsKeysMapper[key]['routeName'],
+                  arguments: taiChiLessons[0]);
+            }
+          },
+        );
+      },
+    ).toList();
 
     final activitiesWidget = GestureDetector(
       child: Card(

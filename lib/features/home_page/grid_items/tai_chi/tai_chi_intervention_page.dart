@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:master_thesis/features/home_page/grid_items/tai_chi/tai_chi_intervention_cubit.dart';
 import 'package:master_thesis/features/home_page/grid_items/tai_chi/tai_chi_page.dart';
+import 'package:master_thesis/service_locator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class TaiChiInterventionPage extends StatefulWidget {
   const TaiChiInterventionPage({Key? key}) : super(key: key);
@@ -85,14 +87,36 @@ class _TaiChiInterventionPageState extends State<TaiChiInterventionPage> {
                           ),
                     leading: Image.network(
                         'https://img.youtube.com/vi/${lesson.ytVideoId}/mqdefault.jpg'),
-                    onTap: () => Navigator.pushNamed(
+                    onTap: () {
+                      bool isDoneToday = false;
+                      if (sl<SharedPreferences>()
+                          .containsKey(TaiChiPage.lastTaiChiDate)) {
+                        final DateTime lastThaiChiDate = DateTime.parse(
+                            sl<SharedPreferences>()
+                                .getString(TaiChiPage.lastTaiChiDate)!);
+                        final DateTime now = DateTime.now().toUtc();
+                        final DateTime today =
+                            DateTime(now.year, now.month, now.day);
+                        if (today.compareTo(lastThaiChiDate) == 0) {
+                          isDoneToday = true;
+                        }
+                      }
+
+                      if (isDoneToday) {
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                            content: Text(
+                                'You have done this today. Back tomorrow 😊')));
+                      } else {
+                        Navigator.pushNamed(
                           context,
                           TaiChiPage.routeName,
                           arguments: TaiChiPageArguments(
                             taiChiLesson: state.lessons[index],
                             taiChiIntervention: state.taiChiIntervention,
                           ),
-                        )),
+                        );
+                      }
+                    }),
               );
             },
           ),

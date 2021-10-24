@@ -131,6 +131,47 @@ class UserRepository {
   }
 
   Future<Either<DefaultFailure, DocumentReference>>
+      doneQuestionnaireIntervention(
+          {required String questionnaireInterventionId}) async {
+    try {
+      final failureOrUserApp = await getUser();
+      failureOrUserApp.fold(
+        (l) {
+          return Left(DefaultFailure(
+              message:
+                  "Can't make done Questionnaire Intervention for user. Error: $l"));
+        },
+        (UserApp userApp) async {
+          final Map<String, List<String>> pastInterventions =
+              userApp.pastInterventions;
+          final Map<String, List<String>> activeInterventions =
+              userApp.activeInterventions;
+          activeInterventions.remove('QLQ-C30');
+
+          if (userApp.pastInterventions.containsKey('QLQ-C30')) {
+            pastInterventions['QLQ-C30']!.add(questionnaireInterventionId);
+          } else {
+            pastInterventions['QLQ-C30'] = [questionnaireInterventionId];
+          }
+          log(userApp.email);
+          log(userApp.id.toString());
+
+          log('activeInterventions: ${activeInterventions.toString()}');
+          await documentReference.update({
+            'pastInterventions': pastInterventions,
+            'activeInterventions': activeInterventions
+          });
+        },
+      );
+    } catch (e) {
+      return Left(DefaultFailure(
+          message:
+              "Can't make done Questionnaire Intervention for user. Error: $e"));
+    }
+    return Right(documentReference);
+  }
+
+  Future<Either<DefaultFailure, DocumentReference>>
       assign30x30ChallangeIntervention(
           {required String challanhe30x30InterventionId}) async {
     try {
@@ -221,7 +262,7 @@ class UserRepository {
       PointsEntry pointsEntry) async {
     try {
       final failureOrUserApp = await getUser();
-      return failureOrUserApp.fold(
+      return await failureOrUserApp.fold(
         (l) {
           log(l.message);
           return Left(DefaultFailure(message: l.message));

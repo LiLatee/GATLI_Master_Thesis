@@ -16,12 +16,17 @@ class PointsHistoryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List<PointsEntry> pointsEntries = userApp.pointsEntries
+        .where((pointsEntry) => pointsEntry.points != 0)
+        .toList();
+
     return Scaffold(
         appBar: AppBar(title: const Text('Points history')),
         body: ListView.builder(
-          itemCount: userApp.pointsEntries.length,
+          reverse: true,
+          itemCount: pointsEntries.length,
           itemBuilder: (context, index) {
-            final PointsEntry pointsEntry = userApp.pointsEntries[index];
+            final PointsEntry pointsEntry = pointsEntries[index];
             return ListTile(
               leading: Text(
                 pointsEntry.points.toString(),

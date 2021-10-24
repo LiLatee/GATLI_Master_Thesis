@@ -13,6 +13,7 @@ import 'package:master_thesis/features/home_page/grid_items/tai_chi/tai_chi_inte
 import 'package:master_thesis/features/home_page/grid_items/tai_chi/tai_chi_page.dart';
 import 'package:master_thesis/features/home_page/home_screen.dart';
 import 'package:master_thesis/features/home_page/settings_page/set_avatar_page.dart';
+import 'package:master_thesis/features/home_page/week_stats.dart';
 import 'package:master_thesis/features/login/login_page.dart';
 
 class AppRouter {
@@ -70,6 +71,12 @@ class AppRouter {
       case TaiChiInterventionPage.routeName:
         return MaterialPageRoute(
           builder: (_) => const TaiChiInterventionPage(),
+        );
+      case WeekStats.routeName:
+        final WeekStatsArguments args =
+            settings.arguments as WeekStatsArguments;
+        return MaterialPageRoute(
+          builder: (_) => WeekStats(args: args),
         );
       case SetAvatarPage.routeName:
         final bool fromSettings;

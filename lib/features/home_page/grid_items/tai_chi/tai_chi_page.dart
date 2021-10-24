@@ -14,6 +14,7 @@ import 'package:master_thesis/features/home_page/home_screen.dart';
 import 'package:master_thesis/features/widgets/badges.dart';
 import 'package:master_thesis/service_locator.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
@@ -43,6 +44,8 @@ class TaiChiPageArguments {
 }
 
 class TaiChiPage extends StatefulWidget {
+  static const String lastTaiChiDate = 'lastTaiChiDate';
+
   const TaiChiPage({
     Key? key,
     required this.taiChiLesson,
@@ -135,6 +138,9 @@ class _TaiChiPageState extends State<TaiChiPage> {
                 .taiChiSingleVideo
                 .copyWith(datetime: DateTime.now()));
           }
+          final DateTime now = DateTime.now().toUtc();
+          sl<SharedPreferences>().setString(TaiChiPage.lastTaiChiDate,
+              DateTime(now.year, now.month, now.day).toString());
         }
       },
       // onChangeRawMinute: (value) => log('onChangeRawMinute $value'),

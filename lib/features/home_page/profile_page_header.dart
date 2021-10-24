@@ -112,26 +112,42 @@ class ProfilePageHeader extends SliverPersistentHeaderDelegate {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // Row(
+        //   children: [
+        //     const Icon(Icons.check_box_outlined),
+        //     const SizedBox(width: 8),
+        //     Text(
+        //       context.l10n.taiChi,
+        //       style:
+        //           Theme.of(context).textTheme.bodyText2!.copyWith(fontSize: 16),
+        //     ),
+        //   ],
+        // ),
+        // const SizedBox(height: 8),
+        // Row(
+        //   children: [
+        //     Icon(wasActivityAbove30Mins
+        //         ? Icons.check_box_outlined
+        //         : Icons.check_box_outline_blank),
+        //     const SizedBox(width: 8),
+        //     Text(
+        //       context.l10n.anyPhysicalActivity,
+        //       style:
+        //           Theme.of(context).textTheme.bodyText2!.copyWith(fontSize: 16),
+        //     ),
+        //   ],
+        // ),
+        // const SizedBox(height: 8),
         Row(
           children: [
-            const Icon(Icons.check_box_outlined),
-            const SizedBox(width: 8),
-            Text(
-              context.l10n.taiChi,
-              style:
-                  Theme.of(context).textTheme.bodyText2!.copyWith(fontSize: 16),
+            Image.asset(
+              distanceIcon,
+              height: 20,
+              width: 20,
             ),
-          ],
-        ),
-        const SizedBox(height: 8),
-        Row(
-          children: [
-            Icon(wasActivityAbove30Mins
-                ? Icons.check_box_outlined
-                : Icons.check_box_outline_blank),
             const SizedBox(width: 8),
             Text(
-              context.l10n.anyPhysicalActivity,
+              '${userApp.kilometers} km',
               style:
                   Theme.of(context).textTheme.bodyText2!.copyWith(fontSize: 16),
             ),
@@ -165,22 +181,22 @@ class ProfilePageHeader extends SliverPersistentHeaderDelegate {
             ),
           ],
         ),
-        const SizedBox(height: 8),
-        Row(
-          children: [
-            Image.asset(
-              distanceIcon,
-              height: 20,
-              width: 20,
-            ),
-            const SizedBox(width: 8),
-            Text(
-              '${userApp.kilometers} km',
-              style:
-                  Theme.of(context).textTheme.bodyText2!.copyWith(fontSize: 16),
-            ),
-          ],
-        ),
+        // const SizedBox(height: 8),
+        // Row(
+        //   children: [
+        //     Image.asset(
+        //       distanceIcon,
+        //       height: 20,
+        //       width: 20,
+        //     ),
+        //     const SizedBox(width: 8),
+        //     Text(
+        //       '${userApp.kilometers} km',
+        //       style:
+        //           Theme.of(context).textTheme.bodyText2!.copyWith(fontSize: 16),
+        //     ),
+        //   ],
+        // ),
       ],
     );
   }

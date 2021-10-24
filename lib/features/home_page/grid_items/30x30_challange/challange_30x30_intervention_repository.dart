@@ -68,7 +68,6 @@ class Challange30x30InterventionRepository {
     }
   }
 
-  // TODO
   Future<Either<DefaultFailure, void>> updateChallange30x30Intervention(
       {required Challange30x30Intervention
           newChallange30x30Intervention}) async {

@@ -20,6 +20,7 @@ import 'package:master_thesis/features/home_page/grid_items/activity/activity_se
 import 'package:master_thesis/features/home_page/grid_items/activity/my_activity.dart';
 import 'package:master_thesis/service_locator.dart';
 import 'package:pedometer/pedometer.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 
@@ -83,6 +84,8 @@ class ActivityStateLoaded extends ActivityState {
 }
 
 class ActivityCubit extends Cubit<ActivityState> {
+  static const String last30MinActivityDoneDate = 'last30MinActivityDoneDate';
+
   ActivityCubit() : super(ActivityStateLoading()) {
     init();
   }
@@ -242,16 +245,21 @@ class ActivityCubit extends Cubit<ActivityState> {
       ),
     );
 
-    final failureOrNewUser = sl<UserRepository>().addUserActivitySession(
-      newState.activitySession.copyWith(
-        steps: (state as ActivityStateLoaded).steps,
-        minutesOfActivity: (state as ActivityStateLoaded).minutes,
-      ),
+    int minutesOfActivity = 0;
+    currentState.activitySession.activities
+        .where((element) => element.isActive)
+        .forEach((MyActivity myActivity) =>
+            minutesOfActivity += myActivity.durationInMinutes);
+    final finishedActivitySession = newState.activitySession.copyWith(
+      steps: (state as ActivityStateLoaded).steps,
+      minutesOfActivity: minutesOfActivity,
     );
+    final failureOrNewUser =
+        sl<UserRepository>().addUserActivitySession(finishedActivitySession);
 
     await failureOrNewUser;
 
-    await update30x30ChallangeIntervention();
+    await update30x30ChallangeIntervention(finishedActivitySession);
 
     sl<UserRepository>().addUserPointsEntry(
       PredefinedEntryPoints.activityXMins.copyWith(
@@ -263,7 +271,8 @@ class ActivityCubit extends Cubit<ActivityState> {
     emit(newState);
   }
 
-  Future<void> update30x30ChallangeIntervention() async {
+  Future<void> update30x30ChallangeIntervention(
+      ActivitySession activitySession) async {
     final failureOrUser = await userRepository.getUser();
 
     failureOrUser.fold(
@@ -276,7 +285,7 @@ class ActivityCubit extends Cubit<ActivityState> {
         failureOrChallangeIntervention.fold(
           (DefaultFailure failure) =>
               log('ActivityCubit - cannot get 30x30 Challange intervention'),
-          (intervention) {
+          (intervention) async {
             final currentState = state as ActivityStateLoaded;
             final String todayString = DateFormat('yyyy-MM-dd')
                 .format(currentState.activitySession.startTime);
@@ -288,13 +297,17 @@ class ActivityCubit extends Cubit<ActivityState> {
                 ChallangeOneDayStats(
               day: challangeDayStats?.day ??
                   DateTime(
-                    currentState.activitySession.startTime.year,
-                    currentState.activitySession.startTime.month,
-                    currentState.activitySession.startTime.day,
+                    activitySession.startTime.year,
+                    activitySession.startTime.month,
+                    activitySession.startTime.day,
                   ),
-              steps: (challangeDayStats?.steps ?? 0) + currentState.steps,
-              minutesOfMove: (challangeDayStats?.minutesOfMove ?? 0) +
-                  currentState.minutes,
+              steps: activitySession.steps > (challangeDayStats?.steps ?? 0)
+                  ? activitySession.steps
+                  : (challangeDayStats?.steps ?? 0),
+              minutesOfMove: activitySession.minutesOfActivity >
+                      (challangeDayStats?.minutesOfMove ?? 0)
+                  ? activitySession.minutesOfActivity
+                  : (challangeDayStats?.minutesOfMove ?? 0),
             );
 
             days[todayString] = updatedChallangeDayStats;
@@ -302,7 +315,17 @@ class ActivityCubit extends Cubit<ActivityState> {
             final Challange30x30Intervention newChallange30x30Intervention =
                 intervention.copyWith(days: days);
 
-            challangeRepository.updateChallange30x30Intervention(
+            if (activitySession.minutesOfActivity >
+                    (challangeDayStats?.minutesOfMove ?? 0) &&
+                activitySession.minutesOfActivity >= 5) //TODO change to 30
+            {
+              final DateTime now = DateTime.now().toUtc();
+              final DateTime today = DateTime(now.year, now.month, now.day);
+              sl<SharedPreferences>().setString(
+                  ActivityCubit.last30MinActivityDoneDate, today.toString());
+            }
+
+            await challangeRepository.updateChallange30x30Intervention(
                 newChallange30x30Intervention: newChallange30x30Intervention);
           },
         );
@@ -335,7 +358,7 @@ class ActivityCubit extends Cubit<ActivityState> {
     );
     final currentStateActivities = newState.activitySession.activities;
 
-    final int diff = event.timestamp
+    final int diffInMinutes = event.timestamp
         .difference(
             currentStateActivities[currentStateActivities.length - 1].timestamp)
         .inMinutes;
@@ -345,15 +368,15 @@ class ActivityCubit extends Cubit<ActivityState> {
                 event.isActive) &&
             currentStateActivities[currentStateActivities.length - 1].isStart ==
                 false;
-    log('diff: ${diff.toString()}');
-    final int minimumMinutes = 1;
-    if (isSameAction && diff > minimumMinutes - 1) {
+    log('diff: ${diffInMinutes.toString()}');
+    const int minimumMinutes = 1;
+    if (isSameAction && diffInMinutes > minimumMinutes - 1) {
       log('sameAction');
       currentStateActivities[currentStateActivities.length - 1]
-          .durationInMinutes = diff;
+          .durationInMinutes = diffInMinutes;
 
       emit(newState);
-    } else if (!isSameAction && diff > minimumMinutes) {
+    } else if (!isSameAction && diffInMinutes > minimumMinutes) {
       log('not sameAction');
 
       emit(

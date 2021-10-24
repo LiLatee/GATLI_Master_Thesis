@@ -11,7 +11,9 @@ import 'package:master_thesis/features/data/users_repository.dart';
 import 'package:master_thesis/features/home_page/achievements_page/achievements_page.dart';
 import 'package:master_thesis/features/home_page/actions_gird_view/actions_grid_view.dart';
 import 'package:master_thesis/features/home_page/profile_page_header.dart';
+import 'package:master_thesis/features/home_page/settings_page/set_avatar_page.dart';
 import 'package:master_thesis/features/home_page/settings_page/settings_page.dart';
+import 'package:master_thesis/features/home_page/week_stats.dart';
 import 'package:master_thesis/features/widgets/badges.dart';
 import 'package:master_thesis/features/widgets/custom_bottom_navigation_bar.dart';
 import 'package:master_thesis/service_locator.dart';
@@ -93,9 +95,14 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  checkIfShowSummary() {
+  void checkIfShowSummary() {
     final DateTime? lastWeekDay = checkIfNewWeek();
     if (lastWeekDay != null) {
+      Navigator.pushNamed(context, WeekStats.routeName,
+          arguments: WeekStatsArguments(
+              data: _healthDataList, lastWeekDay: lastWeekDay));
+
+      return;
       int stepsInLastWeek = 0;
       _healthDataList
           .where((element) => element.type == HealthDataType.STEPS)
@@ -141,9 +148,9 @@ class _HomePageState extends State<HomePage> {
       log('stepsInLastWeek: ${stepsInLastWeek.toString()}');
       log('stepsInLastLastWeek: ${stepsInLastLastWeek.toString()}');
 
-      _showDialog(
-          stepsInLastWeek: stepsInLastWeek,
-          stepsInLastLastWeek: stepsInLastLastWeek);
+      // _showDialog(
+      //     stepsInLastWeek: stepsInLastWeek,
+      //     stepsInLastLastWeek: stepsInLastLastWeek);
     }
   }
 
@@ -160,7 +167,10 @@ class _HomePageState extends State<HomePage> {
     final DateTime now = DateTime.now();
     final DateTime todayDateStart =
         DateTime(now.year, now.month, now.day, 0, 0, 0);
-    final DateTime installedDate = DateTime.parse(installDate);
+    // final DateTime installedDate = DateTime.parse(installDate); // TODO
+    final DateTime installedDate =
+        DateTime.parse(installDate).subtract(Duration(days: 14));
+
     final DateTime todayDateEnd =
         DateTime(now.year, now.month, now.day, 23, 59, 59);
     log('installedDate: $installedDate');
@@ -316,8 +326,8 @@ class _HomePageState extends State<HomePage> {
                         // minExtent: AppConstants.homePageAvatarRadius * 2 + 8 * 2,
                         stepsToday: stepsToday,
                         userApp: userApp,
-                        minExtent: 200,
-                        maxExtent: 200,
+                        minExtent: 160,
+                        maxExtent: 160,
                       ),
                     ),
                     _options[_selectedIndex],

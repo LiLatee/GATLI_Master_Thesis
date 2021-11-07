@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_web_client_id" translatable="false">655420451184-vgddob936qjqm48r6t2ts015rgrn3kv6.apps.googleusercontent.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">655420451184</string>
+    <string name="google_api_key" translatable="false">AIzaSyAkg3ImRM-70-V4L4N2agL4PpMahLgpTHA</string>
+    <string name="google_app_id" translatable="false">1:655420451184:android:b5f0f9f6e19125827487b5</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyAkg3ImRM-70-V4L4N2agL4PpMahLgpTHA</string>
+    <string name="google_storage_bucket" translatable="false">master-thesis-b5628.appspot.com</string>
+    <string name="project_id" translatable="false">master-thesis-b5628</string>
+</resources>

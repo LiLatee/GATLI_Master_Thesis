@@ -213,7 +213,7 @@ Widget? getBadgeUsingKey({required String badgeKey}) {
       darkColor: Color(0xffe55000),
       level: Level.BRONZE,
       icon: Icon(
-        Icons.directions_bike,
+        Icons.poll,
         size: 50,
       ),
     ),
@@ -224,7 +224,7 @@ Widget? getBadgeUsingKey({required String badgeKey}) {
       darkColor: Color(0xffe55000),
       level: Level.SILVER,
       icon: Icon(
-        Icons.directions_bike,
+        Icons.poll,
         size: 50,
       ),
     ),
@@ -235,7 +235,7 @@ Widget? getBadgeUsingKey({required String badgeKey}) {
       darkColor: Color(0xffe55000),
       level: Level.GOLD,
       icon: Icon(
-        Icons.directions_bike,
+        Icons.poll,
         size: 50,
       ),
     ),

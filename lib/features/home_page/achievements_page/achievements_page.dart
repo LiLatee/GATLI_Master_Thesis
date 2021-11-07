@@ -72,13 +72,27 @@ class AchievementsPage extends StatelessWidget {
   }
 
   Widget _buildBadgesWidget(UserApp userApp) {
-    final badgesMap = _countOccurences(userApp.badgesKeys);
-    log('userApp.badgesKeys: ${userApp.badgesKeys.toString()}');
+    // final badgesMap = _countOccurences(userApp.badgesKeys);
+    // final userMockedBadgesKeys = [
+    //   BadgesKeys.challanger30x30Level1,
+    //   BadgesKeys.challanger30x30Level2,
+    //   BadgesKeys.challanger30x30Level3,
+    //   BadgesKeys.taiChiLevel1,
+    //   BadgesKeys.taiChiLevel2,
+    //   BadgesKeys.taiChiLevel3,
+    //   BadgesKeys.questionnaireFillerLevel1,
+    //   BadgesKeys.questionnaireFillerLevel2,
+    //   BadgesKeys.questionnaireFillerLevel3,
+    //   BadgesKeys.stepsLevel1,
+    //   BadgesKeys.stepsLevel2,
+    //   BadgesKeys.stepsLevel3,
+    // ];
+    // final badgesKeys = _determineBadges(userMockedBadgesKeys);
 
-    log('badgesMap: ${badgesMap.toString()}');
+    final badgesKeys = _determineBadges(userApp.badgesKeys);
 
     return GridView.builder(
-      itemCount: badgesMap.length,
+      itemCount: badgesKeys.length,
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       primary: true,
@@ -87,95 +101,14 @@ class AchievementsPage extends StatelessWidget {
         mainAxisExtent: 170,
       ),
       itemBuilder: (BuildContext context, int index) {
-        String? badgeKey;
-        final key = badgesMap.keys.toList()[index];
-        final occurences = badgesMap.values.toList()[index];
-
-        switch (key) {
-          case BadgesKeys.taiChiLevel1:
-            {
-              if (occurences >= 10) {
-                badgeKey = BadgesKeys.taiChiLevel3;
-              } else if (occurences >= 5) {
-                badgeKey = BadgesKeys.taiChiLevel2;
-              } else if (occurences > 0) {
-                badgeKey = BadgesKeys.taiChiLevel1;
-              }
-            }
-            break;
-          case BadgesKeys.stepsLevel1:
-            badgeKey = BadgesKeys.stepsLevel1;
-            break;
-          case BadgesKeys.stepsLevel2:
-            badgeKey = BadgesKeys.stepsLevel2;
-            break;
-          case BadgesKeys.stepsLevel3:
-            badgeKey = BadgesKeys.stepsLevel3;
-            break;
-          case BadgesKeys.questionnaireFillerLevel1:
-            {
-              if (occurences >= 10) {
-                badgeKey = BadgesKeys.questionnaireFillerLevel3;
-              } else if (occurences >= 5) {
-                badgeKey = BadgesKeys.questionnaireFillerLevel2;
-              } else if (occurences > 0) {
-                badgeKey = BadgesKeys.questionnaireFillerLevel1;
-              }
-            }
-            break;
-          case BadgesKeys.challanger30x30Level1:
-            {
-              if (occurences >= 10) {
-                badgeKey = BadgesKeys.challanger30x30Level3;
-              } else if (occurences >= 5) {
-                badgeKey = BadgesKeys.challanger30x30Level2;
-              } else if (occurences > 0) {
-                badgeKey = BadgesKeys.challanger30x30Level1;
-              }
-            }
-            break;
-        }
-
-        if (badgeKey == null) {
-          return const SizedBox();
-        }
-
         return Card(
-          child: getBadgeUsingKey(badgeKey: badgeKey),
+          child: getBadgeUsingKey(badgeKey: badgesKeys[index]),
         );
       },
     );
-
-    return SliverGrid(
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-        mainAxisExtent: 150,
-      ),
-      delegate: SliverChildBuilderDelegate(
-        (BuildContext context, int index) {
-          final String badgeKey;
-          if (badgesMap.keys.toList()[index] == BadgesKeys.taiChiLevel1) {
-            if (badgesMap.values.toList()[index] == 2) {
-              badgeKey = BadgesKeys.taiChiLevel2;
-            } else if (badgesMap.values.toList()[index] > 2) {
-              badgeKey = BadgesKeys.taiChiLevel3;
-            } else {
-              badgeKey = BadgesKeys.taiChiLevel1;
-            }
-          } else {
-            badgeKey = badgesMap.keys.toList()[index];
-          }
-
-          return Card(
-            child: getBadgeUsingKey(badgeKey: badgeKey),
-          );
-        },
-        childCount: badgesMap.length,
-      ),
-    );
   }
 
-  Map<String, int> _countOccurences(List<dynamic> list) {
+  List<String> _determineBadges(List<dynamic> list) {
     final map = <String, int>{};
 
     // ignore: avoid_function_literals_in_foreach_calls
@@ -186,6 +119,39 @@ class AchievementsPage extends StatelessWidget {
         map[element] = map[element]! + 1;
       }
     });
-    return map;
+
+    const int goldThreshold = 10;
+    const int silverThreshold = 5;
+    const int bronzeThreshold = 1;
+
+    final List<String> resultListOfBadges = [];
+    map.forEach((key, value) {
+      if (value >= goldThreshold) {
+        resultListOfBadges.add(key);
+        if (key == BadgesKeys.challanger30x30Level1) {
+          resultListOfBadges.add(BadgesKeys.challanger30x30Level2);
+          resultListOfBadges.add(BadgesKeys.challanger30x30Level3);
+        } else if (key == BadgesKeys.questionnaireFillerLevel1) {
+          resultListOfBadges.add(BadgesKeys.questionnaireFillerLevel2);
+          resultListOfBadges.add(BadgesKeys.questionnaireFillerLevel3);
+        } else if (key == BadgesKeys.taiChiLevel1) {
+          resultListOfBadges.add(BadgesKeys.taiChiLevel2);
+          resultListOfBadges.add(BadgesKeys.taiChiLevel3);
+        }
+      } else if (value >= silverThreshold) {
+        resultListOfBadges.add(key);
+        if (key == BadgesKeys.challanger30x30Level1) {
+          resultListOfBadges.add(BadgesKeys.challanger30x30Level2);
+        } else if (key == BadgesKeys.questionnaireFillerLevel1) {
+          resultListOfBadges.add(BadgesKeys.questionnaireFillerLevel2);
+        } else if (key == BadgesKeys.taiChiLevel1) {
+          resultListOfBadges.add(BadgesKeys.taiChiLevel2);
+        }
+      } else if (value >= bronzeThreshold) {
+        resultListOfBadges.add(key);
+      }
+    });
+    return resultListOfBadges;
+    // return map;
   }
 }

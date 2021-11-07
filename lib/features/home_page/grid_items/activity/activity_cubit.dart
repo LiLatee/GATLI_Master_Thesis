@@ -10,11 +10,11 @@ import 'package:master_thesis/core/error/failures.dart';
 import 'package:master_thesis/features/data/points_entry.dart';
 import 'package:master_thesis/features/data/user_app.dart';
 import 'package:master_thesis/features/data/users_repository.dart';
-import 'package:master_thesis/features/home_page/grid_items/30x30_challange/challange_30x30_cubit.dart';
-import 'package:master_thesis/features/home_page/grid_items/30x30_challange/challange_30x30_intervention.dart';
+import 'package:master_thesis/features/home_page/grid_items/30x30_challenge/challenge_30x30_cubit.dart';
+import 'package:master_thesis/features/home_page/grid_items/30x30_challenge/challenge_30x30_intervention.dart';
 
-import 'package:master_thesis/features/home_page/grid_items/30x30_challange/challange_30x30_intervention_repository.dart';
-import 'package:master_thesis/features/home_page/grid_items/30x30_challange/challange_one_day_stats.dart';
+import 'package:master_thesis/features/home_page/grid_items/30x30_challenge/challenge_30x30_intervention_repository.dart';
+import 'package:master_thesis/features/home_page/grid_items/30x30_challenge/challenge_one_day_stats.dart';
 
 import 'package:master_thesis/features/home_page/grid_items/activity/activity_session.dart';
 import 'package:master_thesis/features/home_page/grid_items/activity/my_activity.dart';
@@ -114,8 +114,8 @@ class ActivityCubit extends Cubit<ActivityState> {
 
   final UserRepository userRepository = sl<UserRepository>();
 
-  final Challange30x30InterventionRepository challangeRepository =
-      sl<Challange30x30InterventionRepository>();
+  final Challenge30x30InterventionRepository challangeRepository =
+      sl<Challenge30x30InterventionRepository>();
 
   Future<void> init() async {
     //StopWatchTimer
@@ -291,10 +291,10 @@ class ActivityCubit extends Cubit<ActivityState> {
                 .format(currentState.activitySession.startTime);
             final days = intervention.days;
 
-            final ChallangeOneDayStats? challangeDayStats = days![todayString];
+            final ChallengeOneDayStats? challangeDayStats = days![todayString];
 
-            final ChallangeOneDayStats updatedChallangeDayStats =
-                ChallangeOneDayStats(
+            final ChallengeOneDayStats updatedChallangeDayStats =
+                ChallengeOneDayStats(
               day: challangeDayStats?.day ??
                   DateTime(
                     activitySession.startTime.year,
@@ -312,7 +312,7 @@ class ActivityCubit extends Cubit<ActivityState> {
 
             days[todayString] = updatedChallangeDayStats;
 
-            final Challange30x30Intervention newChallange30x30Intervention =
+            final Challenge30x30Intervention newChallange30x30Intervention =
                 intervention.copyWith(days: days);
 
             if (activitySession.minutesOfActivity >

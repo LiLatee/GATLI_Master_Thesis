@@ -23,16 +23,17 @@ allprojects {
     repositories {
         google()
         jcenter()
-        maven {
-            // [required] background_fetch
-           url "${project(':background_fetch').projectDir}/libs"
-       }
+    //     maven {
+    //         // [required] background_fetch
+    //        url "${project(':background_fetch').projectDir}/libs"
+    //    }
     }
 }
 
 rootProject.buildDir = '../build'
 subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
+
 }
 subprojects {
     project.evaluationDependsOn(':app')

@@ -4,6 +4,11 @@ import 'package:charts_flutter/flutter.dart' hide Color;
 import 'package:flutter/material.dart';
 import 'package:health/health.dart';
 import 'package:intl/intl.dart';
+import 'package:master_thesis/features/home_page/home_screen.dart';
+import 'package:master_thesis/service_locator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+const String LAST_WEEK_DATE_KEY = 'lastWeekDate';
 
 class WeekStatsArguments {
   final List<HealthDataPoint> data;
@@ -38,6 +43,14 @@ class _WeekStatsState extends State<WeekStats> {
   @override
   void initState() {
     super.initState();
+    final DateTime now = DateTime.now();
+    final DateTime today = DateTime(now.year, now.month, now.day);
+    final DateTime lastWeekDate =
+        today.subtract(Duration(days: today.weekday - 1));
+
+    sl<SharedPreferences>()
+        .setString(LAST_WEEK_DATE_KEY, lastWeekDate.toString());
+    log('NOWA DATA: ${lastWeekDate.toString()}');
 
     log(widget.args.lastWeekDay.toString());
     final List<DateTime> lastLastWeekDays = [
@@ -119,7 +132,7 @@ class _WeekStatsState extends State<WeekStats> {
                   color: Color(0xfff44336),
                 ),
                 Text(
-                  '- ${DateFormat.yMd().format(date.subtract(const Duration(days: 7)))} - ${DateFormat.yMd().format(date.subtract(const Duration(days: 1)))}',
+                  ' ${DateFormat.yMd().format(date.subtract(const Duration(days: 7)))} - ${DateFormat.yMd().format(date.subtract(const Duration(days: 1)))}',
                   style: Theme.of(context).textTheme.subtitle2,
                 )
               ],
@@ -131,7 +144,7 @@ class _WeekStatsState extends State<WeekStats> {
                   color: Color(0xff2196f3),
                 ),
                 Text(
-                  '- ${DateFormat.yMd().format(date)} - ${DateFormat.yMd().format(date.add(const Duration(days: 6)))}',
+                  ' ${DateFormat.yMd().format(date)} - ${DateFormat.yMd().format(date.add(const Duration(days: 6)))}',
                   style: Theme.of(context).textTheme.subtitle2,
                 )
               ],

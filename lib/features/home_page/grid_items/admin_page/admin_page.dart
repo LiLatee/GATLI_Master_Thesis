@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:master_thesis/features/data/user_session_repository.dart';
 import 'package:master_thesis/features/data/users_repository.dart';
-import 'package:master_thesis/features/home_page/grid_items/30x30_challange/challange_30x30_intervention_repository.dart';
+import 'package:master_thesis/features/home_page/grid_items/30x30_challenge/challenge_30x30_intervention_repository.dart';
 import 'package:master_thesis/features/home_page/grid_items/questionnaire_page/questionnaire.dart';
 import 'package:master_thesis/features/home_page/grid_items/questionnaire_page/questionnaire_repository.dart';
 import 'package:master_thesis/features/home_page/grid_items/tai_chi/tai_chi_interventions_repository.dart';
@@ -114,9 +114,9 @@ class _AdminPageState extends State<AdminPage> {
 
   Widget _buildAssign30x30Challange() {
     return TextButton(
-      child: const Text('Assign 30x30 Challange'),
+      child: const Text('Assign 30x30 Challenge'),
       onPressed: () async {
-        final failureOrDocRef = await sl<Challange30x30InterventionRepository>()
+        final failureOrDocRef = await sl<Challenge30x30InterventionRepository>()
             .addChallange30x30Intervention(
           userId: _patientIDController.text,
         );

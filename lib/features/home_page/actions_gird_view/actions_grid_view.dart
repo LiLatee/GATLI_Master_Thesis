@@ -6,6 +6,7 @@ import 'package:master_thesis/features/data/users_repository.dart';
 import 'package:master_thesis/features/home_page/grid_items/activity/activity_cubit.dart';
 import 'package:master_thesis/features/home_page/grid_items/activity/activity_history_page.dart';
 import 'package:master_thesis/features/home_page/grid_items/admin_page/admin_page.dart';
+import 'package:master_thesis/features/home_page/grid_items/questionnaire_page/questionnaire_page.dart';
 import 'package:master_thesis/features/home_page/grid_items/tai_chi/tai_chi_lesson.dart';
 import 'package:master_thesis/features/home_page/grid_items/tai_chi/tai_chi_page.dart';
 import 'package:master_thesis/service_locator.dart';
@@ -54,6 +55,7 @@ class ActionsGridView extends StatelessWidget {
           if (sl<SharedPreferences>().containsKey(TaiChiPage.lastTaiChiDate)) {
             final DateTime lastThaiChiDate = DateTime.parse(
                 sl<SharedPreferences>().getString(TaiChiPage.lastTaiChiDate)!);
+
             final DateTime now = DateTime.now().toUtc();
             final DateTime today = DateTime(now.year, now.month, now.day);
             if (today.compareTo(lastThaiChiDate) == 0) {
@@ -152,7 +154,7 @@ class ActionsGridView extends StatelessWidget {
                 ),
                 Center(
                   child: Text(
-                    'Activities',
+                    'Activity',
                     style: Theme.of(context).textTheme.headline5,
                     textAlign: TextAlign.center,
                   ),
@@ -165,7 +167,23 @@ class ActionsGridView extends StatelessWidget {
       onTap: () => Navigator.pushNamed(context, ActivityHistoryPage.routeName),
     );
 
-    final adminWidget = GestureDetector(
+    return SliverGrid(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisSpacing: 16,
+          mainAxisSpacing: 16,
+          crossAxisCount: 2,
+        ),
+        delegate: SliverChildListDelegate(interventionsWidgets +
+            [
+              if (showFakeQuestionnaireWidget())
+                _fakeQuestionnaireWidget(context),
+              activitiesWidget,
+              _adminWidget(context),
+            ]));
+  }
+
+  GestureDetector _adminWidget(BuildContext context) {
+    return GestureDetector(
       child: Card(
         elevation: 4,
         color: Theme.of(context).colorScheme.secondary,
@@ -198,38 +216,66 @@ class ActionsGridView extends StatelessWidget {
       onTap: () => Navigator.pushNamed(context, AdminPage.routeName,
           arguments: taiChiLessons[0]),
     );
+  }
 
-    final testWidget = GestureDetector(
+  GestureDetector _fakeQuestionnaireWidget(BuildContext context) {
+    return GestureDetector(
       child: Card(
-        // color: Theme.of(context).colorScheme.primary,
         elevation: 4,
+        color: Theme.of(context).colorScheme.primary,
         child: GridTile(
           child: Padding(
             padding: const EdgeInsets.all(16),
-            child: Center(
-              child: Text(
-                'Test',
-                style: Theme.of(context).textTheme.headline5,
-                textAlign: TextAlign.center,
-              ),
+            child: Stack(
+              children: [
+                const Positioned.fill(
+                  child: Opacity(
+                    opacity: 0.1,
+                    child: FittedBox(
+                      fit: BoxFit.fill,
+                      child: Icon(Icons.poll),
+                    ),
+                  ),
+                ),
+                Center(
+                  child: Text(
+                    'Question-naire',
+                    style: Theme.of(context).textTheme.headline5,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                Positioned(
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: Icon(
+                      Icons.done_outline,
+                      color: Theme.of(context).colorScheme.secondaryVariant,
+                      size: 36,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ),
       ),
-      // onTap: () => Navigator.pushNamed(context, TestFit.routeName),
+      onTap: () => ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+              'You have done this today. It will disappear in 24 hours 😊'))),
     );
+  }
 
-    return SliverGrid(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisSpacing: 16,
-          mainAxisSpacing: 16,
-          crossAxisCount: 2,
-        ),
-        delegate: SliverChildListDelegate(interventionsWidgets +
-            [
-              activitiesWidget,
-              adminWidget,
-              // testWidget,
-            ]));
+  bool showFakeQuestionnaireWidget() {
+    if (sl<SharedPreferences>()
+        .containsKey(QuestionnairePage.sharedPrefQuestionnaireDoneDate)) {
+      final DateTime questionnaireDoneDate = DateTime.parse(
+          sl<SharedPreferences>()
+              .getString(QuestionnairePage.sharedPrefQuestionnaireDoneDate)!);
+      final DateTime now = DateTime.now().toUtc();
+      if (now.difference(questionnaireDoneDate) < const Duration(hours: 24)) {
+        return true;
+      }
+    }
+    return false;
   }
 }

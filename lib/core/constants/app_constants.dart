@@ -1,6 +1,6 @@
 //! SharedPreferences Keys
 import 'package:flutter/material.dart';
-import 'package:master_thesis/features/home_page/grid_items/30x30_challange/challange_30x30_page.dart';
+import 'package:master_thesis/features/home_page/grid_items/30x30_challenge/challenge_30x30_page.dart';
 import 'package:master_thesis/features/home_page/grid_items/questionnaire_page/questionnaire_intro_page.dart';
 import 'package:master_thesis/features/home_page/grid_items/tai_chi/tai_chi_intervention_page.dart';
 
@@ -11,7 +11,7 @@ class SPKeys {
   static const String setProfile = 'setProfile';
 }
 
-class AppConstants {
+abstract class AppConstants {
   //! Durations
   // static const Duration splashScreenDuration = Duration(seconds: 1);
 
@@ -29,13 +29,13 @@ class AppConstants {
       'icon': Icons.self_improvement,
     },
     'QLQ-C30': {
-      'name': 'Questionnaire',
+      'name': 'Question-naire',
       'routeName': QuestionnaireIntroPage.routeName,
       'icon': Icons.poll,
     },
     '30x30_challange': {
-      'name': '30x30 Challange',
-      'routeName': Challange30x30Page.routeName,
+      'name': '30x30 Challenge',
+      'routeName': Challenge30x30Page.routeName,
       'icon': Icons.thirty_fps,
     },
   };

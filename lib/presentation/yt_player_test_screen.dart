@@ -12,6 +12,8 @@ class YTPlayerTestScreen extends StatelessWidget {
     _controller = YoutubePlayerController(
       initialVideoId: videoId,
       flags: const YoutubePlayerFlags(
+        disableDragSeek: true,
+        hideControls: true,
         autoPlay: false,
         mute: false,
       ),

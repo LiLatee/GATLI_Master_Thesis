@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:master_thesis/features/data/user_app.dart';
 import 'package:master_thesis/features/home_page/achievements_page/points_history_page.dart';
-import 'package:master_thesis/features/home_page/grid_items/30x30_challange/challange_30x30_page.dart';
+import 'package:master_thesis/features/home_page/grid_items/30x30_challenge/challenge_30x30_page.dart';
 import 'package:master_thesis/features/home_page/grid_items/activity/activity_history_page.dart';
 import 'package:master_thesis/features/home_page/grid_items/activity/activity_page.dart';
 import 'package:master_thesis/features/home_page/grid_items/admin_page/admin_page.dart';
@@ -52,9 +52,9 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => ActivityHistoryPage(),
         );
-      case Challange30x30Page.routeName:
+      case Challenge30x30Page.routeName:
         return MaterialPageRoute(
-          builder: (_) => const Challange30x30Page(),
+          builder: (_) => const Challenge30x30Page(),
         );
       case TestTile.routeName:
         return MaterialPageRoute(

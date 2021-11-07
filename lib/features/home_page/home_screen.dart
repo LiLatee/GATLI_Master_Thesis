@@ -11,16 +11,14 @@ import 'package:master_thesis/features/data/users_repository.dart';
 import 'package:master_thesis/features/home_page/achievements_page/achievements_page.dart';
 import 'package:master_thesis/features/home_page/actions_gird_view/actions_grid_view.dart';
 import 'package:master_thesis/features/home_page/profile_page_header.dart';
-import 'package:master_thesis/features/home_page/settings_page/set_avatar_page.dart';
 import 'package:master_thesis/features/home_page/settings_page/settings_page.dart';
 import 'package:master_thesis/features/home_page/week_stats.dart';
 import 'package:master_thesis/features/widgets/badges.dart';
 import 'package:master_thesis/features/widgets/custom_bottom_navigation_bar.dart';
+import 'package:master_thesis/presentation/yt_player_test_screen.dart';
 import 'package:master_thesis/service_locator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-const String LAST_WEEK_DATE_KEY = 'lastWeekDate';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -86,9 +84,13 @@ class _HomePageState extends State<HomePage> {
       lastWeekDate = DateTime.parse(prefs.getString(LAST_WEEK_DATE_KEY)!);
     } else {
       lastWeekDate = today.subtract(Duration(days: today.weekday - 1));
+      sl<SharedPreferences>()
+          .setString(LAST_WEEK_DATE_KEY, lastWeekDate.toString());
     }
 
-    if (today.difference(lastWeekDate).inHours > 1 * 24) {
+    log("lastWeekDate: ${lastWeekDate.toString()}");
+    if (today.difference(lastWeekDate).inHours > 7 * 24) // TODO 0-->7
+    {
       return lastWeekDate;
     } else {
       return null;
@@ -97,60 +99,15 @@ class _HomePageState extends State<HomePage> {
 
   void checkIfShowSummary() {
     final DateTime? lastWeekDay = checkIfNewWeek();
+
     if (lastWeekDay != null) {
-      Navigator.pushNamed(context, WeekStats.routeName,
-          arguments: WeekStatsArguments(
-              data: _healthDataList, lastWeekDay: lastWeekDay));
-
+      Navigator.pushNamed(
+        context,
+        WeekStats.routeName,
+        arguments:
+            WeekStatsArguments(data: _healthDataList, lastWeekDay: lastWeekDay),
+      );
       return;
-      int stepsInLastWeek = 0;
-      _healthDataList
-          .where((element) => element.type == HealthDataType.STEPS)
-          .where((element) {
-        final DateTime dateTimeOnlyDay = DateTime(
-          element.dateFrom.year,
-          element.dateFrom.month,
-          element.dateFrom.day,
-        );
-        final bool isAfter = dateTimeOnlyDay.compareTo(lastWeekDay) == 1 ||
-            dateTimeOnlyDay.compareTo(lastWeekDay) == 0;
-        final bool isBefore = dateTimeOnlyDay
-                .compareTo(lastWeekDay.add(const Duration(days: 7))) ==
-            -1;
-
-        return isAfter && isBefore;
-      }).forEach((element) {
-        stepsInLastWeek += element.value.round();
-      });
-
-      int stepsInLastLastWeek = 0;
-      _healthDataList
-          .where((element) => element.type == HealthDataType.STEPS)
-          .where((element) {
-        final DateTime dateTimeOnlyDay = DateTime(
-          element.dateFrom.year,
-          element.dateFrom.month,
-          element.dateFrom.day,
-        );
-        final bool isAfter = dateTimeOnlyDay
-                    .compareTo(lastWeekDay.subtract(const Duration(days: 7))) ==
-                1 ||
-            dateTimeOnlyDay
-                    .compareTo(lastWeekDay.subtract(const Duration(days: 7))) ==
-                0;
-        final bool isBefore = dateTimeOnlyDay.compareTo(lastWeekDay) == -1;
-
-        return isAfter && isBefore;
-      }).forEach((element) {
-        stepsInLastLastWeek += element.value.round();
-      });
-
-      log('stepsInLastWeek: ${stepsInLastWeek.toString()}');
-      log('stepsInLastLastWeek: ${stepsInLastLastWeek.toString()}');
-
-      // _showDialog(
-      //     stepsInLastWeek: stepsInLastWeek,
-      //     stepsInLastLastWeek: stepsInLastLastWeek);
     }
   }
 

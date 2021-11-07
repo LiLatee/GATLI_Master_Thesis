@@ -16,11 +16,13 @@ import 'package:master_thesis/features/home_page/grid_items/questionnaire_page/q
 import 'package:master_thesis/features/home_page/grid_items/questionnaire_page/questionnaire_intervention_repository.dart';
 import 'package:master_thesis/features/widgets/badges.dart';
 import 'package:master_thesis/service_locator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class QuestionnairePage extends StatefulWidget {
   const QuestionnairePage({Key? key}) : super(key: key);
 
   static const String routeName = '/QLQ-C30';
+  static const String sharedPrefQuestionnaireDoneDate = 'QLQ-C30-done';
 
   @override
   State<QuestionnairePage> createState() => _QuestionnairePageState();
@@ -144,30 +146,15 @@ class _QuestionnairePageState extends State<QuestionnairePage> {
                     ));
                   }
                   if (questionNumber == allQuestions.length) {
-                    final UserRepository userRepository = sl<UserRepository>();
-                    final failureOrDocRef =
-                        await sl<QuestionnaireInterventionRepository>()
-                            .addQuestionnaire(
-                                questionnaire: answeredQuestionnaire);
-
-                    await userRepository.addUserPointsEntry(
-                      PredefinedEntryPoints.questionnaireDone
-                          .copyWith(datetime: DateTime.now()),
-                    );
-
-                    await userRepository
-                        .addBadge(BadgesKeys.questionnaireFillerLevel1);
-
-                    await failureOrDocRef.fold(
-                      (l) async => log(l.message),
-                      (DocumentReference ref) async {
-                        await userRepository.doneQuestionnaireIntervention(
-                            questionnaireInterventionId: ref.id);
-                      },
-                    );
+                    await _makeQuestionnaireDone();
 
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text('Thanks! You got 500 points!')));
+
+                    sl<SharedPreferences>().setString(
+                      QuestionnairePage.sharedPrefQuestionnaireDoneDate,
+                      DateTime.now().toUtc().toString(),
+                    );
 
                     Navigator.pop(context);
                     Navigator.pop(context);
@@ -195,6 +182,27 @@ class _QuestionnairePageState extends State<QuestionnairePage> {
           );
         },
       ),
+    );
+  }
+
+  Future<void> _makeQuestionnaireDone() async {
+    final UserRepository userRepository = sl<UserRepository>();
+    final failureOrDocRef = await sl<QuestionnaireInterventionRepository>()
+        .addQuestionnaire(questionnaire: answeredQuestionnaire);
+
+    await userRepository.addUserPointsEntry(
+      PredefinedEntryPoints.questionnaireDone
+          .copyWith(datetime: DateTime.now()),
+    );
+
+    await userRepository.addBadge(BadgesKeys.questionnaireFillerLevel1);
+
+    await failureOrDocRef.fold(
+      (l) async => log(l.message),
+      (DocumentReference ref) async {
+        await userRepository.doneQuestionnaireIntervention(
+            questionnaireInterventionId: ref.id);
+      },
     );
   }
 

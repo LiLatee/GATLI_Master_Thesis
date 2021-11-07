@@ -1,8 +1,5 @@
-import 'dart:async';
 import 'dart:developer';
-import 'dart:io';
 
-import 'package:activity_recognition_flutter/activity_recognition_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:master_thesis/features/data/points_entry.dart';
@@ -10,10 +7,8 @@ import 'package:master_thesis/features/data/users_repository.dart';
 import 'package:master_thesis/features/home_page/grid_items/tai_chi/tai_chi_intervention.dart';
 import 'package:master_thesis/features/home_page/grid_items/tai_chi/tai_chi_interventions_repository.dart';
 import 'package:master_thesis/features/home_page/grid_items/tai_chi/tai_chi_lesson.dart';
-import 'package:master_thesis/features/home_page/home_screen.dart';
 import 'package:master_thesis/features/widgets/badges.dart';
 import 'package:master_thesis/service_locator.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';

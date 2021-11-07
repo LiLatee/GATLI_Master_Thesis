@@ -1,20 +1,14 @@
 import 'dart:developer';
 
-import 'package:background_fetch/background_fetch.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dartz/dartz.dart' as dartz;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:master_thesis/core/themes/app_theme.dart';
 import 'package:master_thesis/features/app/app_cubit.dart';
-import 'package:master_thesis/features/data/user_session_repository.dart';
-import 'package:master_thesis/features/data/users_repository.dart';
 import 'package:master_thesis/features/home_page/home_screen.dart';
 import 'package:master_thesis/features/login/login_page.dart';
 import 'package:master_thesis/features/splash_screen/splash_screen.dart';
-import 'package:master_thesis/main.dart';
 import 'package:master_thesis/router/app_router.dart';
 import 'package:master_thesis/service_locator.dart';
 

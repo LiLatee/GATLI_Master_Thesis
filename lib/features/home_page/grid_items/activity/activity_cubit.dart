@@ -5,12 +5,10 @@ import 'package:activity_recognition_flutter/activity_recognition_flutter.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:json_annotation/json_annotation.dart';
 import 'package:master_thesis/core/error/failures.dart';
 import 'package:master_thesis/features/data/points_entry.dart';
 import 'package:master_thesis/features/data/user_app.dart';
 import 'package:master_thesis/features/data/users_repository.dart';
-import 'package:master_thesis/features/home_page/grid_items/30x30_challenge/challenge_30x30_cubit.dart';
 import 'package:master_thesis/features/home_page/grid_items/30x30_challenge/challenge_30x30_intervention.dart';
 
 import 'package:master_thesis/features/home_page/grid_items/30x30_challenge/challenge_30x30_intervention_repository.dart';

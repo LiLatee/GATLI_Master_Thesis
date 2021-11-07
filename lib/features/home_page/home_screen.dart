@@ -15,7 +15,6 @@ import 'package:master_thesis/features/home_page/settings_page/settings_page.dar
 import 'package:master_thesis/features/home_page/week_stats.dart';
 import 'package:master_thesis/features/widgets/badges.dart';
 import 'package:master_thesis/features/widgets/custom_bottom_navigation_bar.dart';
-import 'package:master_thesis/presentation/yt_player_test_screen.dart';
 import 'package:master_thesis/service_locator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -52,24 +51,10 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Future<void> _showDialog({
-    required int stepsInLastWeek,
-    required int stepsInLastLastWeek,
-  }) async {
-    await Future.delayed(const Duration(milliseconds: 50));
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('${stepsInLastLastWeek} --> ${stepsInLastWeek}'),
-          );
-        });
-  }
-
   List<HealthDataPoint> _healthDataList = [];
   int stepsToday = 0;
-  int minutesOfMove = 0;
+  // int minutesOfMove = 0;
+  int metersOfMoveToday = 0;
   late int lastLastWeekSteps;
   late int lastWeekSteps;
   bool showSummaryDialog = false;
@@ -88,9 +73,8 @@ class _HomePageState extends State<HomePage> {
           .setString(LAST_WEEK_DATE_KEY, lastWeekDate.toString());
     }
 
-    log("lastWeekDate: ${lastWeekDate.toString()}");
-    if (today.difference(lastWeekDate).inHours > 7 * 24) // TODO 0-->7
-    {
+    log('lastWeekDate: ${lastWeekDate.toString()}');
+    if (today.difference(lastWeekDate).inHours > 7 * 24) {
       return lastWeekDate;
     } else {
       return null;
@@ -124,9 +108,9 @@ class _HomePageState extends State<HomePage> {
     final DateTime now = DateTime.now();
     final DateTime todayDateStart =
         DateTime(now.year, now.month, now.day, 0, 0, 0);
-    // final DateTime installedDate = DateTime.parse(installDate); // TODO
-    final DateTime installedDate =
-        DateTime.parse(installDate).subtract(Duration(days: 14));
+    final DateTime installedDate = DateTime.parse(installDate);
+    // final DateTime installedDate =
+    // DateTime.parse(installDate).subtract(const Duration(days: 14));
 
     final DateTime todayDateEnd =
         DateTime(now.year, now.month, now.day, 23, 59, 59);
@@ -135,14 +119,13 @@ class _HomePageState extends State<HomePage> {
     final HealthFactory health = HealthFactory();
 
     // define the types to get
-    final List<HealthDataType> types = [
-      HealthDataType.STEPS,
-      HealthDataType.MOVE_MINUTES
-      // HealthDataType.WEIGHT,
-      // HealthDataType.HEIGHT,
-      // HealthDataType.BLOOD_GLUCOSE,
-      // HealthDataType.ACTIVE_ENERGY_BURNED,
-    ];
+    final List<HealthDataType> types = [HealthDataType.STEPS];
+
+    if (Platform.isIOS) {
+      types.add(HealthDataType.DISTANCE_WALKING_RUNNING);
+    } else if (Platform.isAndroid) {
+      types.add(HealthDataType.MOVE_MINUTES);
+    }
 
     // you MUST request access to the data types before reading them
     if (Platform.isAndroid) {
@@ -191,23 +174,42 @@ class _HomePageState extends State<HomePage> {
         stepsSinceInstalled += element.value.round();
       });
 
-      int newMinutesOfMoveToday = 0;
-      _healthDataList
-          .where((element) => element.type == HealthDataType.MOVE_MINUTES)
-          .where((element) {
-        final DateTime dateTimeOnlyDay = DateTime(
-          element.dateFrom.year,
-          element.dateFrom.month,
-          element.dateFrom.day,
-        );
-        return dateTimeOnlyDay.compareTo(todayDateStart) == 0;
-      }).forEach((element) {
-        newMinutesOfMoveToday += element.value.round();
-      });
+      // int newMinutesOfMoveToday = 0;
+      // _healthDataList
+      //     .where((element) => element.type == HealthDataType.MOVE_MINUTES)
+      //     .where((element) {
+      //   final DateTime dateTimeOnlyDay = DateTime(
+      //     element.dateFrom.year,
+      //     element.dateFrom.month,
+      //     element.dateFrom.day,
+      //   );
+      //   return dateTimeOnlyDay.compareTo(todayDateStart) == 0;
+      // }).forEach((element) {
+      //   newMinutesOfMoveToday += element.value.round();
+      // });
 
       log('newStepsToday: $newStepsToday');
       log('stepsSinceInstalled: $stepsSinceInstalled');
-      log('minutesOfMove: $minutesOfMove');
+      // log('minutesOfMove: $minutesOfMove');
+
+      int newMetersOfMoveToday = 0;
+      if (Platform.isIOS) {
+        _healthDataList
+            .where((element) =>
+                element.type == HealthDataType.DISTANCE_WALKING_RUNNING)
+            .where((element) {
+          final DateTime dateTimeOnlyDay = DateTime(
+            element.dateFrom.year,
+            element.dateFrom.month,
+            element.dateFrom.day,
+          );
+          return dateTimeOnlyDay.compareTo(todayDateStart) == 0;
+        }).forEach((element) {
+          newMetersOfMoveToday += element.value.round();
+        });
+      }
+
+      log('metersOfMove: $metersOfMoveToday');
 
       final failureOrUser = await sl<UserRepository>().getUser();
       failureOrUser.fold(
@@ -245,10 +247,11 @@ class _HomePageState extends State<HomePage> {
       // update the UI to display the results
       setState(() {
         stepsToday = newStepsToday;
-        minutesOfMove = newMinutesOfMoveToday;
+        // minutesOfMove = newMinutesOfMoveToday;
+        metersOfMoveToday = newMetersOfMoveToday;
       });
     } else {
-      log("Fit - Authorization not granted");
+      log('Fit - Authorization not granted');
     }
   }
 
@@ -282,6 +285,7 @@ class _HomePageState extends State<HomePage> {
                       delegate: ProfilePageHeader(
                         // minExtent: AppConstants.homePageAvatarRadius * 2 + 8 * 2,
                         stepsToday: stepsToday,
+                        metersOfMoveToday: metersOfMoveToday,
                         userApp: userApp,
                         minExtent: 160,
                         maxExtent: 160,

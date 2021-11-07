@@ -15,6 +15,7 @@ class ProfilePageHeader extends SliverPersistentHeaderDelegate {
     required this.maxExtent,
     required this.userApp,
     this.stepsToday = 0,
+    this.metersOfMoveToday = 0,
   });
 
   @override
@@ -23,6 +24,7 @@ class ProfilePageHeader extends SliverPersistentHeaderDelegate {
   final double maxExtent;
 
   final int stepsToday;
+  final int metersOfMoveToday;
 
   final UserApp userApp;
 
@@ -147,7 +149,7 @@ class ProfilePageHeader extends SliverPersistentHeaderDelegate {
             ),
             const SizedBox(width: 8),
             Text(
-              '${userApp.kilometers} km',
+              '${metersOfMoveToday / 1000} km',
               style:
                   Theme.of(context).textTheme.bodyText2!.copyWith(fontSize: 16),
             ),

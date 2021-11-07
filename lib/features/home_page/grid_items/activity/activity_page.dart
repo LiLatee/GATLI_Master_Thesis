@@ -48,7 +48,7 @@ class _ActivityPageState extends State<ActivityPage> {
       value: cubit,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Activity Recognition Demo'),
+          title: const Text('Activity Tracking'),
         ),
         body: BlocBuilder<ActivityCubit, ActivityState>(
           builder: (context, state) {

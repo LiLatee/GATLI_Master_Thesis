@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:master_thesis/core/constants/image_paths.dart';
-import 'package:master_thesis/core/l10n/l10n.dart';
 
 const lightLevelColors = {
   Level.BRONZE: Color(0xffAD8A56),

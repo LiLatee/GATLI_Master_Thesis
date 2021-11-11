@@ -69,24 +69,6 @@ class TaiChiInterventionsRepository {
     }
   }
 
-  // Future<Either<DefaultFailure, TaiChiIntervention>>
-  //     getTaiChiInterventionOfUser({required String userId}) async {
-  //   final Map<String, dynamic> taiChiInterventionAppMap;
-  //   try {
-  //     taiChiInterventionAppMap = (await (await collectionReference
-  //                 .where('userId', isEqualTo: 'userId'))
-  //             .snapshots()
-  //             .first)
-  //         .docs[0]
-  //         .data() as Map<String, dynamic>;
-
-  //     return Right(TaiChiIntervention.fromJson(taiChiInterventionAppMap));
-  //   } catch (e) {
-  //     return Left(DefaultFailure(
-  //         message: "Can't get Tai Chi Intervention. Error: $e"));
-  //   }
-  // }
-
   Future<Either<DefaultFailure, bool>> exists(String id) async {
     try {
       final snapshot = await collectionReference.doc(id).get();
@@ -101,7 +83,6 @@ class TaiChiInterventionsRepository {
     }
   }
 
-  // TODO
   Future<Either<DefaultFailure, void>> updateTaiChiIntervention(
       {required TaiChiIntervention newTaiChiIntervention}) async {
     try {

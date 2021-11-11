@@ -109,7 +109,7 @@ class ProfilePageHeader extends SliverPersistentHeaderDelegate {
   }
 
   Widget _buildCheckboxes(BuildContext context, UserApp userApp) {
-    final bool wasActivityAbove30Mins = _checkTodayActivity(userApp);
+    // final bool wasActivityAbove30Mins = _checkTodayActivity(userApp);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -203,6 +203,7 @@ class ProfilePageHeader extends SliverPersistentHeaderDelegate {
     );
   }
 
+  // ignore: unused_element
   Widget _buildOverallStatistics(BuildContext context) {
     return Column(
       children: [
@@ -272,6 +273,7 @@ class ProfilePageHeader extends SliverPersistentHeaderDelegate {
     return true;
   }
 
+  // ignore: unused_element
   bool _checkTodayActivity(UserApp userApp) {
     final DateTime now = DateTime.now();
     final DateTime today = DateTime(now.year, now.month, now.day);

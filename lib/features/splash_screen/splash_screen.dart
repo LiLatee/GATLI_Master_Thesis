@@ -15,10 +15,10 @@ class SplashScreen extends StatelessWidget {
         child: Center(
           child: Column(
             children: [
-              FlutterLogo(),
-              Text("TrustInHealth"),
+              const FlutterLogo(),
+              const Text('GATLI'),
               CircularProgressIndicator(
-                valueColor: new AlwaysStoppedAnimation<Color>(
+                valueColor: AlwaysStoppedAnimation<Color>(
                     Theme.of(context).colorScheme.secondary),
               ),
             ],

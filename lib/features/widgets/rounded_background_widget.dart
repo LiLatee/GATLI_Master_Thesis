@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-// TODO use colors from Theme
 class RoundedBackgroundWidget extends StatelessWidget {
   const RoundedBackgroundWidget({
     Key? key,
@@ -18,8 +17,6 @@ class RoundedBackgroundWidget extends StatelessWidget {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              // Color(0xff0A1B30),
-              // Color(0xff255999),
               Theme.of(context).colorScheme.primaryVariant,
               Theme.of(context).colorScheme.primary,
             ],
@@ -33,7 +30,7 @@ class RoundedBackgroundWidget extends StatelessWidget {
 class CurveClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
-    final curveHeight = 38;
+    const curveHeight = 38;
     final controlPoint = Offset(size.width / 2, size.height + curveHeight);
     final endPoint = Offset(size.width, size.height - curveHeight);
 

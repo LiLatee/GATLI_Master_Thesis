@@ -199,7 +199,7 @@ class ActivityCubit extends Cubit<ActivityState> {
 
     final currentState = state as ActivityStateLoaded;
     if (currentState.activitySession.activities.isEmpty) {
-      log("START");
+      log('START');
       emit(
         currentState.copyWith(
           exerciseState: ExerciseState.RUNNING,
@@ -226,7 +226,7 @@ class ActivityCubit extends Cubit<ActivityState> {
     activitySubscription.pause();
     final currentState = state as ActivityStateLoaded;
 
-    log("STOP");
+    log('STOP');
     final newState = currentState.copyWith(
       exerciseState: ExerciseState.FINISHED,
       activitySession: currentState.activitySession.copyWith(
@@ -315,7 +315,7 @@ class ActivityCubit extends Cubit<ActivityState> {
 
             if (activitySession.minutesOfActivity >
                     (challangeDayStats?.minutesOfMove ?? 0) &&
-                activitySession.minutesOfActivity >= 5) //TODO change to 30
+                activitySession.minutesOfActivity >= 30) //TODO change to 30
             {
               final DateTime now = DateTime.now().toUtc();
               final DateTime today = DateTime(now.year, now.month, now.day);
@@ -388,7 +388,7 @@ class ActivityCubit extends Cubit<ActivityState> {
                           event.copyWith(
                               durationInMinutes: minimumMinutes,
                               timestamp: event.timestamp.subtract(
-                                Duration(minutes: minimumMinutes),
+                                const Duration(minutes: minimumMinutes),
                               ))
                         ],
               ),

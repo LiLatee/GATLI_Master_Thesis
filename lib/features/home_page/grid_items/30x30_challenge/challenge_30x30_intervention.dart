@@ -7,6 +7,7 @@ import 'package:master_thesis/features/home_page/grid_items/30x30_challenge/chal
 part 'challenge_30x30_intervention.g.dart';
 
 @JsonSerializable(explicitToJson: true)
+// ignore: must_be_immutable
 class Challenge30x30Intervention extends Equatable {
   final String userId;
   final String id;
@@ -58,11 +59,11 @@ class Challenge30x30Intervention extends Equatable {
     }
 
     days![DateFormat('yyyy-MM-dd')
-        .format(startDatetimeOnlyDay.add(Duration(days: 1)))] = null;
+        .format(startDatetimeOnlyDay.add(const Duration(days: 1)))] = null;
     days![DateFormat('yyyy-MM-dd')
-        .format(startDatetimeOnlyDay.add(Duration(days: 10)))] = null;
+        .format(startDatetimeOnlyDay.add(const Duration(days: 10)))] = null;
     days![DateFormat('yyyy-MM-dd')
-        .format(startDatetimeOnlyDay.add(Duration(days: 11)))] = null;
+        .format(startDatetimeOnlyDay.add(const Duration(days: 11)))] = null;
   }
 
   factory Challenge30x30Intervention.fromJson(Map<String, dynamic> json) =>

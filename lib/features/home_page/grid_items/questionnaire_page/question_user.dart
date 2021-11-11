@@ -18,6 +18,7 @@ class QuestionUser extends Question {
   factory QuestionUser.fromJson(Map<String, dynamic> json) =>
       _$QuestionUserFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() => _$QuestionUserToJson(this);
 
   factory QuestionUser.fromQuestion({

@@ -38,9 +38,9 @@ class _QuestionnairePageState extends State<QuestionnairePage> {
   Questionnaire<QuestionUser> answeredQuestionnaire =
       Questionnaire<QuestionUser>(
     languageCode: 'en',
-    generalQuestions: [],
-    pastWeekQuestions: [],
-    finalQuestions: [],
+    generalQuestions: const [],
+    pastWeekQuestions: const [],
+    finalQuestions: const [],
   );
 
   @override
@@ -167,17 +167,6 @@ class _QuestionnairePageState extends State<QuestionnairePage> {
                   }
                 },
               ),
-              // TextButton(
-              //   onPressed: () {
-              //     sl<QuestionnaireInterventionRepository>()
-              //         .addQuestionnaire(answeredQuestionnaire);
-              //     // pageController.nextPage(
-              //     //   duration: const Duration(milliseconds: 300),
-              //     //   curve: Curves.easeIn,
-              //     // );
-              //   },
-              //   child: const Text('Finish'),
-              // )
             ],
           );
         },

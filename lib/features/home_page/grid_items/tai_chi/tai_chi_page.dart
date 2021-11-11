@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:master_thesis/features/data/points_entry.dart';
@@ -71,15 +69,14 @@ class _TaiChiPageState extends State<TaiChiPage> {
       mode: StopWatchMode.countUp,
       // onChange: (value) => log('onChange $value'),
       onChangeRawSecond: (value) async {
-        log('onChangeRawSecond $value');
         _watchedTimeInSeconds = value;
-        final bool isWatchedVideo = 5 < _watchedTimeInSeconds;
 
-        // TODO for tests
-
-        // final bool isWatchedVideo =
-        //     _controller.metadata.duration.inSeconds * 0.9 <
-        //         _watchedTimeInSeconds;
+        /// for tests
+        // log('onChangeRawSecond $value');
+        // final bool isWatchedVideo = 5 < _watchedTimeInSeconds;
+        final bool isWatchedVideo =
+            _controller.metadata.duration.inSeconds * 0.9 <
+                _watchedTimeInSeconds;
 
         if (isWatchedVideo && !_isWatchedVideo) {
           setState(() {

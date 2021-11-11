@@ -60,22 +60,6 @@ class _SetAvatarPageState extends State<SetAvatarPage> {
             ),
           ),
         ),
-        // if (moji != null)
-        //   SvgPicture.string(
-        //       FluttermojiFunctions().decodeFluttermojifromString(moji!)),
-        // WholeScreenWidthButton(
-        //   label: 'test',
-        //   onPressed: () async {
-        //     final String mojiToDecode =
-        //         await FluttermojiFunctions().encodeMySVGtoString();
-
-        //     setState(() async {
-        //       moji = await FluttermojiFunctions().encodeMySVGtoString();
-        //       // moji = FluttermojiFunctions()
-        //       //     .decodeFluttermojifromString(mojiToDecode);
-        //     });
-        //   },
-        // ),
         _buildFluttermojiCustomizer(context)
       ],
     );

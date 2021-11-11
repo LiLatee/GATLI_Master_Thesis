@@ -27,7 +27,7 @@ class QuestionnaireRepository {
     return Right(documentReference);
   }
 
-  // TODO hadrcoded questionnaire doc ID
+  // hardcoded questionnaire doc ID, because that's the only one
   Future<Either<DefaultFailure, Questionnaire<Question>>> getQuestionnaire(
       {String id = '2mzlcazW6usv6BED90dD'}) async {
     final Map<String, dynamic> questionnaireMap;

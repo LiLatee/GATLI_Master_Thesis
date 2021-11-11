@@ -13,55 +13,14 @@ import 'package:master_thesis/router/app_router.dart';
 import 'package:master_thesis/service_locator.dart';
 
 class App extends StatefulWidget {
-  // This widget is the root of your application.
   @override
   State<App> createState() => _AppState();
 }
 
 class _AppState extends State<App> {
-  // // Platform messages are asynchronous, so we initialize in an async method.
-  // Future<void> initPlatformState() async {
-  //   // Configure BackgroundFetch.
-  //   int status = await BackgroundFetch.configure(
-  //     BackgroundFetchConfig(
-  //       minimumFetchInterval: 15,
-  //       stopOnTerminate: false,
-  //       enableHeadless: true,
-  //       requiresBatteryNotLow: false,
-  //       requiresCharging: false,
-  //       requiresStorageNotLow: false,
-  //       requiresDeviceIdle: false,
-  //       requiredNetworkType: NetworkType.ANY,
-  //     ),
-  //     (String taskId) async {
-  //       // <-- Event handler
-  //       // This is the fetch-event callback.
-  //       print("[BackgroundFetch] Event received $taskId");
-  //       await updateUserSteps();
-  //       print('STEPS UPDATED');
-  //       // IMPORTANT:  You must signal completion of your task or the OS can punish your app
-  //       // for taking too long in the background.
-  //       BackgroundFetch.finish(taskId);
-  //     },
-  //     (String taskId) async {
-  //       // <-- Task timeout handler.
-  //       // This task has exceeded its allowed running-time.  You must stop what you're doing and immediately .finish(taskId)
-  //       print("[BackgroundFetch] TASK TIMEOUT taskId: $taskId");
-  //       BackgroundFetch.finish(taskId);
-  //     },
-  //   );
-  //   print('[BackgroundFetch] configure success: $status');
-
-  //   // If the widget was removed from the tree while the asynchronous platform
-  //   // message was in flight, we want to discard the reply rather than calling
-  //   // setState to update our non-existent appearance.
-  //   if (!mounted) return;
-  // }
-
   @override
   void initState() {
     super.initState();
-    // initPlatformState();
   }
 
   @override
@@ -77,14 +36,12 @@ class _AppState extends State<App> {
       title: 'Flutter Demo',
       onGenerateRoute: sl<AppRouter>().onGenerateRoute,
       theme: myLightThemeData,
-      // darkTheme: AppTheme.darkTheme,
-      // themeMode: themeState is ThemeDark ? ThemeMode.dark : ThemeMode.light,
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
       ],
       supportedLocales: AppLocalizations.supportedLocales,
-      locale: const Locale('en'), // TODO
+      locale: const Locale('en'),
       home: _buildProperScreen(),
       // home: const EmailSignUpPage(),
     );

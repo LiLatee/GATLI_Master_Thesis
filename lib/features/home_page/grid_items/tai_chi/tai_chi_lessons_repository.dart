@@ -88,18 +88,4 @@ class TaiChiLessonsRepository {
           DefaultFailure(message: "Can't get Tai Chi lesson. Error: $e"));
     }
   }
-
-  // TODO
-  Future<Either<DefaultFailure, void>> updateTaiChiLesson(
-      TaiChiLesson taiChiLesson) async {
-    try {
-      await collectionReference
-          .doc(taiChiLesson.ytVideoId)
-          .update(taiChiLesson.toMap());
-      return const Right(null);
-    } catch (e) {
-      return Left(
-          DefaultFailure(message: "Can't update Tai Chi lesson. Error: $e"));
-    }
-  }
 }

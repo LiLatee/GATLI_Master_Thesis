@@ -58,6 +58,7 @@ enum MyActivityType {
 }
 
 @JsonSerializable()
+// ignore: must_be_immutable
 class MyActivity extends Equatable {
   final bool isActive;
   final DateTime timestamp;

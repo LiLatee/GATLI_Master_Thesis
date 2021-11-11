@@ -84,7 +84,7 @@ class TaiChiLessonNoId {
 }
 
 final List<TaiChiLessonNoId> taiChiLessons = [
-  TaiChiLessonNoId(
+  const TaiChiLessonNoId(
     ytVideoId: 'cEOS2zoyQw4',
     title: 'Tai Chi 5 Minutes a Day Module 01 - easy for beginners',
     description: """
@@ -111,7 +111,7 @@ For the next videos in the series:
 https://www.taiflow.com/Silver-Freest...
     """,
   ),
-  TaiChiLessonNoId(
+  const TaiChiLessonNoId(
     ytVideoId: 'fNm2FWi1vkI',
     title: 'UPDATED: Tai Chi 5 min a day Module 02 - no music',
     description:
@@ -138,7 +138,7 @@ For the next videos in the series:
 https://www.taiflow.com/Silver-Freest...
 """,
   ),
-  TaiChiLessonNoId(
+  const TaiChiLessonNoId(
     ytVideoId: 'X1dyl_yHA84',
     title: 'UPDATED: Module 03 beginners Tai Chi (one camera new music)',
     description:
@@ -164,7 +164,7 @@ Follow me on Twitter: @cohenleia
 For the next videos in the series: 
 https://www.taiflow.com/Silver-Freest...""",
   ),
-  TaiChiLessonNoId(
+  const TaiChiLessonNoId(
     ytVideoId: 'RoIqYtiTLFI',
     title: 'UPDATED: Module 04 beginners Tai Chi (one camera - new music)',
     description:
@@ -190,7 +190,7 @@ Follow me on Twitter: @cohenleia
 For the next videos in the series: 
 https://www.taiflow.com/Silver-Freest...""",
   ),
-  TaiChiLessonNoId(
+  const TaiChiLessonNoId(
     ytVideoId: 'HJi-T2_0OeM',
     title: 'Tai Chi five minutes a day module 05 - no music',
     description:

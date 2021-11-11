@@ -43,20 +43,4 @@ class QuestionnaireInterventionRepository {
   }
 
   String generateQuestionnaireDocId() => collectionReference.doc().id;
-
-  // // TODO hadrcoded questionnaire doc ID
-  // Future<Either<DefaultFailure, Questionnaire<Question>>> getQuestionnaire(
-  //     {String id = '2mzlcazW6usv6BED90dD'}) async {
-  //   final Map<String, dynamic> questionnaireMap;
-  //   try {
-  //     questionnaireMap = (await collectionReference.doc(id).get()).data()
-  //         as Map<String, dynamic>;
-
-  //     return Right(Questionnaire.fromJson(questionnaireMap,
-  //         (data) => Question.fromJson(data as Map<String, dynamic>)));
-  //   } catch (e) {
-  //     return Left(
-  //         DefaultFailure(message: "Can't get Questionnaire. Error: $e"));
-  //   }
-  // }
 }

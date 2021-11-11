@@ -8,7 +8,6 @@ import 'package:master_thesis/features/data/user_app.dart';
 import 'package:master_thesis/features/home_page/grid_items/activity/activity_session.dart';
 import 'package:master_thesis/features/home_page/grid_items/questionnaire_page/questionnaire_intervention_repository.dart';
 import 'package:master_thesis/service_locator.dart';
-import 'package:pedometer/pedometer.dart';
 
 class UserRepository {
   const UserRepository({
@@ -205,16 +204,12 @@ class UserRepository {
   }
 
   Future<Either<DefaultFailure, UserApp>> getUser() async {
-    print('getUser');
-
     final Map<String, dynamic> userAppMap;
     try {
       userAppMap =
           (await documentReference.get()).data() as Map<String, dynamic>;
       return Right(UserApp.fromJson(userAppMap)); // usunięte .copyWith(id: id)
     } catch (e) {
-      print('getUser - failure');
-
       return Left(DefaultFailure(message: "Can't get user. Error: $e"));
     }
   }
@@ -302,7 +297,6 @@ class UserRepository {
     }
   }
 
-  // TODO probably not working
   Future<Either<DefaultFailure, void>> updateUser(UserApp user) async {
     try {
       await documentReference.update(user.toJson());

@@ -25,7 +25,7 @@ class LoginInitial extends LoginState {}
 class LoginLoading extends LoginState {}
 
 class LoginSuccess extends LoginState {
-  LoginSuccess({required userId}) {
+  LoginSuccess() {
     // sl.registerLazySingleton(() => UserRepository(
     //     documentReference:
     //         sl<FirebaseFirestore>().collection('users').doc(userId)));
@@ -176,7 +176,7 @@ class LoginCubit extends Cubit<LoginState> {
       (UserApp userApp) {
         log('tete: ${userApp.id.toString()}');
         userSessionRepository.writeSession(userId: userApp.id!); // TODO !
-        emit(LoginSuccess(userId: userApp.id));
+        emit(LoginSuccess());
       },
     );
   }
@@ -224,12 +224,12 @@ class LoginCubit extends Cubit<LoginState> {
           },
         );
 
-        emit(LoginSuccess(userId: user.uid));
+        emit(LoginSuccess());
       } on FirebaseAuthException catch (e, s) {
         log('error2: $e');
         log('stack2: $s');
         emit(LoginError(error: e.code));
-      } catch (e, s) {
+      } catch (e) {
         emit(LoginError(error: e.toString()));
       }
     }
@@ -271,7 +271,7 @@ class LoginCubit extends Cubit<LoginState> {
                 (UserApp userApp) {
                   userSessionRepository.writeSession(
                       userId: userApp.id!); // TODO !
-                  emit(LoginSuccess(userId: userApp.id));
+                  emit(LoginSuccess());
                 },
               );
             } else {

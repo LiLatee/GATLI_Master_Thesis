@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
-// TODO use testStyles from Theme
-// TODO use colors from Theme
 class WholeScreenWidthButton extends StatelessWidget {
   const WholeScreenWidthButton({
     Key? key,

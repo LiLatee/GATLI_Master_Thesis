@@ -113,7 +113,7 @@ class _LoginPageState extends State<LoginPage> {
                   const FlutterLogo(size: 77),
                   const SizedBox(height: 8),
                   Text(
-                    'My App Name',
+                    'GATLI',
                     style: Theme.of(context).textTheme.headline4,
                   )
                 ],

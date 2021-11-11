@@ -7,7 +7,7 @@
 
    <application
         tools:replace="android:label"
-        android:label="master_thesis"
+        android:label="GATLI"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

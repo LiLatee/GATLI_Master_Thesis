@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_literals_to_create_immutables
+
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -38,9 +40,9 @@ class _QuestionnairePageState extends State<QuestionnairePage> {
   Questionnaire<QuestionUser> answeredQuestionnaire =
       Questionnaire<QuestionUser>(
     languageCode: 'en',
-    generalQuestions: const [],
-    pastWeekQuestions: const [],
-    finalQuestions: const [],
+    generalQuestions: [],
+    pastWeekQuestions: [],
+    finalQuestions: [],
   );
 
   @override
